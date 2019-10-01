@@ -39,7 +39,7 @@ public class PlayerMove : MonoBehaviour
             return;
         }
         StateProcessor.Execute();
-
+        Debug.Log(StateProcessor.State.GetStateName());
     }
 
     private void Idle()
