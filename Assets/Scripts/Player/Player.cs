@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using PlayerState;
 
 public class Player : MonoBehaviour
 {
@@ -13,30 +14,80 @@ public class Player : MonoBehaviour
 
     private Rigidbody _rigidbody;
     private Animator _animator;
-    
+    //ステート
+    private StateProcessor StateProcessor = new StateProcessor();
+    private PlayerStateIdle StateIdle = new PlayerStateIdle();
+    private PlayerStateRun StateRun = new PlayerStateRun();
+    private PlayerStateSliding StateSliding = new PlayerStateSliding();
+
     void Start()
     {
         _rigidbody = GetComponent<Rigidbody>();
         _animator = GetComponent<Animator>();
+        StateProcessor.State = StateIdle;
+        StateIdle.execDelegate = Idle;
+        StateRun.execDelegate = Run;
+        StateSliding.execDelegate = Sliding;
+
     }
 
     void Update()
     {
-        var x = Input.GetAxis("Horizontal");
-        var z = Input.GetAxis("Vertical");
+        State();
+    }
+    void State()
+    {
+
+        if (StateProcessor.State == null)
+        {
+            return;
+        }
+        StateProcessor.Execute();
+        Debug.Log(StateProcessor.State.GetStateName());
+
+    }
+    private void Idle()
+    {
+        if (InputController.GetAxis(AxisID.L_Horizontal) != 0 || InputController.GetAxis(AxisID.L_Vertical) != 0)
+        {
+            StateProcessor.State = StateRun;
+        }
+
+    }
+    private void Run()
+    {
+        var x = InputController.GetAxis(AxisID.L_Horizontal);
+        var z = InputController.GetAxis(AxisID.L_Vertical);
 
         Vector3 camForward = Vector3.Scale(_camera.transform.forward, new Vector3(1, 0, 1)).normalized;
         Vector3 moveForward = (camForward * z) + (_camera.transform.right * x);
 
-        if (moveForward.magnitude > 0.01f) 
+        if (moveForward.magnitude > 0.01f)
         {
             transform.position += moveForward * _speed * Time.deltaTime;
-            transform.rotation = Quaternion.LookRotation(moveForward); 
+            transform.rotation = Quaternion.LookRotation(moveForward);
         }
 
-        if (Input.GetButtonDown("Jump"))
+        if (InputController.GetButtonDown(ButtonID.A)) 
         {
-            _rigidbody.AddForce(0.0f, _jumpPower, 0.0f, ForceMode.Impulse);
+            StateProcessor.State = StateSliding;
         }
+        if (InputController.GetAxis(AxisID.L_Horizontal) == 0 && InputController.GetAxis(AxisID.L_Vertical) == 0)
+        {
+            StateProcessor.State = StateIdle;
+        }
+
     }
+    private void Sliding()
+    {
+        var moveForward = Vector3.Scale(transform.forward, new Vector3(1, 0, 1)).normalized;
+        transform.position += moveForward * (_speed * 2) * Time.deltaTime;
+        if (InputController.GetButtonUp(ButtonID.A))
+        {
+            StateProcessor.State = StateIdle;
+        }
+
+
+    }
+
 }
