@@ -10,6 +10,8 @@ public class CameraController3D : MonoBehaviour
     private GameObject _targetObject;
 
     [SerializeField]
+    private float _width = 1.0f;
+    [SerializeField]
     private float _height = 1.5f;
     [SerializeField]
     private float _distance = 5.0f;
@@ -88,9 +90,9 @@ public class CameraController3D : MonoBehaviour
             _addForward += deltaPos * Time.deltaTime * 20.0f;
             _addForward = Vector3.Lerp(_addForward, Vector3.zero, Time.deltaTime * _attenRate);
 
-            _nowPos = Vector3.Lerp(_nowPos, _targetObject.transform.position + Vector3.up * _height + _addForward, Mathf.Clamp(Time.deltaTime * _attenRate, 0.0f, 1.0f));
+            _nowPos = Vector3.Lerp(_nowPos, _targetObject.transform.position + transform.right*_width + Vector3.up * _height + _addForward, Mathf.Clamp(Time.deltaTime * _attenRate, 0.0f, 1.0f));
         }
-        else _nowPos = _targetObject.transform.position + Vector3.up * _height;
+        else _nowPos = _targetObject.transform.position + transform.right* _width + Vector3.up * _height;
 
         // 手ブレ
         bool move = Mathf.Abs(delta.x) > 0.0f;
@@ -124,7 +126,7 @@ public class CameraController3D : MonoBehaviour
         var cx = Mathf.Sin(_nowRotAngle * deg) * Mathf.Cos(_nowHeightAngle * deg) * _distance;
         var cz = -Mathf.Cos(_nowRotAngle * deg) * Mathf.Cos(_nowHeightAngle * deg) * _distance;
         var cy = Mathf.Sin(_nowHeightAngle * deg) * _distance;
-        transform.position = _nowPos + new Vector3(cx, cy, cz);
+        transform.position = _nowPos+ new Vector3(cx, cy, cz);
 
         // カメラ向き
         var rot = Quaternion.LookRotation((_nowPos - transform.position).normalized) * Quaternion.Euler(noise);
