@@ -19,7 +19,7 @@ public class Player : MonoBehaviour
     private PlayerStateIdle StateIdle = new PlayerStateIdle();
     private PlayerStateRun StateRun = new PlayerStateRun();
     private PlayerStateSliding StateSliding = new PlayerStateSliding();
-
+    //アニメーター
     void Start()
     {
         _rigidbody = GetComponent<Rigidbody>();
@@ -48,6 +48,7 @@ public class Player : MonoBehaviour
     }
     private void Idle()
     {
+        _animator.SetBool("is_running", false);
         if (InputController.GetAxis(AxisID.L_Horizontal) != 0 || InputController.GetAxis(AxisID.L_Vertical) != 0)
         {
             StateProcessor.State = StateRun;
@@ -56,6 +57,7 @@ public class Player : MonoBehaviour
     }
     private void Run()
     {
+        _animator.SetBool("is_running", true);
         var x = InputController.GetAxis(AxisID.L_Horizontal);
         var z = InputController.GetAxis(AxisID.L_Vertical);
 
@@ -82,6 +84,7 @@ public class Player : MonoBehaviour
     }
     private void Sliding()
     {
+
         var x = InputController.GetAxis(AxisID.L_Horizontal);
         var z = InputController.GetAxis(AxisID.L_Vertical);
 
