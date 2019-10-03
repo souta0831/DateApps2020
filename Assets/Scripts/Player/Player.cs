@@ -71,6 +71,8 @@ public class Player : MonoBehaviour
         if (InputController.GetButtonDown(ButtonID.A)) 
         {
             StateProcessor.State = StateSliding;
+            transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles-new Vector3(60,0,0));
+
         }
         if (InputController.GetAxis(AxisID.L_Horizontal) == 0 && InputController.GetAxis(AxisID.L_Vertical) == 0)
         {
@@ -80,11 +82,17 @@ public class Player : MonoBehaviour
     }
     private void Sliding()
     {
-        var moveForward = Vector3.Scale(transform.forward, new Vector3(1, 0, 1)).normalized;
+        var x = InputController.GetAxis(AxisID.L_Horizontal);
+        var z = InputController.GetAxis(AxisID.L_Vertical);
+
+        var moveForward = Vector3.Scale(transform.forward+new Vector3(x,0,z), new Vector3(1, 0, 1)).normalized;
         transform.position += moveForward * (_speed * 2) * Time.deltaTime;
-        if (InputController.GetButtonUp(ButtonID.A))
+
+        if (!InputController.GetButton(ButtonID.A))
         {
             StateProcessor.State = StateIdle;
+            transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(60, 0, 0));
+
         }
 
 
