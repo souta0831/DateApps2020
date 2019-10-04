@@ -12,6 +12,9 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float _sliding_speed = 6.0f;
     [SerializeField]
+    private float _sliding_LR_speed = 2.0f;
+
+    [SerializeField]
     private Camera _camera;
 
     private Rigidbody _rigidbody;
@@ -21,8 +24,6 @@ public class Player : MonoBehaviour
     private PlayerStateIdle StateIdle = new PlayerStateIdle();
     private PlayerStateRun StateRun = new PlayerStateRun();
     private PlayerStateSliding StateSliding = new PlayerStateSliding();
-    //保存
-    private float _sliding_power =0;
     void Start()
     {
         _rigidbody = GetComponent<Rigidbody>();
@@ -91,10 +92,11 @@ public class Player : MonoBehaviour
 
         _animator.SetBool("is_sliding", true);
    
-        var x = InputController.GetAxis(AxisID.L_Horizontal)/20;
+        var x = InputController.GetAxis(AxisID.L_Horizontal);
 
-        var moveForward = Vector3.Scale(transform.forward+new Vector3(x,0,0), new Vector3(1, 0, 1)).normalized;
-        transform.position += moveForward * (_sliding_speed) * Time.deltaTime;
+        var moveForward = Vector3.Scale(transform.forward, new Vector3(1, 0, 1)).normalized;
+        var moveLR = (transform.right* x).normalized;
+        transform.position += (moveForward * _sliding_speed+ moveLR *_sliding_LR_speed)*Time.deltaTime;
 
         if (!InputController.GetButton(ButtonID.A))
         {
