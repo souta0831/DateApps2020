@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 
 //キャラクターの状態
+
 namespace PlayerState {
     //ステート管理クラス
     public class StateProcessor
@@ -30,34 +31,41 @@ namespace PlayerState {
         {
             if (execDelegate != null) execDelegate();
         }
-        public abstract string GetStateName();
+        public abstract PlayerStateID GetState();
     }
     //状態クラス
 
     //待機クラス
     public class PlayerStateIdle : PlayerState {
 
-        public override string GetStateName()
+        public override PlayerStateID GetState()
         {
-            return "State:Idle";
+            return PlayerStateID.IDLE;
         }
     }
     //走りクラス
     public class PlayerStateRun : PlayerState {
-        public override string GetStateName()
+        public override PlayerStateID GetState()
         {
-            return "State:Run" ;
+            return PlayerStateID.RUN;
         }
     }
     //スライディングクラス
     public class PlayerStateSliding : PlayerState {
 
-        public override string GetStateName()
+        public override PlayerStateID GetState()
         {
-            return "State:Sliding";
+            return PlayerStateID.SLIDING;
         }
     }
 
+
+}
+public enum PlayerStateID
+{
+    IDLE,
+    RUN,
+    SLIDING,
 
 }
 
