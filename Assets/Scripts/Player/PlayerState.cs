@@ -4,6 +4,14 @@ using UnityEngine;
 using System;
 
 //キャラクターの状態
+public enum PlayerStateID
+{
+    IDLE,
+    RUN,
+    SLIDING,
+    JUMP,
+
+}
 
 namespace PlayerState {
     //ステート管理クラス
@@ -58,14 +66,15 @@ namespace PlayerState {
             return PlayerStateID.SLIDING;
         }
     }
+    public class PlayerStateJump : PlayerState
+    {
 
+        public override PlayerStateID GetState()
+        {
+            return PlayerStateID.JUMP;
+        }
+    }
 
-}
-public enum PlayerStateID
-{
-    IDLE,
-    RUN,
-    SLIDING,
 
 }
 

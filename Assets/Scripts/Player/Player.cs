@@ -21,7 +21,8 @@ public class Player : MonoBehaviour
     private PlayerStateIdle StateIdle = new PlayerStateIdle();
     private PlayerStateRun StateRun = new PlayerStateRun();
     private PlayerStateSliding StateSliding = new PlayerStateSliding();
-    //アニメーター
+    //保存
+    private float _sliding_power =0;
     void Start()
     {
         _rigidbody = GetComponent<Rigidbody>();
@@ -56,11 +57,6 @@ public class Player : MonoBehaviour
         {
             StateProcessor.State = StateRun;
         }
-        if (InputController.GetButtonDown(ButtonID.X))
-        {
-            _rigidbody.AddForce(transform.up * _jumpPower);
-        }
-
 
     }
     private void Run()
@@ -83,10 +79,6 @@ public class Player : MonoBehaviour
             StateProcessor.State = StateSliding;
             transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles-new Vector3(60,0,0));
 
-        }
-        if (InputController.GetButtonDown(ButtonID.X))
-        {
-            _rigidbody.AddForce(transform.up*_jumpPower);
         }
         if (InputController.GetAxis(AxisID.L_Horizontal) == 0 && InputController.GetAxis(AxisID.L_Vertical) == 0)
         {
