@@ -10,6 +10,8 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float _jumpPower = 6.0f;
     [SerializeField]
+    private float _sliding_speed = 6.0f;
+    [SerializeField]
     private Camera _camera;
 
     private Rigidbody _rigidbody;
@@ -43,7 +45,6 @@ public class Player : MonoBehaviour
             return;
         }
         StateProcessor.Execute();
-        Debug.Log(StateProcessor.State.GetStateName());
 
     }
     private void Idle()
@@ -83,7 +84,6 @@ public class Player : MonoBehaviour
             StateProcessor.State = StateIdle;
 
         }
-
     }
     private void Sliding()
     {
@@ -93,7 +93,7 @@ public class Player : MonoBehaviour
         var x = InputController.GetAxis(AxisID.L_Horizontal)/20;
 
         var moveForward = Vector3.Scale(transform.forward+new Vector3(x,0,0), new Vector3(1, 0, 1)).normalized;
-        transform.position += moveForward * (_speed * 2) * Time.deltaTime;
+        transform.position += moveForward * (_sliding_speed) * Time.deltaTime;
 
         if (!InputController.GetButton(ButtonID.A))
         {
@@ -104,5 +104,8 @@ public class Player : MonoBehaviour
 
 
     }
-
+    public PlayerStateID GetState()
+    {
+        return StateProcessor.State.GetState();
+    }
 }
