@@ -49,6 +49,8 @@ public class Player : MonoBehaviour
     private void Idle()
     {
         _animator.SetBool("is_running", false);
+        _animator.SetBool("is_sliding", false);
+
         if (InputController.GetAxis(AxisID.L_Horizontal) != 0 || InputController.GetAxis(AxisID.L_Vertical) != 0)
         {
             StateProcessor.State = StateRun;
@@ -79,16 +81,18 @@ public class Player : MonoBehaviour
         if (InputController.GetAxis(AxisID.L_Horizontal) == 0 && InputController.GetAxis(AxisID.L_Vertical) == 0)
         {
             StateProcessor.State = StateIdle;
+
         }
 
     }
     private void Sliding()
     {
 
-        var x = InputController.GetAxis(AxisID.L_Horizontal);
-        var z = InputController.GetAxis(AxisID.L_Vertical);
+        _animator.SetBool("is_sliding", true);
+    
+        var x = InputController.GetAxis(AxisID.L_Horizontal)/20;
 
-        var moveForward = Vector3.Scale(transform.forward+new Vector3(x,0,z), new Vector3(1, 0, 1)).normalized;
+        var moveForward = Vector3.Scale(transform.forward+new Vector3(x,0,0), new Vector3(1, 0, 1)).normalized;
         transform.position += moveForward * (_speed * 2) * Time.deltaTime;
 
         if (!InputController.GetButton(ButtonID.A))
