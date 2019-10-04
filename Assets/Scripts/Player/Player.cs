@@ -56,6 +56,11 @@ public class Player : MonoBehaviour
         {
             StateProcessor.State = StateRun;
         }
+        if (InputController.GetButtonDown(ButtonID.X))
+        {
+            _rigidbody.AddForce(transform.up * _jumpPower);
+        }
+
 
     }
     private void Run()
@@ -79,6 +84,10 @@ public class Player : MonoBehaviour
             transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles-new Vector3(60,0,0));
 
         }
+        if (InputController.GetButtonDown(ButtonID.X))
+        {
+            _rigidbody.AddForce(transform.up*_jumpPower);
+        }
         if (InputController.GetAxis(AxisID.L_Horizontal) == 0 && InputController.GetAxis(AxisID.L_Vertical) == 0)
         {
             StateProcessor.State = StateIdle;
@@ -89,7 +98,7 @@ public class Player : MonoBehaviour
     {
 
         _animator.SetBool("is_sliding", true);
-    
+   
         var x = InputController.GetAxis(AxisID.L_Horizontal)/20;
 
         var moveForward = Vector3.Scale(transform.forward+new Vector3(x,0,0), new Vector3(1, 0, 1)).normalized;
