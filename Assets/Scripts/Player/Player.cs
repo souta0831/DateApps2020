@@ -78,7 +78,6 @@ public class Player : MonoBehaviour
         if (InputController.GetButtonDown(ButtonID.A)) 
         {
             StateProcessor.State = StateSliding;
-            transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles-new Vector3(60,0,0));
 
         }
         if (InputController.GetAxis(AxisID.L_Horizontal) == 0 && InputController.GetAxis(AxisID.L_Vertical) == 0)
@@ -101,7 +100,6 @@ public class Player : MonoBehaviour
         if (!InputController.GetButton(ButtonID.A))
         {
             StateProcessor.State = StateIdle;
-            transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(60, 0, 0));
 
         }
 
