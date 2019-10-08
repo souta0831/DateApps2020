@@ -133,11 +133,16 @@ public class CameraController3D : MonoBehaviour
         if (_enableAtten) transform.rotation = Quaternion.Slerp(transform.rotation, rot, Time.deltaTime * _angleAttenRate);
         else transform.rotation = rot;
 
-        //Z注目
+        //視点リセット
         if (Input.GetButtonDown("Fire1"))
         {
-            _rotAngle = -_targetObject.transform.localEulerAngles.y;
-            _heightAngle = 0.0f;
+            CameraReset();
         }
+    }
+
+   public void CameraReset()
+    {
+        _rotAngle = -_targetObject.transform.localEulerAngles.y;
+        _heightAngle = 0.0f;
     }
 }
