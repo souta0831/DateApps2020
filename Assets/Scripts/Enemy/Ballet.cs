@@ -5,7 +5,8 @@ using UnityEngine;
 public class Ballet : MonoBehaviour
 {
     [SerializeField] float Speed;
-    Vector3 _angle;
+    [SerializeField] int DestroyTime;
+    Vector3 _angle; 
     void Start()
     {
         
@@ -15,12 +16,24 @@ public class Ballet : MonoBehaviour
     void Update()
     {
         Move();
+        Delete();
     }
     void Move()
     {
         transform.position += _angle * Speed * Time.deltaTime;
 
     }
+    void Delete()
+    {
+        DestroyTime--;
+        if (DestroyTime <= 0)
+        {
+            Destroy(this);
+        }
+
+
+    }
+
     public void SetAngle(Vector3 angle) {
         _angle = angle;
     }
