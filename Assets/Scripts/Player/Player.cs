@@ -13,17 +13,22 @@ public class Player : MonoBehaviour
     private float _sliding_speed = 6.0f;
     [SerializeField]
     private float _sliding_LR_speed = 2.0f;
-
+    [SerializeField]
+    private GameObject Slash_Efect=null;
     [SerializeField]
     private Camera _camera;
 
     private Rigidbody _rigidbody;
     private Animator _animator;
+    //保存用
+    private GameObject _temp_slash_fx=null;
     //ステート
     private StateProcessor StateProcessor = new StateProcessor();
     private PlayerStateIdle StateIdle = new PlayerStateIdle();
     private PlayerStateRun StateRun = new PlayerStateRun();
     private PlayerStateSliding StateSliding = new PlayerStateSliding();
+    private PlayerStateAtack StateAtack = new PlayerStateAtack();
+
     void Start()
     {
         _rigidbody = GetComponent<Rigidbody>();
@@ -32,6 +37,7 @@ public class Player : MonoBehaviour
         StateIdle.execDelegate = Idle;
         StateRun.execDelegate = Run;
         StateSliding.execDelegate = Sliding;
+        StateAtack.execDelegate = Atack;
 
     }
 
@@ -75,7 +81,7 @@ public class Player : MonoBehaviour
             transform.rotation = Quaternion.LookRotation(moveForward);
         }
 
-        if (InputController.GetButtonDown(ButtonID.A)) 
+        if (InputController.GetButtonDown(ButtonID.R1)) 
         {
             StateProcessor.State = StateSliding;
 
@@ -97,7 +103,14 @@ public class Player : MonoBehaviour
         var moveLR = (transform.right* x).normalized;
         transform.position += (moveForward * _sliding_speed+ moveLR *_sliding_LR_speed)*Time.deltaTime;
 
-        if (!InputController.GetButton(ButtonID.A))
+        if (InputController.GetButtonDown(ButtonID.Y))
+        {
+
+            _animator.SetTrigger("Atack");
+
+        }
+
+        if (!InputController.GetButton(ButtonID.R1))
         {
             StateProcessor.State = StateIdle;
 
@@ -105,8 +118,27 @@ public class Player : MonoBehaviour
 
 
     }
+    private void Atack()
+    {
+        var moveForward = Vector3.Scale(transform.forward, new Vector3(1, 0, 1)).normalized;
+        transform.position += (moveForward * _sliding_speed) * Time.deltaTime;
+
+    }
     public PlayerStateID GetState()
     {
         return StateProcessor.State.GetState();
     }
+
+    //アニメーションイベントで呼び出します
+    private void AtackEvent()
+    {
+        StateProcessor.State = StateAtack;
+        _temp_slash_fx = Instantiate(Slash_Efect, transform.position,transform.rotation);
+    }
+    private void AtackEndEvent()
+    {
+        StateProcessor.State = StateIdle;
+        Destroy(_temp_slash_fx);
+    }
+
 }

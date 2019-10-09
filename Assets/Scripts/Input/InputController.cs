@@ -15,6 +15,8 @@ public static class InputController
         _game_pad.AddButton(ButtonID.Y, "Fire3");
         _game_pad.AddButton(ButtonID.Start, "Submit");
         _game_pad.AddButton(ButtonID.Select, "Cancel");
+        _game_pad.AddButton(ButtonID.L1, "Left");
+        _game_pad.AddButton(ButtonID.R1, "Right");
 
         _game_pad.AddAxis(AxisID.L_Horizontal, "Horizontal");
         _game_pad.AddAxis(AxisID.L_Vertical, "Vertical");
