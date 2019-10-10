@@ -42,13 +42,23 @@ public class Enemy : MonoBehaviour
     private void ActiveCheck()
     {
         if (_is_activate) return;
-        float distance = Vector3.Distance(transform.position, _player_transform.position);
-        Debug.Log(distance);
-        if (_active_distance > distance)
+        //Rayを生成
+        Ray ray = new Ray(transform.position, (_player_transform.position  - transform.position).normalized);
+        RaycastHit hit;
+        Debug.DrawLine(ray.origin, ray.direction, Color.red,0,true);
+
+        if (Physics.Raycast(ray, out hit, _active_distance))
         {
-            _is_activate = true;
-            Debug.Log("起動");
+            Debug.Log("ヒット");
+            if (hit.collider.tag == "Player")
+            {
+                _is_activate = true;
+                Debug.Log("起動");
+
+            }
+
         }
+
     }
     private void CreateBullet()
     {
