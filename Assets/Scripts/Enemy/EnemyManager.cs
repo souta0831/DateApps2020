@@ -18,7 +18,7 @@ public class EnemyManager : MonoBehaviour
         }
         foreach (Enemy enemy_list in EnemyList)
         {
-            enemy_list.SetPlayer(_player.transform);
+            enemy_list.SetPlayer(_player.GetComponent<Transform>());
         }
     }
 

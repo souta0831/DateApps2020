@@ -65,6 +65,7 @@ public class Player : MonoBehaviour
             StateProcessor.State = StateRun;
         }
 
+
     }
     private void Run()
     {
@@ -133,7 +134,8 @@ public class Player : MonoBehaviour
     private void AtackEvent()
     {
         StateProcessor.State = StateAtack;
-        _temp_slash_fx = Instantiate(Slash_Efect, transform.position,transform.rotation);
+        _temp_slash_fx = Instantiate(Slash_Efect, transform.position+new Vector3(0,0.5f,0),transform.rotation);
+        _temp_slash_fx.GetComponent<ParticleSystem>().Play();
     }
     private void AtackEndEvent()
     {
