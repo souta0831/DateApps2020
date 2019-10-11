@@ -10,3 +10,5 @@ Obj
 *.csproj
 *.vs
 Assets/RPG_FPS_game_assets_industrial/
+Assets/Demigiant/DOTween/
+Assets/Plugins/UniRx/
