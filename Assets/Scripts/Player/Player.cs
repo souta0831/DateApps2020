@@ -14,9 +14,13 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float _sliding_LR_speed = 2.0f;
     [SerializeField]
+    private GameObject AttackCollider=null;
+    [SerializeField]
     private GameObject Slash_Efect=null;
+    //カメラ
     [SerializeField]
     private Camera Camera;
+    //スライディングした時に再生するパーティクル
     [SerializeField]
     private List<ParticleSystem> SlidingParticleList=new List<ParticleSystem>();
 
@@ -29,7 +33,6 @@ public class Player : MonoBehaviour
     private PlayerStateIdle StateIdle = new PlayerStateIdle();
     private PlayerStateRun StateRun = new PlayerStateRun();
     private PlayerStateSliding StateSliding = new PlayerStateSliding();
-    private PlayerStateAtack StateAtack = new PlayerStateAtack();
 
     void Start()
     {
@@ -39,7 +42,6 @@ public class Player : MonoBehaviour
         StateIdle.execDelegate = Idle;
         StateRun.execDelegate = Run;
         StateSliding.execDelegate = Sliding;
-        StateAtack.execDelegate = Atack;
 
         SlidingParticleSwitch(false);
 
@@ -127,12 +129,6 @@ public class Player : MonoBehaviour
 
 
     }
-    private void Atack()
-    {
-        var moveForward = Vector3.Scale(transform.forward, new Vector3(1, 0, 1)).normalized;
-        transform.position += (moveForward * _sliding_speed) * Time.deltaTime;
-
-    }
     public PlayerStateID GetState()
     {
         return StateProcessor.State.GetState();
@@ -141,15 +137,12 @@ public class Player : MonoBehaviour
     //アニメーションイベントで呼び出します
     private void AtackEvent()
     {
-        StateProcessor.State = StateAtack;
-        _temp_slash_fx = Instantiate(Slash_Efect, transform.position+new Vector3(0,0.5f,0),transform.rotation);
-        _temp_slash_fx.GetComponent<ParticleSystem>().Play();
+        AttackCollider.SetActive(true);
     }
     private void AtackEndEvent()
     {
-        StateProcessor.State = StateIdle;
-        Destroy(_temp_slash_fx);
-        SlidingParticleSwitch(false);
+        AttackCollider.SetActive(false);
+
     }
     private void SlidingParticleSwitch(bool isPlay)
     {

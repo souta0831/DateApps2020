@@ -17,10 +17,11 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float FireCoolTime=60;
     //連射数
     [SerializeField] private int Burst = 3;
+    //切られた時のエフェクト
+    [SerializeField] private GameObject DeadParticle = null;
     private float _fire_timer;
     private float _cool_timer;
     private float _burst_count ;
-    private GameObject[] _bullet_list = new GameObject[3];
     void Start()
     {
         _fire_timer = FireRate;
@@ -49,7 +50,6 @@ public class Enemy : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, _active_distance))
         {
-            Debug.Log("ヒット");
             if (hit.collider.tag == "Player")
             {
                 _is_activate = true;
@@ -79,5 +79,14 @@ public class Enemy : MonoBehaviour
         }
 
 
+    }
+    private void OnTriggerEnter(Collider collision)
+    {
+        if (collision.gameObject.tag == "Attack")
+        {
+            Debug.Log("攻撃");
+            Instantiate(DeadParticle, transform.position+new Vector3(0,1,0),transform.rotation);
+            Destroy(this.gameObject);
+        }
     }
 }
