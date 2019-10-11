@@ -16,7 +16,9 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject Slash_Efect=null;
     [SerializeField]
-    private Camera _camera;
+    private Camera Camera;
+    [SerializeField]
+    private List<ParticleSystem> SlidingParticleList=new List<ParticleSystem>();
 
     private Rigidbody _rigidbody;
     private Animator _animator;
@@ -39,6 +41,9 @@ public class Player : MonoBehaviour
         StateSliding.execDelegate = Sliding;
         StateAtack.execDelegate = Atack;
 
+        SlidingParticleSwitch(false);
+
+
     }
 
     void Update()
@@ -53,6 +58,7 @@ public class Player : MonoBehaviour
             return;
         }
         StateProcessor.Execute();
+
 
     }
     private void Idle()
@@ -73,8 +79,8 @@ public class Player : MonoBehaviour
         var x = InputController.GetAxis(AxisID.L_Horizontal);
         var z = InputController.GetAxis(AxisID.L_Vertical);
 
-        Vector3 camForward = Vector3.Scale(_camera.transform.forward, new Vector3(1, 0, 1)).normalized;
-        Vector3 moveForward = (camForward * z) + (_camera.transform.right * x);
+        Vector3 camForward = Vector3.Scale(Camera.transform.forward, new Vector3(1, 0, 1)).normalized;
+        Vector3 moveForward = (camForward * z) + (Camera.transform.right * x);
 
         if (moveForward.magnitude > 0.01f)
         {
@@ -85,6 +91,8 @@ public class Player : MonoBehaviour
         if (InputController.GetButtonDown(ButtonID.R1)) 
         {
             StateProcessor.State = StateSliding;
+            SlidingParticleSwitch(true);
+
 
         }
         if (InputController.GetAxis(AxisID.L_Horizontal) == 0 && InputController.GetAxis(AxisID.L_Vertical) == 0)
@@ -95,7 +103,6 @@ public class Player : MonoBehaviour
     }
     private void Sliding()
     {
-
         _animator.SetBool("is_sliding", true);
    
         var x = InputController.GetAxis(AxisID.L_Horizontal);
@@ -114,6 +121,7 @@ public class Player : MonoBehaviour
         if (!InputController.GetButton(ButtonID.R1))
         {
             StateProcessor.State = StateIdle;
+            SlidingParticleSwitch(false);
 
         }
 
@@ -141,6 +149,23 @@ public class Player : MonoBehaviour
     {
         StateProcessor.State = StateIdle;
         Destroy(_temp_slash_fx);
+        SlidingParticleSwitch(false);
+    }
+    private void SlidingParticleSwitch(bool isPlay)
+    {
+        for (int i = 0; i < SlidingParticleList.Count; i++)
+        {
+            if (SlidingParticleList[i] == null) continue;
+
+            if (isPlay)
+            {
+                SlidingParticleList[i].Play();
+                continue;
+            }
+            SlidingParticleList[i].Stop();
+        }
+
+
     }
 
 }
