@@ -17,6 +17,10 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float FireCoolTime=60;
     //連射数
     [SerializeField] private int Burst = 3;
+    //弾の精度
+    [SerializeField]
+    private float Accuracy = 5;
+
     //切られた時のエフェクト
     [SerializeField] private GameObject DeadParticle = null;
     private float _fire_timer;
@@ -67,8 +71,10 @@ public class Enemy : MonoBehaviour
         _fire_timer--;
         if (_fire_timer >= 0) return;
 
-        var bullet = Instantiate(_bullet, transform.position,transform.rotation);
-        Vector3 angle = ((_player_transform.position+new Vector3(0,0.5f,0)) - transform.position).normalized;
+        var bullet = Instantiate(_bullet, transform.position+new Vector3(0,1f,0),transform.rotation);
+        Vector3 accuracy = new Vector3(Random.Range(-Accuracy, Accuracy), Random.Range(-Accuracy, Accuracy), Random.Range(-Accuracy, Accuracy));
+        Vector3 angle = ((_player_transform.position + new Vector3(0, 0.2f, 0)) - transform.position+accuracy).normalized;
+
         bullet.GetComponent<Ballet>().SetAngle(angle);
         _fire_timer = FireRate;
         _burst_count--;
