@@ -1,5 +1,49 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2893522973692061959
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7868440968182283612}
+  - component: {fileID: 1590582763247391161}
+  m_Layer: 0
+  m_Name: AttackCollider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &7868440968182283612
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2893522973692061959}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 9062789926308239622}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1590582763247391161
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2893522973692061959}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1.45, z: 0.7}
+  m_Center: {x: 0, y: 0.77, z: 0.63}
 --- !u!1 &9062789926307808384
 GameObject:
   m_ObjectHideFlags: 0
@@ -1504,7 +1548,7 @@ GameObject:
   - component: {fileID: 9062789926308239622}
   - component: {fileID: 9062789926298433274}
   - component: {fileID: 9062789925607258131}
-  - component: {fileID: 9062789925607258128}
+  - component: {fileID: 3724920369511092298}
   - component: {fileID: 9062789925607258140}
   m_Layer: 0
   m_Name: Player
@@ -1521,7 +1565,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9062789926307808550}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.20357355, y: -0.041782618, z: 1.73}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 9062789926308239642}
@@ -1531,6 +1575,7 @@ Transform:
   - {fileID: 9062789926308239504}
   - {fileID: 707375325838405381}
   - {fileID: 8899511867491836798}
+  - {fileID: 7868440968182283612}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1569,8 +1614,8 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!136 &9062789925607258128
-CapsuleCollider:
+--- !u!65 &3724920369511092298
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -1579,10 +1624,9 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 1.5
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.65, z: 0}
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1.45, z: 1}
+  m_Center: {x: 0, y: 0.77, z: 0}
 --- !u!114 &9062789925607258140
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1599,6 +1643,7 @@ MonoBehaviour:
   _jumpPower: 6
   _sliding_speed: 18
   _sliding_LR_speed: 2
+  AttackCollider: {fileID: 2893522973692061959}
   Slash_Efect: {fileID: 83773069660809620, guid: b62d53137927de849ad4f174cb19f23f,
     type: 3}
   Camera: {fileID: 0}
@@ -3141,11 +3186,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: fire_spark_red
       objectReference: {fileID: 0}
-    - target: {fileID: 8364421972446098961, guid: ec59025723f899942931bf95267fa512,
-        type: 3}
-      propertyPath: playOnAwake
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 8364421972446098974, guid: ec59025723f899942931bf95267fa512,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3200,6 +3240,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8364421972446098961, guid: ec59025723f899942931bf95267fa512,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ec59025723f899942931bf95267fa512, type: 3}
