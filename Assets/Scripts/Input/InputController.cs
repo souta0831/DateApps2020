@@ -67,9 +67,24 @@ public static class InputController
                 return Input.GetAxis(item.Value);
 
             }
+
         }
         return 0;
     }
+    public static float GetAxisRaw(AxisID axis)
+    {
+
+        foreach (KeyValuePair<AxisID, string> item in _game_pad._axis_map)
+        {
+            if (item.Key == axis)
+            {
+                return Input.GetAxisRaw(item.Value);
+
+            }
+        }
+        return 0;
+    }
+
 
 }
 
