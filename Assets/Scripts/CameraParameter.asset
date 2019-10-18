@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea085befa193fdc4d9b9cb0a740ce721, type: 3}
+  m_Name: CameraParameter
+  m_EditorClassIdentifier: 
+  _sensitivity: 3
+  _width: 1
+  _height: 1.5
+  _distance: 4
+  _heightAngle: 10
+  _rotAngle: 0
+  _rotAngleAttenRate: 5
+  _angleAttenRate: 40
+  _enableAtten: 1
+  _attenRate: 3
+  _enableNoise: 0
+  _noiseSpeed: 0.5
+  _moveNoiseSpeed: 1.5
+  _noiseCoeff: 1.3
+  moveNoiseCoeff: 2.5
+  _enableFieldOfViewAtten: 1
+  _fieldOfView: 50
+  _moveFieldOfView: 60
+  _forwardDistance: 3.75
