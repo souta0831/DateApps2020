@@ -70,7 +70,7 @@ public class Enemy : MonoBehaviour
         _fire_timer--;
         if (_fire_timer >= 0) return;
 
-        var bullet = Instantiate(_bullet, transform.position+new Vector3(0,1f,0),transform.rotation);
+        var bullet = Instantiate(_bullet, transform.position+new Vector3(0,1.5f,0),transform.rotation);
         Vector3 accuracy = new Vector3(Random.Range(-Accuracy, Accuracy), 0, Random.Range(-Accuracy, Accuracy));
         Vector3 angle = ((_player_transform.position + new Vector3(0, 0.2f, 0)) - (transform.position+accuracy)).normalized;
 
