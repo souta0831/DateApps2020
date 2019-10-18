@@ -20,6 +20,7 @@ public class Player : MonoBehaviour
     //カメラ
     [SerializeField]
     private Camera Camera;
+    private CameraController3D _camera_script;
     //スライディングした時に再生するパーティクル
     [SerializeField]
     private List<ParticleSystem> SlidingParticleList=new List<ParticleSystem>();
@@ -42,6 +43,7 @@ public class Player : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody>();
         _animator = GetComponent<Animator>();
         _box_collider = GetComponent<BoxCollider>();
+        _camera_script = Camera.GetComponent<CameraController3D>();
         _collider_size = _box_collider.size;
         _collider_center = _box_collider.center;
         StateProcessor.State = StateIdle;
@@ -112,6 +114,7 @@ public class Player : MonoBehaviour
         }
 
     }
+  
     private void Sliding()
     {
         _animator.SetBool("is_sliding", true);
@@ -129,7 +132,7 @@ public class Player : MonoBehaviour
 
         }
 
-        if (!InputController.GetButton(ButtonID.R1))
+        if (!InputController.GetButton(ButtonID.R1) && !IsUpWallHit())
         {
             //アイドルに移行
             StateProcessor.State = StateIdle;
@@ -141,15 +144,29 @@ public class Player : MonoBehaviour
 
 
     }
-    public PlayerStateID GetState()
+    //天井判定
+    private bool IsUpWallHit()
     {
-        return StateProcessor.State.GetState();
+        Ray up_ray = new Ray(transform.position, transform.up);
+        RaycastHit hit;
+        //天井判定の距離
+        float tenjou = 2;
+        int layermask = 1 << 9;
+
+#if UNITY_EDITOR
+        Debug.DrawRay(up_ray.origin, up_ray.direction * tenjou, Color.red);
+#endif
+        if (Physics.Raycast(up_ray, out hit,tenjou, layermask))
+        {
+            return true;
+        }
+        return false;
     }
+
 
     //アニメーションイベントで呼び出します
     private void AtackEvent()
     {
-        Time.timeScale = 0;
 
         AttackCollider.SetActive(true);
     }
@@ -184,6 +201,10 @@ public class Player : MonoBehaviour
         }
         _box_collider.size = _collider_size;
         _box_collider.center = _collider_center;
+    }
+    public PlayerStateID GetState()
+    {
+        return StateProcessor.State.GetState();
     }
 
 }

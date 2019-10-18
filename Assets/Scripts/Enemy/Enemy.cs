@@ -32,7 +32,6 @@ public class Enemy : MonoBehaviour
         _burst_count  = Burst;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (_player_transform == null) return;
@@ -72,8 +71,8 @@ public class Enemy : MonoBehaviour
         if (_fire_timer >= 0) return;
 
         var bullet = Instantiate(_bullet, transform.position+new Vector3(0,1f,0),transform.rotation);
-        Vector3 accuracy = new Vector3(Random.Range(-Accuracy, Accuracy), Random.Range(-Accuracy, Accuracy), Random.Range(-Accuracy, Accuracy));
-        Vector3 angle = ((_player_transform.position + new Vector3(0, 0.2f, 0)) - transform.position+accuracy).normalized;
+        Vector3 accuracy = new Vector3(Random.Range(-Accuracy, Accuracy), 0, Random.Range(-Accuracy, Accuracy));
+        Vector3 angle = ((_player_transform.position + new Vector3(0, 0.2f, 0)) - (transform.position+accuracy)).normalized;
 
         bullet.GetComponent<Ballet>().SetAngle(angle);
         _fire_timer = FireRate;
