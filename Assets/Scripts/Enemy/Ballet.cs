@@ -28,7 +28,7 @@ public class Ballet : MonoBehaviour
         DestroyTime--;
         if (DestroyTime <= 0)
         {
-            Destroy(this);
+            Destroy(this.gameObject);
         }
 
 
