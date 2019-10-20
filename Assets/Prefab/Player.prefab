@@ -1640,10 +1640,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecbcd34b8440c1f4ebdde1500646b2c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 6
-  _jumpPower: 6
-  _sliding_speed: 18
-  _sliding_LR_speed: 2
+  Parameter: {fileID: 11400000, guid: 3aa0e0a3ef2a23a44b0bc8f679b80735, type: 2}
   AttackCollider: {fileID: 2893522973692061959}
   Slash_Efect: {fileID: 83773069660809620, guid: b62d53137927de849ad4f174cb19f23f,
     type: 3}
