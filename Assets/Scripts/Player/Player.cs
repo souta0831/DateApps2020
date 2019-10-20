@@ -8,7 +8,7 @@ public class Player : MonoBehaviour
    [SerializeField]
     private float _speed = 3.0f;
     [SerializeField]
-    private float _jumpPower = 6.0f;
+    private float _jumpPower = 100.0f;
     [SerializeField]
     private float _sliding_speed = 6.0f;
     [SerializeField]
@@ -37,7 +37,7 @@ public class Player : MonoBehaviour
     private PlayerStateIdle StateIdle = new PlayerStateIdle();
     private PlayerStateRun StateRun = new PlayerStateRun();
     private PlayerStateSliding StateSliding = new PlayerStateSliding();
-
+    private PlayerStateJump StateJump = new PlayerStateJump();
     void Start()
     {
         _rigidbody = GetComponent<Rigidbody>();
@@ -59,6 +59,13 @@ public class Player : MonoBehaviour
     void Update()
     {
         State();
+        if (IsGround()) {
+            if (InputController.GetButtonDown(ButtonID.B))
+            {
+                _rigidbody.AddRelativeForce(transform.up * _jumpPower);
+
+            }
+        }
     }
     void State()
     {
@@ -76,7 +83,7 @@ public class Player : MonoBehaviour
         _animator.SetBool("is_running", false);
         _animator.SetBool("is_sliding", false);
 
-        if (InputController.GetAxis(AxisID.L_Horizontal) != 0 || InputController.GetAxis(AxisID.L_Vertical) != 0)
+        if (InputController.GetAxis(AxisID.L_Horizontal) != 0.0f || InputController.GetAxis(AxisID.L_Vertical) != 0.0f)
         {
             StateProcessor.State = StateRun;
         }
@@ -86,11 +93,14 @@ public class Player : MonoBehaviour
     private void Run()
     {
         _animator.SetBool("is_running", true);
-        var x = InputController.GetAxis(AxisID.L_Horizontal);
-        var z = InputController.GetAxis(AxisID.L_Vertical);
+        var x = InputController.GetAxisRaw(AxisID.L_Horizontal);
+        var z = InputController.GetAxisRaw(AxisID.L_Vertical);
 
-        Vector3 camForward = Vector3.Scale(Camera.transform.forward, new Vector3(1, 0, 1)).normalized;
+
+        Vector3 camForward = Vector3.Scale(Camera.transform.forward, Vector3.right + Vector3.forward);
         Vector3 moveForward = (camForward * z) + (Camera.transform.right * x);
+
+        Debug.Log(moveForward);
 
         if (moveForward.magnitude > 0.01f)
         {
@@ -107,32 +117,30 @@ public class Player : MonoBehaviour
 
 
         }
-        if (InputController.GetAxis(AxisID.L_Horizontal) == 0 && InputController.GetAxis(AxisID.L_Vertical) == 0)
+        if (InputController.GetAxis(AxisID.L_Horizontal) == 0.0f && InputController.GetAxis(AxisID.L_Vertical) == 0.0f&&IsGround())
         {
-            //アイドルに移行
             StateProcessor.State = StateIdle;
         }
 
     }
-  
     private void Sliding()
     {
         _animator.SetBool("is_sliding", true);
 
-        var x = InputController.GetAxis(AxisID.L_Horizontal);
+        var x = InputController.GetAxisRaw(AxisID.L_Horizontal);
 
-        var moveForward = Vector3.Scale(transform.forward, new Vector3(1, 0, 1)).normalized;
+        var moveForward = Vector3.Scale(transform.forward, new Vector3(1.0f, 0.0f, 1.0f));
         var moveLR = (transform.right* x).normalized;
         transform.position += (moveForward * _sliding_speed+ moveLR *_sliding_LR_speed)*Time.deltaTime;
 
         if (InputController.GetButtonDown(ButtonID.Y))
         {
 
-            _animator.SetTrigger("Atack");
+            _animator.SetTrigger("Attack");
 
         }
 
-        if (!InputController.GetButton(ButtonID.R1) && !IsUpWallHit())
+        if (!InputController.GetButton(ButtonID.R1) && !IsUpWallHit() && IsGround())
         {
             //アイドルに移行
             StateProcessor.State = StateIdle;
@@ -144,26 +152,39 @@ public class Player : MonoBehaviour
 
 
     }
+    private void Jump()
+    {
+    }
     //天井判定
     private bool IsUpWallHit()
     {
         Ray up_ray = new Ray(transform.position, transform.up);
-        RaycastHit hit;
         //天井判定の距離
         float tenjou = 2;
         int layermask = 1 << 9;
 
-#if UNITY_EDITOR
-        Debug.DrawRay(up_ray.origin, up_ray.direction * tenjou, Color.red);
-#endif
-        if (Physics.Raycast(up_ray, out hit,tenjou, layermask))
+        if (Physics.Raycast(up_ray,tenjou, layermask))
         {
             return true;
         }
         return false;
     }
+    //地面判定
+    private bool IsGround()
+    {
+        Ray down_ray = new Ray(transform.position+new Vector3(0,0.5f,0), -transform.up);
+        float gorund = 1;
+        int layermask = 1 << 9;
+        if (Physics.Raycast(down_ray, gorund, layermask))
+        {
+            Debug.Log("地面なう");
+            return true;
+            
+        }
 
-
+        return false;
+    }
+   
     //アニメーションイベントで呼び出します
     private void AtackEvent()
     {

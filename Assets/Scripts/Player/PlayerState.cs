@@ -9,6 +9,8 @@ public enum PlayerStateID
     IDLE,
     RUN,
     SLIDING,
+    SLIDINGC_END,
+    JUMP,
     ATACK,
 
 }
@@ -75,6 +77,14 @@ namespace PlayerState {
         }
     }
 
+    public class PlayerStateJump : PlayerState
+    {
+
+        public override PlayerStateID GetState()
+        {
+            return PlayerStateID.JUMP;
+        }
+    }
 
 }
 
