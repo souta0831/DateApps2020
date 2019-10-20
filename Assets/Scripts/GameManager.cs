@@ -8,13 +8,13 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        InputController.GamePadInit();
+        InputController.SetDefault();
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        InputController.Update();
     }
 }

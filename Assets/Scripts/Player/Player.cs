@@ -5,14 +5,8 @@ using PlayerState;
 
 public class Player : MonoBehaviour
 {
-   [SerializeField]
-    private float _speed = 3.0f;
     [SerializeField]
-    private float _jumpPower = 100.0f;
-    [SerializeField]
-    private float _sliding_speed = 6.0f;
-    [SerializeField]
-    private float _sliding_LR_speed = 2.0f;
+    PlayerParameter Parameter;
     [SerializeField]
     private GameObject AttackCollider=null;
     [SerializeField]
@@ -24,14 +18,17 @@ public class Player : MonoBehaviour
     //スライディングした時に再生するパーティクル
     [SerializeField]
     private List<ParticleSystem> SlidingParticleList=new List<ParticleSystem>();
-
+    [SerializeField]
+    private EnemyManager _enemy_manager;
     private Rigidbody _rigidbody;
     private Animator _animator;
     private BoxCollider _box_collider;
     //保存用
-    private GameObject _temp_slash_fx=null;
     private Vector3 _collider_size = Vector3.zero;
     private Vector3 _collider_center = Vector3.zero;
+    private Vector3 _move_vector = Vector3.zero;
+    private GameObject _lockon_object=null;
+    private GameObject _near_enemy=null;
     //ステート
     private StateProcessor StateProcessor = new StateProcessor();
     private PlayerStateIdle StateIdle = new PlayerStateIdle();
@@ -59,14 +56,21 @@ public class Player : MonoBehaviour
     void Update()
     {
         State();
+        Move();
+
         if (IsGround()) {
-            if (InputController.GetButtonDown(ButtonID.B))
+            if (InputController.GetButtonDown(Button.B))
             {
-                _rigidbody.AddRelativeForce(transform.up * _jumpPower);
+                _rigidbody.AddRelativeForce(transform.up * Parameter.JumpPower);
 
             }
         }
     }
+    private void Move()
+    {
+        transform.position += _move_vector;
+    }
+
     void State()
     {
 
@@ -83,32 +87,27 @@ public class Player : MonoBehaviour
         _animator.SetBool("is_running", false);
         _animator.SetBool("is_sliding", false);
 
-        if (InputController.GetAxis(AxisID.L_Horizontal) != 0.0f || InputController.GetAxis(AxisID.L_Vertical) != 0.0f)
+        if (InputController.GetAxis(Axis.L_Horizontal) != 0.0f || InputController.GetAxis(Axis.L_Vertical) != 0.0f)
         {
             StateProcessor.State = StateRun;
         }
-
+        _move_vector *= 0.9f;
 
     }
     private void Run()
     {
         _animator.SetBool("is_running", true);
-        var x = InputController.GetAxisRaw(AxisID.L_Horizontal);
-        var z = InputController.GetAxisRaw(AxisID.L_Vertical);
+        var x = InputController.GetAxisRow(Axis.L_Horizontal);
+        var z = InputController.GetAxisRow(Axis.L_Vertical);
 
 
         Vector3 camForward = Vector3.Scale(Camera.transform.forward, Vector3.right + Vector3.forward);
         Vector3 moveForward = (camForward * z) + (Camera.transform.right * x);
+        _move_vector = moveForward * Parameter.RunSpeed * Time.deltaTime;
+        transform.rotation = Quaternion.LookRotation(moveForward);
+        
 
-        Debug.Log(moveForward);
-
-        if (moveForward.magnitude > 0.01f)
-        {
-            transform.position += moveForward * _speed * Time.deltaTime;
-            transform.rotation = Quaternion.LookRotation(moveForward);
-        }
-
-        if (InputController.GetButtonDown(ButtonID.R1)) 
+        if (InputController.GetButtonDown(Button.R1)) 
         {
             //スライディングに移行
             StateProcessor.State = StateSliding;
@@ -117,7 +116,7 @@ public class Player : MonoBehaviour
 
 
         }
-        if (InputController.GetAxis(AxisID.L_Horizontal) == 0.0f && InputController.GetAxis(AxisID.L_Vertical) == 0.0f&&IsGround())
+        if (InputController.GetAxis(Axis.L_Horizontal) == 0.0f && InputController.GetAxis(Axis.L_Vertical) == 0.0f&&IsGround())
         {
             StateProcessor.State = StateIdle;
         }
@@ -127,20 +126,20 @@ public class Player : MonoBehaviour
     {
         _animator.SetBool("is_sliding", true);
 
-        var x = InputController.GetAxisRaw(AxisID.L_Horizontal);
+        var x = InputController.GetAxisRow(Axis.L_Horizontal);
 
         var moveForward = Vector3.Scale(transform.forward, new Vector3(1.0f, 0.0f, 1.0f));
         var moveLR = (transform.right* x).normalized;
-        transform.position += (moveForward * _sliding_speed+ moveLR *_sliding_LR_speed)*Time.deltaTime;
+        _move_vector = (moveForward * Parameter.SlidingSpeed + moveLR * Parameter.SlidingLRSpeed) * Time.deltaTime;
 
-        if (InputController.GetButtonDown(ButtonID.Y))
+        if (InputController.GetButtonDown(Button.Y))
         {
 
             _animator.SetTrigger("Attack");
 
         }
 
-        if (!InputController.GetButton(ButtonID.R1) && !IsUpWallHit() && IsGround())
+        if (!InputController.GetButtonStay(Button.R1) && !IsUpWallHit() && IsGround())
         {
             //アイドルに移行
             StateProcessor.State = StateIdle;
@@ -154,6 +153,7 @@ public class Player : MonoBehaviour
     }
     private void Jump()
     {
+
     }
     //天井判定
     private bool IsUpWallHit()
@@ -223,9 +223,38 @@ public class Player : MonoBehaviour
         _box_collider.size = _collider_size;
         _box_collider.center = _collider_center;
     }
+    //ロックオン処理
+    private void EnemyLockOn()
+    {
+        if (InputController.GetButtonDown(Button.L1))
+        {
+            _lockon_object = _near_enemy;
+        }
+    }
+    //一番距離の近い敵を保存する関数
+    private void GetNearEnemy()
+    {
+        foreach(Enemy enemy in _enemy_manager.GetEnemyList())
+        {
+            if (_near_enemy == null)
+            {
+                _near_enemy = enemy.gameObject;
+                continue;
+            }
+            float list_dis = Vector3.Distance(enemy.transform.position, this.transform.position);
+            float near_dis = Vector3.Distance(_near_enemy.transform.position, this.transform.position);
+            if(near_dis> list_dis)
+            {
+                _near_enemy = enemy.gameObject;
+            }
+        }
+    }
     public PlayerStateID GetState()
     {
         return StateProcessor.State.GetState();
     }
-
+    public GameObject GetLockOnObject()
+    {
+        return _lockon_object;
+    }
 }

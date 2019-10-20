@@ -94,4 +94,8 @@ public class Enemy : MonoBehaviour
             Destroy(this.gameObject);
         }
     }
+    public GameObject GetTransForm()
+    {
+        return gameObject;
+    }
 }

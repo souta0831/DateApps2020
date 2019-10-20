@@ -23,8 +23,23 @@ public class EnemyManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
-        
+        RemoveList();
+    }
+    void RemoveList()
+    {
+        //敵がNULLだったら除外する
+        foreach (Enemy enemy_list in EnemyList.ToArray())
+        {
+            if (enemy_list == null)
+                EnemyList.Remove(enemy_list);
+
+
+        }
+
+    }
+    public List<Enemy> GetEnemyList(){
+        return EnemyList;
     }
 }
