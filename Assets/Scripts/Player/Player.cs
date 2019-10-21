@@ -28,7 +28,7 @@ public class Player : MonoBehaviour
     private Vector3 _collider_center = Vector3.zero;
     private Vector3 _move_vector = Vector3.zero;
     private GameObject _lockon_object=null;
-    private GameObject _near_enemy=null;
+    private bool _is_lockon = false;
     //ステート
     private StateProcessor StateProcessor = new StateProcessor();
     private PlayerStateIdle StateIdle = new PlayerStateIdle();
@@ -71,7 +71,7 @@ public class Player : MonoBehaviour
         transform.position += _move_vector;
     }
 
-    void State()
+    private void State()
     {
 
         if (StateProcessor.State == null)
@@ -151,10 +151,6 @@ public class Player : MonoBehaviour
 
 
     }
-    private void Jump()
-    {
-
-    }
     //天井判定
     private bool IsUpWallHit()
     {
@@ -226,29 +222,31 @@ public class Player : MonoBehaviour
     //ロックオン処理
     private void EnemyLockOn()
     {
-        if (InputController.GetButtonDown(Button.L1))
+        if (!_is_lockon)
         {
-            _lockon_object = _near_enemy;
+
+            if (_enemy_manager.GetEnemyList()[0].GetPlayerDistance() <= 50)
+            {
+                _enemy_manager.GetEnemyList()[0].SetLockOnState(LockOnState.NEAR);
+            }
+            if (InputController.GetButtonDown(Button.R1))
+            {
+                _enemy_manager.GetEnemyList()[0].SetLockOnState(LockOnState.LOCKON);
+                _is_lockon = true;
+            }
         }
+        else
+        {
+            if (InputController.GetButtonDown(Button.R1))
+            {
+                _enemy_manager.GetEnemyList()[0].SetLockOnState(LockOnState.NORE);
+                _is_lockon = false;
+            }
+
+        }
+
     }
     //一番距離の近い敵を保存する関数
-    private void GetNearEnemy()
-    {
-        foreach(Enemy enemy in _enemy_manager.GetEnemyList())
-        {
-            if (_near_enemy == null)
-            {
-                _near_enemy = enemy.gameObject;
-                continue;
-            }
-            float list_dis = Vector3.Distance(enemy.transform.position, this.transform.position);
-            float near_dis = Vector3.Distance(_near_enemy.transform.position, this.transform.position);
-            if(near_dis> list_dis)
-            {
-                _near_enemy = enemy.gameObject;
-            }
-        }
-    }
     public PlayerStateID GetState()
     {
         return StateProcessor.State.GetState();
