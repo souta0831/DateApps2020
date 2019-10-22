@@ -23,12 +23,14 @@ public class Player : MonoBehaviour
     private Rigidbody _rigidbody;
     private Animator _animator;
     private BoxCollider _box_collider;
+    private LockonCursor _lockon_cursor=null;
     //保存用
     private Vector3 _collider_size = Vector3.zero;
     private Vector3 _collider_center = Vector3.zero;
     private Vector3 _move_vector = Vector3.zero;
-    private GameObject _lockon_object=null;
     private bool _is_lockon = false;
+    [SerializeField]
+    private int _lockon_num = 0;
     //ステート
     private StateProcessor StateProcessor = new StateProcessor();
     private PlayerStateIdle StateIdle = new PlayerStateIdle();
@@ -40,6 +42,7 @@ public class Player : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody>();
         _animator = GetComponent<Animator>();
         _box_collider = GetComponent<BoxCollider>();
+        _lockon_cursor = GetComponent<LockonCursor>();
         _camera_script = Camera.GetComponent<CameraController3D>();
         _collider_size = _box_collider.size;
         _collider_center = _box_collider.center;
@@ -57,7 +60,7 @@ public class Player : MonoBehaviour
     {
         State();
         Move();
-
+        EnemyLockOn();
         if (IsGround()) {
             if (InputController.GetButtonDown(Button.B))
             {
@@ -222,37 +225,43 @@ public class Player : MonoBehaviour
     //ロックオン処理
     private void EnemyLockOn()
     {
-        if (!_is_lockon)
+        if (_is_lockon)
         {
-
-            if (_enemy_manager.GetEnemyList()[0].GetPlayerDistance() <= 50)
+            if ( InputController.GetButtonDown(Button.L1) || 50 <= _enemy_manager.GetEnemyList()[_lockon_num].GetPlayerDistance() )
             {
-                _enemy_manager.GetEnemyList()[0].SetLockOnState(LockOnState.NEAR);
-            }
-            if (InputController.GetButtonDown(Button.R1))
-            {
-                _enemy_manager.GetEnemyList()[0].SetLockOnState(LockOnState.LOCKON);
-                _is_lockon = true;
-            }
-        }
-        else
-        {
-            if (InputController.GetButtonDown(Button.R1))
-            {
-                _enemy_manager.GetEnemyList()[0].SetLockOnState(LockOnState.NORE);
+                Debug.Log("ロックオン解除");
+                _lockon_cursor.OnLockonEnd();
                 _is_lockon = false;
             }
 
-        }
 
+        }
+        else
+        {
+            if ( 50 >= _enemy_manager.GetEnemyList()[_lockon_num].GetPlayerDistance() )
+            {
+                _lockon_cursor.OnLockonRady(_enemy_manager.GetEnemyList()[_lockon_num].gameObject);
+            }
+            //ロックオン　
+            if (InputController.GetButtonDown(Button.L1))
+            {
+                _lockon_cursor.OnLockonStart();
+                _is_lockon = true;
+            }
+            //ロック切り替え
+            if (InputController.GetButtonDown(Button.RightStick))
+            {
+                if (50 >= _enemy_manager.GetEnemyList()[_lockon_num + 1].GetPlayerDistance())
+                {
+                    _lockon_num++;
+                }
+            }
+
+        }
     }
     //一番距離の近い敵を保存する関数
     public PlayerStateID GetState()
     {
         return StateProcessor.State.GetState();
-    }
-    public GameObject GetLockOnObject()
-    {
-        return _lockon_object;
     }
 }

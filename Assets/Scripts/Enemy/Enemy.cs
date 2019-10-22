@@ -25,9 +25,8 @@ public class Enemy : MonoBehaviour
     private GameObject DeadParticle = null;
     [SerializeField]
     private GameObject _lockon_sprite;
-
     
-    private LockOnState _now_lockon_state =LockOnState.NORE;
+    
     private float _fire_timer;
     private float _cool_timer;
     private float _burst_count;
@@ -109,21 +108,6 @@ public class Enemy : MonoBehaviour
     {
         return gameObject;
     }
-    public void SetIsLockOn(LockOnState islockon)
-    {
-        _now_lockon_state = islockon;
 
-    }
 
-    public void SetLockOnState(LockOnState LockOnState)
-    {
-        _now_lockon_state = LockOnState;
-    }
-
-}
-public enum LockOnState
-{
-    NORE,
-    NEAR,
-    LOCKON,
 }

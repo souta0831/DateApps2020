@@ -52,6 +52,8 @@ public static class InputController
         controller.Buttons[Button.Select].SetButtonName("Cancel");
         controller.Buttons[Button.R1].SetButtonName("Right");
         controller.Buttons[Button.L1].SetButtonName("Left");
+        controller.Buttons[Button.LeftStick].SetButtonName("L3");
+        controller.Buttons[Button.RightStick].SetButtonName("R3");
 
 
 
