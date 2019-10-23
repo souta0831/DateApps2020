@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName ="custom/CameraController",fileName ="CameraParameter")]
+[CreateAssetMenu(menuName = "custom/CameraController3DParameter", fileName = "New CameraController3D Parameter")]
 
 public class CameraController3DParameter : ScriptableObject
 {
