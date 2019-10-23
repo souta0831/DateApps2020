@@ -260,6 +260,15 @@ public class Player : MonoBehaviour
 
         }
     }
+    //ロックオンしてるオブジェクトを取得
+    public GameObject GetLockOnbject()
+    {
+        return _lockon_cursor.GetLockONTarget();
+    }
+    public bool IsLockOn()
+    {
+        return _is_lockon;
+    }
     //一番距離の近い敵を保存する関数
     public PlayerStateID GetState()
     {

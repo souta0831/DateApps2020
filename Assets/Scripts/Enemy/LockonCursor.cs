@@ -63,6 +63,10 @@ public class LockonCursor : MonoBehaviour
         }
         LockonTarget = null;
     }
+    public GameObject GetLockONTarget()
+    {
+        return LockonTarget;
+    }
     public enum LockOnState_
     {
         Ready,
