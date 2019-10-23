@@ -28,6 +28,7 @@ public class Player : MonoBehaviour
     private Vector3 _collider_size = Vector3.zero;
     private Vector3 _collider_center = Vector3.zero;
     private Vector3 _move_vector = Vector3.zero;
+    private int _now_hp;
     private bool _is_lockon = false;
     [SerializeField]
     private int _lockon_num = 0;
@@ -50,7 +51,7 @@ public class Player : MonoBehaviour
         StateIdle.execDelegate = Idle;
         StateRun.execDelegate = Run;
         StateSliding.execDelegate = Sliding;
-
+        _now_hp = Parameter.MaxHp;
         SlidingParticleSwitch(false);
 
 
@@ -227,7 +228,7 @@ public class Player : MonoBehaviour
     {
         if (_is_lockon)
         {
-            if ( InputController.GetButtonDown(Button.L1) || 50 <= _enemy_manager.GetEnemyList()[_lockon_num].GetPlayerDistance() )
+            if ( InputController.GetButtonDown(Button.L1) || Parameter.LockOnRange <= _enemy_manager.GetEnemyList()[_lockon_num].GetPlayerDistance() )
             {
                 Debug.Log("ロックオン解除");
                 _lockon_cursor.OnLockonEnd();
@@ -238,7 +239,7 @@ public class Player : MonoBehaviour
         }
         else
         {
-            if ( 50 >= _enemy_manager.GetEnemyList()[_lockon_num].GetPlayerDistance() )
+            if (Parameter.LockOnRange >= _enemy_manager.GetEnemyList()[_lockon_num].GetPlayerDistance() )
             {
                 _lockon_cursor.OnLockonRady(_enemy_manager.GetEnemyList()[_lockon_num].gameObject);
             }
@@ -251,7 +252,7 @@ public class Player : MonoBehaviour
             //ロック切り替え
             if (InputController.GetButtonDown(Button.RightStick))
             {
-                if (50 >= _enemy_manager.GetEnemyList()[_lockon_num + 1].GetPlayerDistance())
+                if (Parameter.LockOnRange >= _enemy_manager.GetEnemyList()[_lockon_num + 1].GetPlayerDistance())
                 {
                     _lockon_num++;
                 }
