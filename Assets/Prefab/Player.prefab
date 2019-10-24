@@ -1321,8 +1321,9 @@ GameObject:
   - component: {fileID: 3042763766288236294}
   - component: {fileID: 3461666720597633088}
   - component: {fileID: 8904348827464153794}
+  - component: {fileID: 3832162172635798876}
   m_Layer: 0
-  m_Name: mition_20191007
+  m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1421,6 +1422,22 @@ MonoBehaviour:
   - {fileID: 7712163778202297727}
   - {fileID: 4811192499901464562}
   _enemy_manager: {fileID: 0}
+  _lockon_num: 0
+--- !u!114 &3832162172635798876
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5071254205091258481}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fae18def594231345839f18a063122a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _lockon_image:
+  - {fileID: 1363718574685530445, guid: ba03b2b97b18b6747916416c398098b0, type: 3}
+  - {fileID: 4543799663364359987, guid: 5483cbd484396024d85af8c446d84144, type: 3}
 --- !u!1 &5071254205091258483
 GameObject:
   m_ObjectHideFlags: 0
@@ -3090,6 +3107,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: demo_fire
       objectReference: {fileID: 0}
+    - target: {fileID: 451509570267526992, guid: df874768c603777408338bd38f5f64d1,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 451509570267526993, guid: df874768c603777408338bd38f5f64d1,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3159,11 +3181,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.030000003
-      objectReference: {fileID: 0}
-    - target: {fileID: 451509570267526992, guid: df874768c603777408338bd38f5f64d1,
-        type: 3}
-      propertyPath: playOnAwake
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: df874768c603777408338bd38f5f64d1, type: 3}

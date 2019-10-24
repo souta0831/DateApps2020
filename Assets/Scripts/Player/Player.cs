@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using PlayerState;
-
 public class Player : MonoBehaviour
 {
     [SerializeField]
@@ -51,6 +50,7 @@ public class Player : MonoBehaviour
         StateIdle.execDelegate = Idle;
         StateRun.execDelegate = Run;
         StateSliding.execDelegate = Sliding;
+        //hpセット
         _now_hp = Parameter.MaxHp;
         SlidingParticleSwitch(false);
 
@@ -269,6 +269,14 @@ public class Player : MonoBehaviour
     {
         return _is_lockon;
     }
+    public int GetMaxHP()
+    {
+        return Parameter.MaxHp;
+    }
+    public int GetNowHP() {
+    return _now_hp;
+    }
+
     //一番距離の近い敵を保存する関数
     public PlayerStateID GetState()
     {

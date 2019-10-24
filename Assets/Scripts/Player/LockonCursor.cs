@@ -12,8 +12,12 @@ public class LockonCursor : MonoBehaviour
     private RectTransform[] rectTransform=new RectTransform[(int)LockOnState_.Num];
 
     // カーソルのImage
-    public Image[] _lockon_image = new Image[(int)LockOnState_.Num];
-
+    [SerializeField]
+    GameObject[] _lockon_image = new GameObject[(int)LockOnState_.Num];
+    [SerializeField]
+    GameObject Canvas;
+    GameObject[] _image_obj = new GameObject[(int)LockOnState_.Num];
+    Image[] _image=new Image[(int)LockOnState_.Num];
     // ロックオン対象のTransform
     GameObject LockonTarget;
 
@@ -22,9 +26,14 @@ public class LockonCursor : MonoBehaviour
 
         for (int i = 0; i < 2; i++)
         {
-            rectTransform[i] = _lockon_image[i].GetComponent<RectTransform>();
+            //生成
+            _image_obj[i] = Instantiate(_lockon_image[i]);
+            _image_obj[i].transform.SetParent(Canvas.transform, false);
+            //イメージ取得
+            _image[i] = _image_obj[i].GetComponent<Image>();
+            rectTransform[i] = _image[i].GetComponent<RectTransform>();
 
-            _lockon_image[i].enabled = false;
+            _image[i].enabled = false;
         }
     }
 
@@ -46,20 +55,20 @@ public class LockonCursor : MonoBehaviour
 
     public void OnLockonRady(GameObject target)
     {
-        _lockon_image[(int)LockOnState_.Ready].enabled = true;
+        _image[(int)LockOnState_.Ready].enabled = true;
         LockonTarget = target;
     }
     public void OnLockonStart()
     {
-        _lockon_image[(int)LockOnState_.Ready].enabled = false;
-        _lockon_image[(int)LockOnState_.LockOn].enabled = true;
+        _image[(int)LockOnState_.Ready].enabled = false;
+        _image[(int)LockOnState_.LockOn].enabled = true;
         Debug.Log("ロックオン");
     }
     public void OnLockonEnd()
     {
         for (int i = 0; i < 2; i++)
         {
-            _lockon_image[i].enabled = false;
+            _image[i].enabled = false;
         }
         LockonTarget = null;
     }
