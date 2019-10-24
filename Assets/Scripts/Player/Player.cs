@@ -61,14 +61,8 @@ public class Player : MonoBehaviour
     {
         State();
         Move();
-        EnemyLockOn();
-        if (IsGround()) {
-            if (InputController.GetButtonDown(Button.B))
-            {
-                _rigidbody.AddRelativeForce(transform.up * Parameter.JumpPower);
-
-            }
-        }
+        Jump();
+        LockOnUpdate();
     }
     private void Move()
     {
@@ -155,6 +149,19 @@ public class Player : MonoBehaviour
 
 
     }
+    private void Jump()
+    {
+        if (IsGround())
+        {
+            if (InputController.GetButtonDown(Button.B))
+            {
+                _animator.SetTrigger("Jump");
+                _rigidbody.AddRelativeForce(transform.up * Parameter.JumpPower);
+
+            }
+        }
+
+    }
     //天井判定
     private bool IsUpWallHit()
     {
@@ -224,7 +231,7 @@ public class Player : MonoBehaviour
         _box_collider.center = _collider_center;
     }
     //ロックオン処理
-    private void EnemyLockOn()
+    private void LockOnUpdate()
     {
         if (_is_lockon)
         {
@@ -276,7 +283,6 @@ public class Player : MonoBehaviour
     public int GetNowHP() {
     return _now_hp;
     }
-
     //一番距離の近い敵を保存する関数
     public PlayerStateID GetState()
     {
