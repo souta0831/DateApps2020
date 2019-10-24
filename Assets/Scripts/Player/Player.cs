@@ -23,12 +23,15 @@ public class Player : MonoBehaviour
     private Rigidbody _rigidbody;
     private Animator _animator;
     private BoxCollider _box_collider;
+    private LockonCursor _lockon_cursor=null;
     //保存用
     private Vector3 _collider_size = Vector3.zero;
     private Vector3 _collider_center = Vector3.zero;
     private Vector3 _move_vector = Vector3.zero;
-    private GameObject _lockon_object=null;
-    private GameObject _near_enemy=null;
+    private int _now_hp;
+    private bool _is_lockon = false;
+    [SerializeField]
+    private int _lockon_num = 0;
     //ステート
     private StateProcessor StateProcessor = new StateProcessor();
     private PlayerStateIdle StateIdle = new PlayerStateIdle();
@@ -40,6 +43,7 @@ public class Player : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody>();
         _animator = GetComponent<Animator>();
         _box_collider = GetComponent<BoxCollider>();
+        _lockon_cursor = GetComponent<LockonCursor>();
         _camera_script = Camera.GetComponent<CameraController3D>();
         _collider_size = _box_collider.size;
         _collider_center = _box_collider.center;
@@ -47,7 +51,7 @@ public class Player : MonoBehaviour
         StateIdle.execDelegate = Idle;
         StateRun.execDelegate = Run;
         StateSliding.execDelegate = Sliding;
-
+        _now_hp = Parameter.MaxHp;
         SlidingParticleSwitch(false);
 
 
@@ -57,7 +61,7 @@ public class Player : MonoBehaviour
     {
         State();
         Move();
-
+        EnemyLockOn();
         if (IsGround()) {
             if (InputController.GetButtonDown(Button.B))
             {
@@ -71,7 +75,7 @@ public class Player : MonoBehaviour
         transform.position += _move_vector;
     }
 
-    void State()
+    private void State()
     {
 
         if (StateProcessor.State == null)
@@ -151,10 +155,6 @@ public class Player : MonoBehaviour
 
 
     }
-    private void Jump()
-    {
-
-    }
     //天井判定
     private bool IsUpWallHit()
     {
@@ -226,35 +226,52 @@ public class Player : MonoBehaviour
     //ロックオン処理
     private void EnemyLockOn()
     {
-        if (InputController.GetButtonDown(Button.L1))
+        if (_is_lockon)
         {
-            _lockon_object = _near_enemy;
+            if ( InputController.GetButtonDown(Button.L1) || Parameter.LockOnRange <= _enemy_manager.GetEnemyList()[_lockon_num].GetPlayerDistance() )
+            {
+                Debug.Log("ロックオン解除");
+                _lockon_cursor.OnLockonEnd();
+                _is_lockon = false;
+            }
+
+
         }
+        else
+        {
+            if (Parameter.LockOnRange >= _enemy_manager.GetEnemyList()[_lockon_num].GetPlayerDistance() )
+            {
+                _lockon_cursor.OnLockonRady(_enemy_manager.GetEnemyList()[_lockon_num].gameObject);
+            }
+            //ロックオン　
+            if (InputController.GetButtonDown(Button.L1))
+            {
+                _lockon_cursor.OnLockonStart();
+                _is_lockon = true;
+            }
+            //ロック切り替え
+            if (InputController.GetButtonDown(Button.RightStick))
+            {
+                if (Parameter.LockOnRange >= _enemy_manager.GetEnemyList()[_lockon_num + 1].GetPlayerDistance())
+                {
+                    _lockon_num++;
+                }
+            }
+
+        }
+    }
+    //ロックオンしてるオブジェクトを取得
+    public GameObject GetLockOnbject()
+    {
+        return _lockon_cursor.GetLockONTarget();
+    }
+    public bool IsLockOn()
+    {
+        return _is_lockon;
     }
     //一番距離の近い敵を保存する関数
-    private void GetNearEnemy()
-    {
-        foreach(Enemy enemy in _enemy_manager.GetEnemyList())
-        {
-            if (_near_enemy == null)
-            {
-                _near_enemy = enemy.gameObject;
-                continue;
-            }
-            float list_dis = Vector3.Distance(enemy.transform.position, this.transform.position);
-            float near_dis = Vector3.Distance(_near_enemy.transform.position, this.transform.position);
-            if(near_dis> list_dis)
-            {
-                _near_enemy = enemy.gameObject;
-            }
-        }
-    }
     public PlayerStateID GetState()
     {
         return StateProcessor.State.GetState();
-    }
-    public GameObject GetLockOnObject()
-    {
-        return _lockon_object;
     }
 }

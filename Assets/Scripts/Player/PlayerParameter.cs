@@ -13,5 +13,8 @@ public class PlayerParameter : ScriptableObject
     public float SlidingSpeed = 6.0f;
     [SerializeField]
     public float SlidingLRSpeed = 2.0f;
-
+    [SerializeField]
+    public float LockOnRange = 10.0f;
+    [SerializeField]
+    public int MaxHp = 100;
 }

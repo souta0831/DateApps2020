@@ -4,32 +4,36 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    
-    private Transform _player_transform=null;
+
+    private Transform _player_transform = null;
     private bool _is_activate = false;
     //起動に必要な距離
-    [SerializeField] private float _active_distance=50;
+    [SerializeField] private float _active_distance = 50;
     //生成する弾
     [SerializeField] private GameObject _bullet;
     //発射レート
-    [SerializeField] private float FireRate=5;
+    [SerializeField] private float FireRate = 5;
     //再発射までの時間
-    [SerializeField] private float FireCoolTime=60;
+    [SerializeField] private float FireCoolTime = 60;
     //連射数
     [SerializeField] private int Burst = 3;
     //弾の精度
     [SerializeField]
     private float Accuracy = 5;
-
     //切られた時のエフェクト
-    [SerializeField] private GameObject DeadParticle = null;
+    [SerializeField]
+    private GameObject DeadParticle = null;
+    [SerializeField]
+    private GameObject _lockon_sprite;
+    
+    
     private float _fire_timer;
     private float _cool_timer;
-    private float _burst_count ;
+    private float _burst_count;
     void Start()
     {
         _fire_timer = FireRate;
-        _burst_count  = Burst;
+        _burst_count = Burst;
     }
 
     void Update()
@@ -47,9 +51,9 @@ public class Enemy : MonoBehaviour
     {
         if (_is_activate) return;
         //Rayを生成
-        Ray ray = new Ray(transform.position, (_player_transform.position  - transform.position).normalized);
+        Ray ray = new Ray(transform.position, (_player_transform.position - transform.position).normalized);
         RaycastHit hit;
-        Debug.DrawLine(ray.origin, ray.direction, Color.red,0,true);
+        Debug.DrawLine(ray.origin, ray.direction, Color.red, 0, true);
 
         if (Physics.Raycast(ray, out hit, _active_distance))
         {
@@ -70,9 +74,9 @@ public class Enemy : MonoBehaviour
         _fire_timer--;
         if (_fire_timer >= 0) return;
 
-        var bullet = Instantiate(_bullet, transform.position+new Vector3(0,1.5f,0),transform.rotation);
+        var bullet = Instantiate(_bullet, transform.position + new Vector3(0, 1.5f, 0), transform.rotation);
         Vector3 accuracy = new Vector3(Random.Range(-Accuracy, Accuracy), 0, Random.Range(-Accuracy, Accuracy));
-        Vector3 angle = ((_player_transform.position + new Vector3(0, 0.2f, 0)) - (transform.position+accuracy)).normalized;
+        Vector3 angle = ((_player_transform.position + new Vector3(0, 0.2f, 0)) - (transform.position + accuracy)).normalized;
 
         bullet.GetComponent<Ballet>().SetAngle(angle);
         _fire_timer = FireRate;
@@ -90,12 +94,20 @@ public class Enemy : MonoBehaviour
         if (collision.gameObject.tag == "Attack")
         {
             Debug.Log("攻撃");
-            Instantiate(DeadParticle, transform.position+new Vector3(0,1,0),transform.rotation);
+            Instantiate(DeadParticle, transform.position + new Vector3(0, 1, 0), transform.rotation);
             Destroy(this.gameObject);
         }
     }
-    public GameObject GetTransForm()
+
+    public float GetPlayerDistance()
+    {
+
+        return Vector3.Distance(this.transform.position, _player_transform.position);
+    }
+    public GameObject GetObject()
     {
         return gameObject;
     }
+
+
 }
