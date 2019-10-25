@@ -17,4 +17,8 @@ public class PlayerParameter : ScriptableObject
     public float LockOnRange = 10.0f;
     [SerializeField]
     public int MaxHp = 100;
+    [SerializeField]
+    public float WallRunStartRange = 1;
+    [SerializeField]
+    public float WallRunSpeed = 3.0f;
 }

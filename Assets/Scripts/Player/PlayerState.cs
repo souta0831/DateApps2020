@@ -11,7 +11,7 @@ public enum PlayerStateID
     SLIDING,
     SLIDINGC_END,
     JUMP,
-    ATACK,
+    WALLRUN
 
 }
 
@@ -68,12 +68,12 @@ namespace PlayerState {
             return PlayerStateID.SLIDING;
         }
     }
-    public class PlayerStateAtack : PlayerState
+    public class PlayerStateWallRun : PlayerState
     {
 
         public override PlayerStateID GetState()
         {
-            return PlayerStateID.ATACK;
+            return PlayerStateID.WALLRUN;
         }
     }
 

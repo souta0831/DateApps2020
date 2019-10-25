@@ -7,49 +7,59 @@ public class Player : MonoBehaviour
     [SerializeField]
     PlayerParameter Parameter;
     [SerializeField]
-    private GameObject AttackCollider=null;
-    [SerializeField]
-    private GameObject Slash_Efect=null;
+    private GameObject AttackCollider = null;
     //カメラ
     [SerializeField]
     private Camera Camera;
-    private CameraController3D _camera_script;
     //スライディングした時に再生するパーティクル
     [SerializeField]
-    private List<ParticleSystem> SlidingParticleList=new List<ParticleSystem>();
+    private List<ParticleSystem> SlidingParticleList = new List<ParticleSystem>();
     [SerializeField]
     private EnemyManager _enemy_manager;
+    //Thisコンポーネント
     private Rigidbody _rigidbody;
     private Animator _animator;
     private BoxCollider _box_collider;
-    private LockonCursor _lockon_cursor=null;
+    private LockonCursor _lockon_cursor = null;
     //保存用
     private Vector3 _collider_size = Vector3.zero;
     private Vector3 _collider_center = Vector3.zero;
-    private Vector3 _move_vector = Vector3.zero;
+    private Vector3 _move_power = Vector3.zero;
+    private Vector3 _buffer_pos = Vector3.zero;
+    private Vector3 _nomal_vector = Vector3.zero;
+    private Vector3 _move_direction = Vector3.zero;
     private int _now_hp;
     private bool _is_lockon = false;
-    [SerializeField]
     private int _lockon_num = 0;
+    private float _stick_x = 0.0f;
+    private float _stick_z = 0.0f;
+
     //ステート
     private StateProcessor StateProcessor = new StateProcessor();
     private PlayerStateIdle StateIdle = new PlayerStateIdle();
     private PlayerStateRun StateRun = new PlayerStateRun();
     private PlayerStateSliding StateSliding = new PlayerStateSliding();
     private PlayerStateJump StateJump = new PlayerStateJump();
+    private PlayerStateWallRun StateWalRun = new PlayerStateWallRun();
     void Start()
     {
+        //GetComponent
         _rigidbody = GetComponent<Rigidbody>();
         _animator = GetComponent<Animator>();
         _box_collider = GetComponent<BoxCollider>();
         _lockon_cursor = GetComponent<LockonCursor>();
-        _camera_script = Camera.GetComponent<CameraController3D>();
+        //コライダーの大きさを取得
         _collider_size = _box_collider.size;
         _collider_center = _box_collider.center;
+        //初期ステートセット
         StateProcessor.State = StateIdle;
-        StateIdle.execDelegate = Idle;
-        StateRun.execDelegate = Run;
-        StateSliding.execDelegate = Sliding;
+        //イデレーターにセット
+        StateIdle.execDelegate = IdleState;
+        StateRun.execDelegate = RunState;
+        StateSliding.execDelegate = SlidingState;
+        StateWalRun.execDelegate = WallRunState;
+        StateJump.execDelegate = JumpState;
+
         //hpセット
         _now_hp = Parameter.MaxHp;
         SlidingParticleSwitch(false);
@@ -60,15 +70,43 @@ public class Player : MonoBehaviour
     void Update()
     {
         State();
-        Move();
         Jump();
         LockOnUpdate();
+        StickUpdate();
+        Move();
     }
+    //-------------------------------------------------
+    // 移動の関数のやつ？
+    //-------------------------------------------------
     private void Move()
     {
-        transform.position += _move_vector;
+        transform.position += _move_power;
+        _buffer_pos = transform.position;
+    }
+    private void Jump()
+    {
+
+
+        if (InputController.GetButtonDown(Button.B) && IsGround())
+        {
+            _animator.SetTrigger("Jump");
+            _rigidbody.AddRelativeForce(transform.up * Parameter.JumpPower);
+            StateProcessor.State = StateJump;
+        }
+
+
+
     }
 
+    private void StickUpdate()
+    {
+        _stick_x = InputController.GetAxisRow(Axis.L_Horizontal);
+        _stick_z = InputController.GetAxisRow(Axis.L_Vertical);
+    }
+
+    //-------------------------------------------------
+    // ステートのやつ
+    //-------------------------------------------------
     private void State()
     {
 
@@ -80,32 +118,30 @@ public class Player : MonoBehaviour
 
 
     }
-    private void Idle()
+    private void IdleState()
     {
         _animator.SetBool("is_running", false);
         _animator.SetBool("is_sliding", false);
 
-        if (InputController.GetAxis(Axis.L_Horizontal) != 0.0f || InputController.GetAxis(Axis.L_Vertical) != 0.0f)
+        if (InputController.GetAxisDown(Axis.L_Horizontal) != 0 || InputController.GetAxisDown(Axis.L_Vertical) != 0)
         {
             StateProcessor.State = StateRun;
         }
-        _move_vector *= 0.9f;
+        _move_power *= 0.9f;
 
     }
-    private void Run()
+    private void RunState()
     {
         _animator.SetBool("is_running", true);
-        var x = InputController.GetAxisRow(Axis.L_Horizontal);
-        var z = InputController.GetAxisRow(Axis.L_Vertical);
 
 
         Vector3 camForward = Vector3.Scale(Camera.transform.forward, Vector3.right + Vector3.forward);
-        Vector3 moveForward = (camForward * z) + (Camera.transform.right * x);
-        _move_vector = moveForward * Parameter.RunSpeed * Time.deltaTime;
+        Vector3 moveForward = (camForward * _stick_z) + (Camera.transform.right * _stick_x);
+        _move_power = moveForward * Parameter.RunSpeed * Time.deltaTime;
         transform.rotation = Quaternion.LookRotation(moveForward);
-        
 
-        if (InputController.GetButtonDown(Button.R1)) 
+
+        if (InputController.GetButtonDown(Button.R1))
         {
             //スライディングに移行
             StateProcessor.State = StateSliding;
@@ -114,21 +150,20 @@ public class Player : MonoBehaviour
 
 
         }
-        if (InputController.GetAxis(Axis.L_Horizontal) == 0.0f && InputController.GetAxis(Axis.L_Vertical) == 0.0f&&IsGround())
+        if (_stick_x == 0.0f && _stick_z == 0.0f)
         {
+            Debug.Log("ステート移行");
             StateProcessor.State = StateIdle;
         }
 
     }
-    private void Sliding()
+    private void SlidingState()
     {
         _animator.SetBool("is_sliding", true);
 
-        var x = InputController.GetAxisRow(Axis.L_Horizontal);
-
         var moveForward = Vector3.Scale(transform.forward, new Vector3(1.0f, 0.0f, 1.0f));
-        var moveLR = (transform.right* x).normalized;
-        _move_vector = (moveForward * Parameter.SlidingSpeed + moveLR * Parameter.SlidingLRSpeed) * Time.deltaTime;
+        var moveLR = (transform.right * _stick_x).normalized;
+        _move_power = (moveForward * Parameter.SlidingSpeed + moveLR * Parameter.SlidingLRSpeed) * Time.deltaTime;
 
         if (InputController.GetButtonDown(Button.Y))
         {
@@ -143,26 +178,46 @@ public class Player : MonoBehaviour
             StateProcessor.State = StateIdle;
             SlidingParticleSwitch(false);
             SetSlidingCollider(false);
-
-
         }
 
 
     }
-    private void Jump()
+    private void JumpState()
     {
+        if (WallRunStartCheck())
+        {
+            Debug.Log("壁に当たった");
+            StateProcessor.State = StateWalRun;
+        }
         if (IsGround())
         {
-            if (InputController.GetButtonDown(Button.B))
+            StateProcessor.State = StateIdle;
+        }
+    }
+    private void WallRunState()
+    {
+        Vector3 WallRunVector = _move_direction + Vector3.Scale(((-_move_direction + _nomal_vector).normalized), _nomal_vector);
+        _move_power = WallRunVector * Parameter.WallRunSpeed;
+    }
+    //-------------------------------------------------
+    // 判定関数
+    //-------------------------------------------------
+    private bool WallRunStartCheck()
+    {
+        _move_direction = (transform.position - _buffer_pos).normalized;
+        Ray ray = new Ray(transform.position, _move_direction);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, Parameter.WallRunStartRange))
+        {
+            if (hit.collider.gameObject.layer == 10)
             {
-                _animator.SetTrigger("Jump");
-                _rigidbody.AddRelativeForce(transform.up * Parameter.JumpPower);
-
+                _nomal_vector = hit.normal;
+                return true;
             }
         }
+        return false;
 
     }
-    //天井判定
     private bool IsUpWallHit()
     {
         Ray up_ray = new Ray(transform.position, transform.up);
@@ -170,32 +225,31 @@ public class Player : MonoBehaviour
         float tenjou = 2;
         int layermask = 1 << 9;
 
-        if (Physics.Raycast(up_ray,tenjou, layermask))
+        if (Physics.Raycast(up_ray, tenjou, layermask))
         {
             return true;
         }
         return false;
     }
-    //地面判定
     private bool IsGround()
     {
-        Ray down_ray = new Ray(transform.position+new Vector3(0,0.5f,0), -transform.up);
+        Ray down_ray = new Ray(transform.position + new Vector3(0, 0.5f, 0), -transform.up);
         float gorund = 1;
         int layermask = 1 << 9;
         if (Physics.Raycast(down_ray, gorund, layermask))
         {
-            Debug.Log("地面なう");
             return true;
-            
+
         }
 
         return false;
     }
-   
-    //アニメーションイベントで呼び出します
+
+    //-------------------------------------------------
+    // アニメーションイベントで呼び出す奴
+    //-------------------------------------------------
     private void AtackEvent()
     {
-
         AttackCollider.SetActive(true);
     }
     private void AtackEndEvent()
@@ -203,6 +257,9 @@ public class Player : MonoBehaviour
         AttackCollider.SetActive(false);
 
     }
+    //-------------------------------------------------
+    // スライディング中に起動するやつ
+    //-------------------------------------------------
     private void SlidingParticleSwitch(bool isPlay)
     {
         for (int i = 0; i < SlidingParticleList.Count; i++)
@@ -230,44 +287,47 @@ public class Player : MonoBehaviour
         _box_collider.size = _collider_size;
         _box_collider.center = _collider_center;
     }
-    //ロックオン処理
+    //-------------------------------------------------
+    // ロックオンの処理
+    //-------------------------------------------------
     private void LockOnUpdate()
     {
         if (_is_lockon)
         {
-            if ( InputController.GetButtonDown(Button.L1) || Parameter.LockOnRange <= _enemy_manager.GetEnemyList()[_lockon_num].GetPlayerDistance() )
+            if (InputController.GetButtonDown(Button.L1) || Parameter.LockOnRange <= _enemy_manager.GetEnemyList()[_lockon_num].GetPlayerDistance())
             {
                 Debug.Log("ロックオン解除");
                 _lockon_cursor.OnLockonEnd();
                 _is_lockon = false;
             }
 
-
+            return;
         }
-        else
+
+        if (Parameter.LockOnRange >= _enemy_manager.GetEnemyList()[_lockon_num].GetPlayerDistance())
         {
-            if (Parameter.LockOnRange >= _enemy_manager.GetEnemyList()[_lockon_num].GetPlayerDistance() )
-            {
-                _lockon_cursor.OnLockonRady(_enemy_manager.GetEnemyList()[_lockon_num].gameObject);
-            }
-            //ロックオン　
-            if (InputController.GetButtonDown(Button.L1))
-            {
-                _lockon_cursor.OnLockonStart();
-                _is_lockon = true;
-            }
-            //ロック切り替え
-            if (InputController.GetButtonDown(Button.RightStick))
-            {
-                if (Parameter.LockOnRange >= _enemy_manager.GetEnemyList()[_lockon_num + 1].GetPlayerDistance())
-                {
-                    _lockon_num++;
-                }
-            }
-
+            _lockon_cursor.OnLockonRady(_enemy_manager.GetEnemyList()[_lockon_num].gameObject);
         }
+        //ロックオン　
+        if (InputController.GetButtonDown(Button.L1))
+        {
+            _lockon_cursor.OnLockonStart();
+            _is_lockon = true;
+        }
+        //ロック切り替え
+        if (InputController.GetButtonDown(Button.RightStick))
+        {
+            if (Parameter.LockOnRange >= _enemy_manager.GetEnemyList()[_lockon_num + 1].GetPlayerDistance())
+            {
+                _lockon_num++;
+            }
+        }
+
     }
-    //ロックオンしてるオブジェクトを取得
+
+    //-------------------------------------------------
+    // 各種取得関数
+    //-------------------------------------------------
     public GameObject GetLockOnbject()
     {
         return _lockon_cursor.GetLockONTarget();
@@ -283,7 +343,6 @@ public class Player : MonoBehaviour
     public int GetNowHP() {
     return _now_hp;
     }
-    //一番距離の近い敵を保存する関数
     public PlayerStateID GetState()
     {
         return StateProcessor.State.GetState();
