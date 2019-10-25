@@ -1,11 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
+
 public class CameraController3D : MonoBehaviour
-{
-    
+{    
     [SerializeField]
-    private GameObject _targetObject;
+    private GameObject _targetObject = null;
+
+    [SerializeField]
+    private GameObject _lookTaget = null;
 
     [SerializeField]
     CameraController3DParameter _parameter;
@@ -27,6 +31,8 @@ public class CameraController3D : MonoBehaviour
         _camera = GetComponent<Camera>();
         _nowfov = _parameter._fieldOfView;
         _nowPos = _targetObject.transform.position;
+
+        CameraReset();
     }
 
     // Update is called once per frame
@@ -89,9 +95,16 @@ public class CameraController3D : MonoBehaviour
         transform.position = _nowPos+ new Vector3(cx, cy, cz);
 
         // カメラ向き
-        var rot = Quaternion.LookRotation((_nowPos - transform.position).normalized) * Quaternion.Euler(noise);
-        if (_parameter._enableAtten) transform.rotation = Quaternion.Slerp(transform.rotation, rot, Time.deltaTime * _parameter._angleAttenRate);
-        else transform.rotation = rot;
+        if (_lookTaget == null)
+        {
+            var rot = Quaternion.LookRotation((_nowPos - transform.position).normalized) * Quaternion.Euler(noise);
+            if (_parameter._enableAtten) transform.rotation = Quaternion.Slerp(transform.rotation, rot, Time.deltaTime * _parameter._angleAttenRate);
+            else transform.rotation = rot;
+        }
+        else
+        {
+            transform.LookAt(_lookTaget.transform, Vector3.up);
+        }
     }
 
    public void CameraReset()
