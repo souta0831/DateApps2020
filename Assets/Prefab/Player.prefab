@@ -1534,7 +1534,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: a3094ed96189d2249bbc3b00da4bf207, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
@@ -1591,7 +1591,6 @@ MonoBehaviour:
   - {fileID: 7712163778202297727}
   - {fileID: 4811192499901464562}
   _enemy_manager: {fileID: 0}
-  _lockon_num: 0
 --- !u!114 &3832162172635798876
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3132,6 +3131,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5071254205091298385}
     m_Modifications:
+    - target: {fileID: 451509570267526994, guid: df874768c603777408338bd38f5f64d1,
+        type: 3}
+      propertyPath: m_Name
+      value: demo_fire
+      objectReference: {fileID: 0}
     - target: {fileID: 451509570267526992, guid: df874768c603777408338bd38f5f64d1,
         type: 3}
       propertyPath: playOnAwake
@@ -3206,11 +3210,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.030000003
-      objectReference: {fileID: 0}
-    - target: {fileID: 451509570267526994, guid: df874768c603777408338bd38f5f64d1,
-        type: 3}
-      propertyPath: m_Name
-      value: demo_fire
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: df874768c603777408338bd38f5f64d1, type: 3}
@@ -3319,6 +3318,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5071254205091298385}
     m_Modifications:
+    - target: {fileID: 8685359597421499936, guid: db1c8c9eb287c324c8e39d89faa87372,
+        type: 3}
+      propertyPath: m_Name
+      value: speedLine
+      objectReference: {fileID: 0}
     - target: {fileID: 2974924566062214592, guid: db1c8c9eb287c324c8e39d89faa87372,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3373,11 +3377,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8685359597421499936, guid: db1c8c9eb287c324c8e39d89faa87372,
-        type: 3}
-      propertyPath: m_Name
-      value: speedLine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: db1c8c9eb287c324c8e39d89faa87372, type: 3}
