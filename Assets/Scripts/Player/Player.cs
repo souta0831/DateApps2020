@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using PlayerState;
+
 public class Player : MonoBehaviour
 {
     [SerializeField]
     PlayerParameter Parameter;
     [SerializeField]
     private GameObject AttackCollider = null;
+
     //カメラ
     [SerializeField]
     private Camera Camera;
@@ -15,12 +17,12 @@ public class Player : MonoBehaviour
     [SerializeField]
     private List<ParticleSystem> SlidingParticleList = new List<ParticleSystem>();
     [SerializeField]
-    private EnemyManager _enemy_manager;
+    private EnemyManager  _enemyManager;
     //Thisコンポーネント
     private Rigidbody _rigidbody;
     private Animator _animator;
     private BoxCollider _box_collider;
-    private LockonCursor _lockon_cursor = null;
+    private LockonCursor _lockonCursor = null;
     //保存用
     private Vector3 _collider_size = Vector3.zero;
     private Vector3 _collider_center = Vector3.zero;
@@ -29,7 +31,7 @@ public class Player : MonoBehaviour
     private Vector3 _nomal_vector = Vector3.zero;
     private Vector3 _move_direction = Vector3.zero;
     private int _now_hp;
-    private bool _is_lockon = false;
+    private bool _isLockOn = false;
     private int _lockon_num = 0;
     private float _stick_x = 0.0f;
     private float _stick_z = 0.0f;
@@ -41,13 +43,14 @@ public class Player : MonoBehaviour
     private PlayerStateSliding StateSliding = new PlayerStateSliding();
     private PlayerStateJump StateJump = new PlayerStateJump();
     private PlayerStateWallRun StateWalRun = new PlayerStateWallRun();
+
     void Start()
     {
         //GetComponent
         _rigidbody = GetComponent<Rigidbody>();
         _animator = GetComponent<Animator>();
         _box_collider = GetComponent<BoxCollider>();
-        _lockon_cursor = GetComponent<LockonCursor>();
+      _lockonCursor = GetComponent<LockonCursor>();
         //コライダーの大きさを取得
         _collider_size = _box_collider.size;
         _collider_center = _box_collider.center;
@@ -71,7 +74,7 @@ public class Player : MonoBehaviour
     {
         State();
         Jump();
-        LockOnUpdate();
+        //LockOnUpdate();
         StickUpdate();
         Move();
     }
@@ -83,6 +86,7 @@ public class Player : MonoBehaviour
         transform.position += _move_power;
         _buffer_pos = transform.position;
     }
+
     private void Jump()
     {
 
@@ -292,32 +296,32 @@ public class Player : MonoBehaviour
     //-------------------------------------------------
     private void LockOnUpdate()
     {
-        if (_is_lockon)
+        if (_isLockOn)
         {
-            if (InputController.GetButtonDown(Button.L1) || Parameter.LockOnRange <= _enemy_manager.GetEnemyList()[_lockon_num].GetPlayerDistance())
+            if (InputController.GetButtonDown(Button.L1) || Parameter.LockOnRange <=  _enemyManager.GetEnemyList()[_lockon_num].GetPlayerDistance())
             {
                 Debug.Log("ロックオン解除");
-                _lockon_cursor.OnLockonEnd();
-                _is_lockon = false;
+              _lockonCursor.OnLockonEnd();
+                _isLockOn = false;
             }
 
             return;
         }
 
-        if (Parameter.LockOnRange >= _enemy_manager.GetEnemyList()[_lockon_num].GetPlayerDistance())
+        if (Parameter.LockOnRange >=  _enemyManager.GetEnemyList()[_lockon_num].GetPlayerDistance())
         {
-            _lockon_cursor.OnLockonRady(_enemy_manager.GetEnemyList()[_lockon_num].gameObject);
+          _lockonCursor.OnLockonRady( _enemyManager.GetEnemyList()[_lockon_num].gameObject);
         }
         //ロックオン　
         if (InputController.GetButtonDown(Button.L1))
         {
-            _lockon_cursor.OnLockonStart();
-            _is_lockon = true;
+          _lockonCursor.OnLockonStart();
+            _isLockOn = true;
         }
         //ロック切り替え
         if (InputController.GetButtonDown(Button.RightStick))
         {
-            if (Parameter.LockOnRange >= _enemy_manager.GetEnemyList()[_lockon_num + 1].GetPlayerDistance())
+            if (Parameter.LockOnRange >=  _enemyManager.GetEnemyList()[_lockon_num + 1].GetPlayerDistance())
             {
                 _lockon_num++;
             }
@@ -330,11 +334,11 @@ public class Player : MonoBehaviour
     //-------------------------------------------------
     public GameObject GetLockOnbject()
     {
-        return _lockon_cursor.GetLockONTarget();
+        return _lockonCursor.GetLockONTarget();
     }
     public bool IsLockOn()
     {
-        return _is_lockon;
+        return _isLockOn;
     }
     public int GetMaxHP()
     {

@@ -9,15 +9,18 @@ using UnityEngine.UI;
 public class LockonCursor : MonoBehaviour
 {
     // カーソルのRectTransform
-    private RectTransform[] rectTransform=new RectTransform[(int)LockOnState_.Num];
+    private RectTransform[] rectTransform = new RectTransform[(int)LockOnState_.Num];
 
     // カーソルのImage
     [SerializeField]
     GameObject[] _lockon_image = new GameObject[(int)LockOnState_.Num];
+
     [SerializeField]
     GameObject Canvas;
+
     GameObject[] _image_obj = new GameObject[(int)LockOnState_.Num];
     Image[] _image=new Image[(int)LockOnState_.Num];
+
     // ロックオン対象のTransform
     GameObject LockonTarget;
 
@@ -51,7 +54,6 @@ public class LockonCursor : MonoBehaviour
         }
 
     }
-
 
     public void OnLockonRady(GameObject target)
     {
