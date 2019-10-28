@@ -1583,14 +1583,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Parameter: {fileID: 11400000, guid: 3aa0e0a3ef2a23a44b0bc8f679b80735, type: 2}
   AttackCollider: {fileID: 5400341332914889586}
-  Slash_Efect: {fileID: 83773069660809620, guid: b62d53137927de849ad4f174cb19f23f,
-    type: 3}
   Camera: {fileID: 0}
   SlidingParticleList:
   - {fileID: 1826047884494235914}
   - {fileID: 7712163778202297727}
   - {fileID: 4811192499901464562}
-  _enemy_manager: {fileID: 0}
+  _enemyManager: {fileID: 0}
 --- !u!114 &3832162172635798876
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3136,20 +3134,15 @@ PrefabInstance:
       propertyPath: m_Name
       value: demo_fire
       objectReference: {fileID: 0}
-    - target: {fileID: 451509570267526992, guid: df874768c603777408338bd38f5f64d1,
-        type: 3}
-      propertyPath: playOnAwake
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 451509570267526993, guid: df874768c603777408338bd38f5f64d1,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.112
+      value: 0.213
       objectReference: {fileID: 0}
     - target: {fileID: 451509570267526993, guid: df874768c603777408338bd38f5f64d1,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.309
+      value: 1.022
       objectReference: {fileID: 0}
     - target: {fileID: 451509570267526993, guid: df874768c603777408338bd38f5f64d1,
         type: 3}
@@ -3210,6 +3203,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.030000003
+      objectReference: {fileID: 0}
+    - target: {fileID: 451509570267526992, guid: df874768c603777408338bd38f5f64d1,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: df874768c603777408338bd38f5f64d1, type: 3}
