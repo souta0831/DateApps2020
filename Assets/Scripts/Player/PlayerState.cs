@@ -20,6 +20,7 @@ namespace PlayerState {
     public class StateProcessor
     {
         private PlayerState _State;
+        private PlayerState _bufferState;
         public PlayerState State
         {
             set { _State = value; }
@@ -27,7 +28,12 @@ namespace PlayerState {
         }
         public void Execute()
         {
+            if(_State != _bufferState)
+            {
+                _bufferState.EndExecute();
+            }
             State.Execute();
+            _bufferState = State;
         }
         
 
@@ -37,9 +43,15 @@ namespace PlayerState {
 
         public delegate void executeState();
         public executeState execDelegate;
+        public executeState execEndDelegate;
         public virtual void Execute()
         {
             if (execDelegate != null) execDelegate();
+        }
+        public virtual void EndExecute()
+        {
+            if (execEndDelegate != null) execEndDelegate();
+
         }
         public abstract PlayerStateID GetState();
     }
