@@ -7,6 +7,9 @@ using DG.Tweening;
 public class UI_LifeGauge : MonoBehaviour
 {
     [SerializeField]
+    LifePointBase LifePoint = null;
+
+    [SerializeField]
     private Image _gaugeImage = null;
     [SerializeField]
     private Image _gaugeBGImage = null;
