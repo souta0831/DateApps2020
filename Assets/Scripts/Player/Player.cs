@@ -6,23 +6,29 @@ using PlayerState;
 public class Player : MonoBehaviour
 {
     [SerializeField]
-    PlayerParameter Parameter;
+    private PlayerParameter Parameter;
+
+    [SerializeField]
+    private LifePointBase _lifePoint = null;
+
+    [SerializeField]
+    private Player_EffectManager _EffectManager = null;
+
     [SerializeField]
     private GameObject AttackCollider = null;
 
     //カメラ
     [SerializeField]
     private Camera Camera;
-    //スライディングした時に再生するパーティクル
-    [SerializeField]
-    private List<ParticleSystem> SlidingParticleList = new List<ParticleSystem>();
     [SerializeField]
     private EnemyManager  _enemyManager;
+
     //Thisコンポーネント
     private Rigidbody _rigidbody;
     private Animator _animator;
     private BoxCollider _box_collider;
     private LockonCursor _lockonCursor = null;
+
     //保存用
     private Vector3 _collider_size = Vector3.zero;
     private Vector3 _collider_center = Vector3.zero;
@@ -30,9 +36,10 @@ public class Player : MonoBehaviour
     private Vector3 _buffer_pos = Vector3.zero;
     private Vector3 _nomal_vector = Vector3.zero;
     private Vector3 _move_direction = Vector3.zero;
-    private int _now_hp;
+
     private bool _isLockOn = false;
     private int _lockon_num = 0;
+    
     private float _stick_x = 0.0f;
     private float _stick_z = 0.0f;
 
@@ -51,11 +58,14 @@ public class Player : MonoBehaviour
         _animator = GetComponent<Animator>();
         _box_collider = GetComponent<BoxCollider>();
       _lockonCursor = GetComponent<LockonCursor>();
+
         //コライダーの大きさを取得
         _collider_size = _box_collider.size;
         _collider_center = _box_collider.center;
+
         //初期ステートセット
         StateProcessor.State = StateIdle;
+
         //イデレーターにセット
         StateIdle.execDelegate = IdleState;
         StateRun.execDelegate = RunState;
@@ -63,11 +73,11 @@ public class Player : MonoBehaviour
         StateWalRun.execDelegate = WallRunState;
         StateJump.execDelegate = JumpState;
 
-        //hpセット
-        _now_hp = Parameter.MaxHp;
-        SlidingParticleSwitch(false);
-
-
+        //LifePointセット
+        _lifePoint.MaxPointSet(Parameter.MaxHp);
+        _lifePoint.PointSet(Parameter.MaxHp);
+        //Effect停止
+        _EffectManager.AllParticleStop();
     }
 
     void Update()
@@ -150,7 +160,7 @@ public class Player : MonoBehaviour
             //スライディングに移行
             StateProcessor.State = StateSliding;
             SetSlidingCollider(true);
-            SlidingParticleSwitch(true);
+            _EffectManager.AllParticlePlay();
 
 
         }
@@ -180,7 +190,7 @@ public class Player : MonoBehaviour
         {
             //アイドルに移行
             StateProcessor.State = StateIdle;
-            SlidingParticleSwitch(false);
+            _EffectManager.AllParticleStop();
             SetSlidingCollider(false);
         }
 
@@ -225,11 +235,8 @@ public class Player : MonoBehaviour
     private bool IsUpWallHit()
     {
         Ray up_ray = new Ray(transform.position, transform.up);
-        //天井判定の距離
-        float tenjou = 2;
-        int layermask = 1 << 9;
 
-        if (Physics.Raycast(up_ray, tenjou, layermask))
+        if (Physics.Raycast(up_ray,Parameter._ceilingRange, Parameter._groundLayer))
         {
             return true;
         }
@@ -237,10 +244,8 @@ public class Player : MonoBehaviour
     }
     private bool IsGround()
     {
-        Ray down_ray = new Ray(transform.position + new Vector3(0, 0.5f, 0), -transform.up);
-        float gorund = 1;
-        int layermask = 1 << 9;
-        if (Physics.Raycast(down_ray, gorund, layermask))
+        Ray down_ray = new Ray(transform.position + (transform.up / 2.0f), -transform.up);
+        if (Physics.Raycast(down_ray, Parameter._groundRange, Parameter._groundLayer))
         {
             return true;
 
@@ -264,22 +269,6 @@ public class Player : MonoBehaviour
     //-------------------------------------------------
     // スライディング中に起動するやつ
     //-------------------------------------------------
-    private void SlidingParticleSwitch(bool isPlay)
-    {
-        for (int i = 0; i < SlidingParticleList.Count; i++)
-        {
-            if (SlidingParticleList[i] == null) continue;
-
-            if (isPlay)
-            {
-                SlidingParticleList[i].Play();
-                continue;
-            }
-            SlidingParticleList[i].Stop();
-        }
-
-
-    }
     private void SetSlidingCollider(bool isSliding)
     {
         if (isSliding)
@@ -339,13 +328,6 @@ public class Player : MonoBehaviour
     public bool IsLockOn()
     {
         return _isLockOn;
-    }
-    public int GetMaxHP()
-    {
-        return Parameter.MaxHp;
-    }
-    public int GetNowHP() {
-    return _now_hp;
     }
     public PlayerStateID GetState()
     {
