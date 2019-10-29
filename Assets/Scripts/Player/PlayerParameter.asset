@@ -16,3 +16,15 @@ MonoBehaviour:
   JumpPower: 300
   SlidingSpeed: 12
   SlidingLRSpeed: 4
+  LockOnRange: 10
+  MaxHp: 100
+  WallRunStartRange: 1
+  WallRunSpeed: 3
+  _groundLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  _runWallLayer:
+    serializedVersion: 2
+    m_Bits: 10
+  _groundRange: 1
+  _ceilingRange: 2

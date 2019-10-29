@@ -36,7 +36,6 @@ public class Player_LockOn : MonoBehaviour
               _lockonCursor.OnLockonEnd();
                 _isLockOn = false;
             }
-
             return;
         }
 
@@ -55,11 +54,6 @@ public class Player_LockOn : MonoBehaviour
         {
             int _lockOnIndex = _lockOnNum+1 < _enemyManager.GetEnemyList().Count ? _lockOnNum + 1 : 0;
             _lockOnNum = _lockOnRange >= _enemyManager.GetEnemyList()[_lockOnIndex].GetPlayerDistance() ? _lockOnIndex : _lockOnNum;
-
-            //if (_lockOnRange >=  _enemyManager.GetEnemyList()[_lockOnIndex].GetPlayerDistance())
-            //{
-            //    _lockOnNum = _lockOnIndex;            
-            //}
         }
     }
 }
