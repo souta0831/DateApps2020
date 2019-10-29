@@ -26,16 +26,26 @@ namespace PlayerState {
             set { _State = value; }
             get { return _State; }
         }
+        public PlayerState BufferState
+        {
+            set { _bufferState = value; }
+            get { return _bufferState; }
+        }
         public void Execute()
         {
-            if(_State != _bufferState)
+            if (BufferState != null)
             {
-                _bufferState.EndExecute();
+                if (State != BufferState)
+                {
+                    BufferState.EndExecute();
+                }
             }
+
             State.Execute();
-            _bufferState = State;
+            BufferState = State;
+
         }
-        
+
 
     }
     //ステートクラス
