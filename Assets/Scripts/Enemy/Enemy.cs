@@ -8,40 +8,20 @@ public class Enemy : MonoBehaviour
     private Transform _player_transform = null;
     private bool _is_activate = false;
     //起動に必要な距離
-    [SerializeField] private float _active_distance = 50;
-    //生成する弾
-    [SerializeField] private GameObject _bullet;
-    //発射レート
-    [SerializeField] private float FireRate = 5;
-    //再発射までの時間
-    [SerializeField] private float FireCoolTime = 60;
-    //連射数
-    [SerializeField] private int Burst = 3;
-    //弾の精度
     [SerializeField]
-    private float Accuracy = 5;
+    private float _active_distance = 50;
     //切られた時のエフェクト
     [SerializeField]
     private GameObject DeadParticle = null;
-    [SerializeField]
-    private GameObject _lockon_sprite;
     
-    
-    private float _fire_timer;
-    private float _cool_timer;
-    private float _burst_count;
     void Start()
     {
-        _fire_timer = FireRate;
-        _burst_count = Burst;
     }
 
     void Update()
     {
         if (_player_transform == null) return;
         ActiveCheck();
-        if (!_is_activate) return;
-        CreateBullet();
     }
     public void SetPlayer(Transform player)
     {
@@ -65,29 +45,6 @@ public class Enemy : MonoBehaviour
             }
 
         }
-
-    }
-    private void CreateBullet()
-    {
-        _cool_timer--;
-        if (_cool_timer >= 0) return;
-        _fire_timer--;
-        if (_fire_timer >= 0) return;
-
-        var bullet = Instantiate(_bullet, transform.position + new Vector3(0, 1.5f, 0), transform.rotation);
-        Vector3 accuracy = new Vector3(Random.Range(-Accuracy, Accuracy), 0, Random.Range(-Accuracy, Accuracy));
-        Vector3 angle = ((_player_transform.position + new Vector3(0, 0.2f, 0)) - (transform.position + accuracy)).normalized;
-
-        bullet.GetComponent<Ballet>().SetAngle(angle);
-        _fire_timer = FireRate;
-        _burst_count--;
-        if (_burst_count <= 0)
-        {
-            _cool_timer = FireCoolTime;
-            _burst_count = Burst;
-        }
-
-
     }
     private void OnTriggerEnter(Collider collision)
     {
@@ -109,5 +66,13 @@ public class Enemy : MonoBehaviour
         return gameObject;
     }
 
+    public bool GetIsActive()
+    {
+        return _is_activate;
+    }
+    public Transform GetPlayerTrans()
+    {
+        return _player_transform;
+    }
 
 }

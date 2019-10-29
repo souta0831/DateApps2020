@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2591807973697484476}
   - component: {fileID: 2591807973528091669}
   - component: {fileID: 1830359387479053619}
+  - component: {fileID: 4615381575684666599}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -46,14 +47,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _active_distance: 50
-  _bullet: {fileID: 3822299235731494083, guid: 9e4c8f55a1422c3498c27770849cb2da, type: 3}
-  FireRate: 5
-  FireCoolTime: 60
-  Burst: 3
-  Accuracy: 5
   DeadParticle: {fileID: 83773069660809620, guid: b62d53137927de849ad4f174cb19f23f,
     type: 3}
-  _lockon_sprite: {fileID: 0}
 --- !u!65 &1830359387479053619
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -67,7 +62,22 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0.5, z: 0}
---- !u!1001 &2479464523837085909
+--- !u!114 &4615381575684666599
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2591807973697579868}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0ae730a46e154341b15c7b54a2c0ac5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _parameter: {fileID: 11400000, guid: 7e90cb803ec974c4baf579449b310c33, type: 2}
+  _bullet: {fileID: 3822299235731494083, guid: 9e4c8f55a1422c3498c27770849cb2da, type: 3}
+  _shot_pos: {fileID: 2591807973697484476}
+--- !u!1001 &4778047961247228133
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
