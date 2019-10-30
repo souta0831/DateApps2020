@@ -6,13 +6,13 @@ using PlayerState;
 public class Player : MonoBehaviour
 {
     [SerializeField]
-    private PlayerParameter Parameter;
+    private PlayerParameter _parameter;
 
     [SerializeField]
     private LifePointBase _lifePoint = null;
 
     [SerializeField]
-    private Player_EffectManager _EffectManager = null;
+    private Player_EffectManager _effectManager = null;
 
     [SerializeField]
     private GameObject AttackCollider = null;
@@ -52,10 +52,11 @@ public class Player : MonoBehaviour
     void Start()
     {
         //GetComponent
-        _rigidbody = GetComponent<Rigidbody>();
-        _animator = GetComponent<Animator>();
-        _box_collider = GetComponent<BoxCollider>();
-      _lockonCursor = GetComponent<LockonCursor>();
+        Camera = Camera.main;
+       _rigidbody = GetComponent<Rigidbody>();
+       _animator = GetComponent<Animator>();
+       _box_collider = GetComponent<BoxCollider>();
+       _lockonCursor = GetComponent<LockonCursor>();
 
         //コライダーの大きさを取得
         _collider_size = _box_collider.size;
@@ -72,18 +73,18 @@ public class Player : MonoBehaviour
         StateJump.execDelegate = JumpState;
 
         //LifePointセット
-        _lifePoint.MaxPointSet(Parameter.MaxHp);
-        _lifePoint.PointSet(Parameter.MaxHp);
+        _lifePoint.MaxPointSet(_parameter.MaxHp);
+        _lifePoint.PointSet(_parameter.MaxHp);
 
         //Effect停止
-        _EffectManager.AllParticleStop();
+        _effectManager.AllParticleStop();
     }
 
     void Update()
     {
         State();
-        Jump();
         StickUpdate();
+        Jump();      
         Move();
     }
     //-------------------------------------------------
@@ -100,15 +101,17 @@ public class Player : MonoBehaviour
         if (InputController.GetButtonDown(Button.B) && IsGround())
         {
             _animator.SetTrigger("Jump");
-            _rigidbody.AddRelativeForce(transform.up * Parameter.JumpPower);
+            _rigidbody.AddRelativeForce(transform.up *  _parameter.JumpPower);
             StateProcessor.State = StateJump;
         }
     }
 
     private void StickUpdate()
     {
-        _stick_x = InputController.GetAxisRow(Axis.L_Horizontal);
-        _stick_z = InputController.GetAxisRow(Axis.L_Vertical);
+        //_stick_x = InputController.GetAxisRow(Axis.L_Horizontal);
+        //_stick_z = InputController.GetAxisRow(Axis.L_Vertical);
+        _stick_x = Input.GetAxis("Horizontal");
+        _stick_z = Input.GetAxis("Vertical");
     }
 
     //-------------------------------------------------
@@ -136,28 +139,29 @@ public class Player : MonoBehaviour
     }
     private void RunState()
     {
-        _animator.SetBool("is_running", true);
+        if (_stick_x == 0.0f && _stick_z == 0.0f)
+        {
+            Debug.Log("ステート移行");
+            StateProcessor.State = StateIdle;
+            return;
+        }
 
+        Vector2 _stickRange = new Vector2(_stick_x,_stick_z);
+
+        _animator.SetBool("is_running", true);
+        _animator.SetFloat("RunSpeed", _stickRange.magnitude);
 
         Vector3 camForward = Vector3.Scale(Camera.transform.forward, Vector3.right + Vector3.forward);
         Vector3 moveForward = (camForward * _stick_z) + (Camera.transform.right * _stick_x);
-        _move_power = moveForward * Parameter.RunSpeed * Time.deltaTime;
-        transform.rotation = Quaternion.LookRotation(moveForward);
-
+        _move_power = moveForward * _parameter.RunSpeed * Time.deltaTime;
+        this.transform.rotation = Quaternion.LookRotation(moveForward);
 
         if (InputController.GetButtonDown(Button.R1))
         {
             //スライディングに移行
             StateProcessor.State = StateSliding;
             SetSlidingCollider(true);
-            _EffectManager.AllParticlePlay();
-
-
-        }
-        if (_stick_x == 0.0f && _stick_z == 0.0f)
-        {
-            Debug.Log("ステート移行");
-            StateProcessor.State = StateIdle;
+            _effectManager.AllParticlePlay();
         }
 
     }
@@ -165,29 +169,31 @@ public class Player : MonoBehaviour
     {
         _animator.SetBool("is_sliding", true);
 
-        var moveForward = Vector3.Scale(transform.forward, new Vector3(1.0f, 0.0f, 1.0f));
-        var moveLR = (transform.right * _stick_x).normalized;
-        _move_power = (moveForward * Parameter.SlidingSpeed + moveLR * Parameter.SlidingLRSpeed) * Time.deltaTime;
+        var moveForward = Vector3.Scale(transform.forward, Vector3.right + Vector3.forward);
+        var moveLR = (transform.right * _stick_x);//.normalized;
+
+        //_move_power = (moveForward * _parameter.SlidingSpeed + moveLR * _parameter.SlidingLRSpeed) * Time.deltaTime;
+        _move_power += (moveLR * _parameter.SlidingLRSpeed) /10.0f* Time.deltaTime;
+        this.transform.position += moveForward * _parameter.SlidingSpeed * Time.deltaTime;
+        _move_power *= 0.99f;
 
         if (InputController.GetButtonDown(Button.Y))
         {
-
             _animator.SetTrigger("Attack");
-
         }
 
         if (!InputController.GetButtonStay(Button.R1) && !IsUpWallHit() && IsGround())
         {
             //アイドルに移行
             StateProcessor.State = StateIdle;
-            _EffectManager.AllParticleStop();
+            _effectManager.AllParticleStop();
             SetSlidingCollider(false);
         }
-
-
     }
     private void JumpState()
     {
+        _effectManager.AllParticleStop();
+
         if (WallRunStartCheck())
         {
             Debug.Log("壁に当たった");
@@ -201,7 +207,7 @@ public class Player : MonoBehaviour
     private void WallRunState()
     {
         Vector3 WallRunVector = _move_direction + Vector3.Scale(((-_move_direction + _nomal_vector).normalized), _nomal_vector);
-        _move_power = WallRunVector * Parameter.WallRunSpeed;
+        _move_power = WallRunVector * _parameter.WallRunSpeed;
     }
     //-------------------------------------------------
     // 判定関数
@@ -209,39 +215,31 @@ public class Player : MonoBehaviour
     private bool WallRunStartCheck()
     {
         _move_direction = (transform.position - _buffer_pos).normalized;
+
         Ray ray = new Ray(transform.position, _move_direction);
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, Parameter.WallRunStartRange))
+
+        if (!Physics.Raycast(ray, out RaycastHit hit, _parameter.WallRunStartRange))
         {
-            if (hit.collider.gameObject.layer == 10)
+            return false;
+        }
+
+        if (hit.collider.gameObject.layer == _parameter._runWallLayer)
             {
                 _nomal_vector = hit.normal;
                 return true;
-            }
-        }
+            }   
+        
         return false;
-
     }
     private bool IsUpWallHit()
     {
         Ray up_ray = new Ray(transform.position, transform.up);
-
-        if (Physics.Raycast(up_ray,Parameter._ceilingRange, Parameter._groundLayer))
-        {
-            return true;
-        }
-        return false;
+        return Physics.Raycast(up_ray, _parameter._ceilingRange, _parameter._groundLayer);
     }
     private bool IsGround()
     {
         Ray down_ray = new Ray(transform.position + (transform.up / 2.0f), -transform.up);
-        if (Physics.Raycast(down_ray, Parameter._groundRange, Parameter._groundLayer))
-        {
-            return true;
-
-        }
-
-        return false;
+        return Physics.Raycast(down_ray, _parameter._groundRange, _parameter._groundLayer);
     }
 
     //-------------------------------------------------
@@ -256,6 +254,7 @@ public class Player : MonoBehaviour
         AttackCollider.SetActive(false);
 
     }
+
     //-------------------------------------------------
     // スライディング中に起動するやつ
     //-------------------------------------------------
@@ -263,14 +262,13 @@ public class Player : MonoBehaviour
     {
         if (isSliding)
         {
-            _box_collider.size = new Vector3(_collider_size.x, _collider_size.y / 2, _collider_size.z);
-            _box_collider.center = new Vector3(_collider_center.x, _collider_center.y / 2, _collider_center.z);
+            _box_collider.size = new Vector3(_collider_size.x, _collider_size.y / 2.0f, _collider_size.z);
+            _box_collider.center = new Vector3(_collider_center.x, _collider_center.y / 2.0f, _collider_center.z);
             return;
         }
         _box_collider.size = _collider_size;
         _box_collider.center = _collider_center;
     }
-
 
     //-------------------------------------------------
     // 各種取得関数
