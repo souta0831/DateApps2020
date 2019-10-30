@@ -20,6 +20,7 @@ public class Player : MonoBehaviour
     //カメラ
     [SerializeField]
     private Camera Camera;
+
     [SerializeField]
     private EnemyManager  _enemyManager;
 
@@ -37,9 +38,6 @@ public class Player : MonoBehaviour
     private Vector3 _nomal_vector = Vector3.zero;
     private Vector3 _move_direction = Vector3.zero;
 
-    private bool _isLockOn = false;
-    private int _lockon_num = 0;
-    
     private float _stick_x = 0.0f;
     private float _stick_z = 0.0f;
 
@@ -76,6 +74,7 @@ public class Player : MonoBehaviour
         //LifePointセット
         _lifePoint.MaxPointSet(Parameter.MaxHp);
         _lifePoint.PointSet(Parameter.MaxHp);
+
         //Effect停止
         _EffectManager.AllParticleStop();
     }
@@ -84,7 +83,6 @@ public class Player : MonoBehaviour
     {
         State();
         Jump();
-        //LockOnUpdate();
         StickUpdate();
         Move();
     }
@@ -93,23 +91,18 @@ public class Player : MonoBehaviour
     //-------------------------------------------------
     private void Move()
     {
-        transform.position += _move_power;
+        this.transform.position += _move_power;
         _buffer_pos = transform.position;
     }
 
     private void Jump()
     {
-
-
         if (InputController.GetButtonDown(Button.B) && IsGround())
         {
             _animator.SetTrigger("Jump");
             _rigidbody.AddRelativeForce(transform.up * Parameter.JumpPower);
             StateProcessor.State = StateJump;
         }
-
-
-
     }
 
     private void StickUpdate()
@@ -123,14 +116,11 @@ public class Player : MonoBehaviour
     //-------------------------------------------------
     private void State()
     {
-
         if (StateProcessor.State == null)
         {
             return;
         }
         StateProcessor.Execute();
-
-
     }
     private void IdleState()
     {
@@ -280,43 +270,7 @@ public class Player : MonoBehaviour
         _box_collider.size = _collider_size;
         _box_collider.center = _collider_center;
     }
-    //-------------------------------------------------
-    // ロックオンの処理
-    //-------------------------------------------------
-    private void LockOnUpdate()
-    {
-        if (_isLockOn)
-        {
-            if (InputController.GetButtonDown(Button.L1) || Parameter.LockOnRange <=  _enemyManager.GetEnemyList()[_lockon_num].GetPlayerDistance())
-            {
-                Debug.Log("ロックオン解除");
-              _lockonCursor.OnLockonEnd();
-                _isLockOn = false;
-            }
 
-            return;
-        }
-
-        if (Parameter.LockOnRange >=  _enemyManager.GetEnemyList()[_lockon_num].GetPlayerDistance())
-        {
-          _lockonCursor.OnLockonRady( _enemyManager.GetEnemyList()[_lockon_num].gameObject);
-        }
-        //ロックオン　
-        if (InputController.GetButtonDown(Button.L1))
-        {
-          _lockonCursor.OnLockonStart();
-            _isLockOn = true;
-        }
-        //ロック切り替え
-        if (InputController.GetButtonDown(Button.RightStick))
-        {
-            if (Parameter.LockOnRange >=  _enemyManager.GetEnemyList()[_lockon_num + 1].GetPlayerDistance())
-            {
-                _lockon_num++;
-            }
-        }
-
-    }
 
     //-------------------------------------------------
     // 各種取得関数
@@ -325,10 +279,7 @@ public class Player : MonoBehaviour
     {
         return _lockonCursor.GetLockONTarget();
     }
-    public bool IsLockOn()
-    {
-        return _isLockOn;
-    }
+    
     public PlayerStateID GetState()
     {
         return StateProcessor.State.GetState();

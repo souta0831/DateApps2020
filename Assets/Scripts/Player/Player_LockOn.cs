@@ -18,12 +18,6 @@ public class Player_LockOn : MonoBehaviour
     private bool _isLockOn = false;
     private int _lockOnNum = 0;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
     // Update is called once per frame
     void Update()
     {
