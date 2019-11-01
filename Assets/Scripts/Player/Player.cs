@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using PlayerState;
+using Player_State;
 
 public class Player : MonoBehaviour
 {
@@ -278,8 +278,8 @@ public class Player : MonoBehaviour
         return _lockonCursor.GetLockONTarget();
     }
     
-    public PlayerStateID GetState()
+    public PlayerState GetState()
     {
-        return StateProcessor.State.GetState();
+        return (PlayerState)StateProcessor.GetState();
     }
 }
