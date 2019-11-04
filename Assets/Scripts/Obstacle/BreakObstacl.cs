@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Player_State;
 public class BreakObstacl : MonoBehaviour
 {
     [SerializeField] List<GameObject> _break_efect;
