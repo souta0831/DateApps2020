@@ -1,8 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Player_State;
-
+using State;
 public class Player : MonoBehaviour
 {
     [SerializeField]
