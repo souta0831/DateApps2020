@@ -14,4 +14,6 @@ public class BossParameter : ScriptableObject
     //上昇速度
     [SerializeField]
     public float RiseSpeed = 1;
+    [SerializeField]
+    public LayerMask GroundLayer;
 }

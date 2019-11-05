@@ -76,8 +76,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9549f64363dca9244951d66b4443856b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _spawn_pos: {fileID: 774346852047999172}
-  _bossSpawnCollision: {fileID: 6207393810867703987}
+  _spawnPos: {fileID: 774346852047999172}
+  _bossSpawnCollider: {fileID: 4254821980908420071}
   _bossEndCollision: {fileID: 1542428243204084512}
   _bossPrefab: {fileID: 391738716817225303, guid: 24e34a566520d8544874d1ee39dc263b,
     type: 3}
@@ -93,6 +93,7 @@ GameObject:
   - component: {fileID: 7946433086794730617}
   - component: {fileID: 2917543889488897867}
   - component: {fileID: 8663998813510652478}
+  - component: {fileID: 4254821980908420071}
   m_Layer: 0
   m_Name: bossSpawnCollision
   m_TagString: Untagged
@@ -172,6 +173,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &4254821980908420071
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6207393810867703987}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6eeaade21dc57ba45ba4fd6c1ee8124b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8841521718858659158
 GameObject:
   m_ObjectHideFlags: 0
