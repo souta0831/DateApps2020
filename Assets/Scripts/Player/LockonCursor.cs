@@ -22,7 +22,7 @@ public class LockonCursor : MonoBehaviour
     Image[] _image=new Image[(int)LockOnState_.Num];
 
     // ロックオン対象のTransform
-    GameObject LockonTarget;
+    Transform LockonTarget;
 
     void Start()
     {
@@ -55,7 +55,7 @@ public class LockonCursor : MonoBehaviour
 
     }
 
-    public void OnLockonRady(GameObject target)
+    public void OnLockonRady(Transform target)
     {
         _image[(int)LockOnState_.Ready].enabled = true;
         LockonTarget = target;
@@ -74,10 +74,7 @@ public class LockonCursor : MonoBehaviour
         }
         LockonTarget = null;
     }
-    public GameObject GetLockONTarget()
-    {
-        return LockonTarget;
-    }
+  
     public enum LockOnState_
     {
         Ready,
