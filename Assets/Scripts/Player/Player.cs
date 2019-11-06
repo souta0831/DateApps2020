@@ -1,8 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using PlayerState;
-
+using State;
 public class Player : MonoBehaviour
 {
     [SerializeField]
@@ -276,9 +275,10 @@ public class Player : MonoBehaviour
 
     //-------------------------------------------------
     // 各種取得関数
-    //-------------------------------------------------    
-    public PlayerStateID GetState()
+    //-------------------------------------------------       
+    public PlayerState GetState()
     {
-        return StateProcessor.State.GetState();
+        return (PlayerState)StateProcessor.GetState();
     }
+
 }
