@@ -92,7 +92,7 @@ public class Player : MonoBehaviour
     //-------------------------------------------------
     private void Move()
     {
-        this.transform.position += _move_power;
+       this.transform.position += _move_power;
         _buffer_pos = transform.position;
     }
 
@@ -108,8 +108,6 @@ public class Player : MonoBehaviour
 
     private void StickUpdate()
     {
-        //_stick_x = InputController.GetAxisRow(Axis.L_Horizontal);
-        //_stick_z = InputController.GetAxisRow(Axis.L_Vertical);
         _stick_x = Input.GetAxis("Horizontal");
         _stick_z = Input.GetAxis("Vertical");
     }
@@ -130,7 +128,7 @@ public class Player : MonoBehaviour
         _animator.SetBool("is_running", false);
         _animator.SetBool("is_sliding", false);
 
-        if (InputController.GetAxisDown(Axis.L_Horizontal) != 0 || InputController.GetAxisDown(Axis.L_Vertical) != 0)
+        if (InputController.GetAxisDown(Axis.L_Horizontal) != 0.0f || InputController.GetAxisDown(Axis.L_Vertical) != 0.0f)
         {
             StateProcessor.State = StateRun;
         }
@@ -149,11 +147,13 @@ public class Player : MonoBehaviour
         Vector2 _stickRange = new Vector2(_stick_x,_stick_z);
 
         _animator.SetBool("is_running", true);
-        _animator.SetFloat("RunSpeed", _stickRange.magnitude);
 
         Vector3 camForward = Vector3.Scale(Camera.transform.forward, Vector3.right + Vector3.forward);
         Vector3 moveForward = (camForward * _stick_z) + (Camera.transform.right * _stick_x);
-        _move_power = moveForward * _parameter.RunSpeed * Time.deltaTime;
+        //_move_power =  _parameter.RunSpeed * moveForward * Time.deltaTime;
+
+        _move_power = moveForward.normalized * (_parameter.RunSpeed / Mathf.Sqrt(2.0f) * Time.deltaTime);
+
         this.transform.rotation = Quaternion.LookRotation(moveForward);
 
         if (InputController.GetButtonDown(Button.R1))
@@ -174,8 +174,12 @@ public class Player : MonoBehaviour
 
         //_move_power = (moveForward * _parameter.SlidingSpeed + moveLR * _parameter.SlidingLRSpeed) * Time.deltaTime;
         _move_power += (moveLR * _parameter.SlidingLRSpeed) /10.0f* Time.deltaTime;
+        if (_move_power.magnitude>= _parameter.SlidingLRSpeed)
+        {
+            _move_power = _move_power.normalized * _parameter.SlidingLRSpeed;
+        }
         this.transform.position += moveForward * _parameter.SlidingSpeed * Time.deltaTime;
-        _move_power *= 0.99f;
+        _move_power.x *= 0.99f;
 
         if (InputController.GetButtonDown(Button.Y))
         {
@@ -272,12 +276,7 @@ public class Player : MonoBehaviour
 
     //-------------------------------------------------
     // 各種取得関数
-    //-------------------------------------------------
-    public GameObject GetLockOnbject()
-    {
-        return _lockonCursor.GetLockONTarget();
-    }
-    
+    //-------------------------------------------------    
     public PlayerStateID GetState()
     {
         return StateProcessor.State.GetState();
