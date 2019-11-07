@@ -2,38 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Ballet : MonoBehaviour
+public class Ballet : BalletBase
 {
-    [SerializeField] float Speed;
-    [SerializeField] int DestroyTime;
-    Vector3 _angle; 
-    void Start()
-    {
-        
-    }
+    Vector3 _angle;
 
-    // Update is called once per frame
-    void Update()
+    protected override void Initialize()
     {
-        Move();
-        Delete();
+        Vector3 accuracy = new Vector3(Random.Range(-_accuracy, _accuracy), 0, Random.Range(-_accuracy, _accuracy));
+        _angle = ((_targetObject.transform.position + new Vector3(0, 0.2f, 0)) - (transform.position + accuracy)).normalized;
+
     }
-    void Move()
+    protected override void Move()
     {
         transform.position += _angle * Speed * Time.deltaTime;
 
     }
-    void Delete()
-    {
-        DestroyTime--;
-        if (DestroyTime <= 0)
-        {
-            Destroy(this.gameObject);
-        }
-
-
-    }
-
     public void SetAngle(Vector3 angle) {
         _angle = angle;
     }

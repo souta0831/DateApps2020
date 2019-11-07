@@ -13,9 +13,10 @@ public class Enemy : MonoBehaviour
     //切られた時のエフェクト
     [SerializeField]
     private GameObject DeadParticle = null;
-    
+    private EnemyShooter _shooter;
     void Start()
     {
+        _shooter = GetComponent<EnemyShooter>();
     }
 
     void Update()
@@ -40,7 +41,11 @@ public class Enemy : MonoBehaviour
             if (hit.collider.tag == "Player")
             {
                 _is_activate = true;
-                Debug.Log("起動");
+                //シュータを起動させる
+                _shooter.IsActive = true;
+                //ターゲットをセットする
+                _shooter.TargetObject = _player_transform.gameObject;
+                Debug.Log("Enemy:起動");
 
             }
 

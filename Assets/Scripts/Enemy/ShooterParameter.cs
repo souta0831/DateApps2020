@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 [CreateAssetMenu(menuName = "custom/ShooterController", fileName = "ShooterParameter")]
 
+
 public class ShooterParameter : ScriptableObject
 {
      //発射レート
