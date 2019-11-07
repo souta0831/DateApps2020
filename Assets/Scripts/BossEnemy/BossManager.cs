@@ -9,29 +9,33 @@ public class BossManager : MonoBehaviour
     private Transform _spawnPos = null;
     //このオブジェクトにプレイヤーが当たったら生成
     [SerializeField]
-    private GameObject _bossSpawnCollision;
+    private BossSpawnCollider _bossSpawnCollider;
     [SerializeField]
     private GameObject _bossEndCollision;
     [SerializeField]
     private GameObject _bossPrefab;
     //ボス本体
-    private GameObject _boss;
+    private GameObject _boss=null;
     //ボスのスクリプト
     private BossEnemy _boosScript;
     void Start()
     {
-        
+        _bossSpawnCollider._bossManager = this;
+
     }
 
     // Update is called once per frame
     void Update()
-    {
-        
+    {   
+
     }
-    void SpawnBoss()
+    public void SpawnBoss()
     {
         if (_boss != null) return;
-        _boss = Instantiate(_bossPrefab, _spawnPos);
-        _boosScript = GetComponent<BossEnemy>();
+        Debug.Log("Boss:Spawn");
+        _boss = Instantiate(_bossPrefab, _spawnPos.position,_spawnPos.rotation);
+        _boosScript = _boss.GetComponent<BossEnemy>();
+        _boosScript._endColliderArea = _bossEndCollision;
+        Destroy(_bossSpawnCollider.gameObject); 
     }
 }

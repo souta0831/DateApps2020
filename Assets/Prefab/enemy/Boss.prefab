@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 391738716816386647}
   - component: {fileID: 391738716815288471}
   - component: {fileID: 1189394230413869514}
+  - component: {fileID: 2454560722562448086}
+  - component: {fileID: 8560043330940292278}
   m_Layer: 0
   m_Name: Boss
   m_TagString: Untagged
@@ -58,7 +60,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f06431ea6b294094c8a93d959e8bf6c8, type: 3}
+  - {fileID: 2100000, guid: e0942dd8e0837924d937530aeedbd59f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -90,3 +92,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a096b80b0344ff74b86fdc349301856b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _parameter: {fileID: 11400000, guid: 3cf800241fd5aa340a97b3982dd28ee2, type: 2}
+--- !u!54 &2454560722562448086
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 391738716817225303}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &8560043330940292278
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 391738716817225303}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 10, y: 6, z: 5.129675}
+  m_Center: {x: 0, y: 3.92, z: 0}

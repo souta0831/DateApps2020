@@ -139,9 +139,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0ae730a46e154341b15c7b54a2c0ac5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _parameter: {fileID: 11400000, guid: 7e90cb803ec974c4baf579449b310c33, type: 2}
-  _bullet: {fileID: 3822299235731494083, guid: 9e4c8f55a1422c3498c27770849cb2da, type: 3}
-  _shot_pos: {fileID: 2068811923422563526}
+  Bullets:
+  - _parameter: {fileID: 11400000, guid: 7e90cb803ec974c4baf579449b310c33, type: 2}
+    _bullet: {fileID: 3822299235731494083, guid: 9e4c8f55a1422c3498c27770849cb2da,
+      type: 3}
+    _shotPos: {fileID: 2068811923422563526}
 --- !u!65 &5977408062963923602
 BoxCollider:
   m_ObjectHideFlags: 0

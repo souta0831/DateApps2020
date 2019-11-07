@@ -3,18 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using State;
+using DG.Tweening;
 
 public class BossEnemy : MonoBehaviour
 {
     private GameObject _endCollision;
     //
     [SerializeField]
-    private BossParameter Parameter;
+    private BossParameter _parameter;
     //ステート
     private StateProcessor _stateProcessor = new StateProcessor();
     private BossStateFall StateFall = new BossStateFall();
     private BossStateChase StateChase = new BossStateChase();
     private BossStateRise StateRise = new BossStateRise();
+    public GameObject _endColliderArea { private get; set; }
     void Start()
     {
         //初期ステートセット
@@ -41,17 +43,41 @@ public class BossEnemy : MonoBehaviour
     //下降
     private void FallState()
     {
-        Vector3 fall = -transform.up * Parameter.FallSpeed;
-        transform.position -= fall;
+        Vector3 fall = -transform.up * _parameter.FallSpeed;
+        transform.position += fall;
+        if (IsGround())
+        {
+            _stateProcessor.State = StateChase;
+
+        }
     }
     //追いかける
     private void ChaseState()
     {
-
+        Vector3 moveDis=(transform.position + _endColliderArea.transform.position).normalized;
+        moveDis.y = 0;
+        transform.position += moveDis * _parameter.ChaseSpeed;
+        
     }
     //上昇
     private void RiseState()
     {
+        Vector3 rise = transform.up * _parameter.RiseSpeed;
+        transform.position += rise;
+    }
+    private bool IsGround()
+    {
+        Ray down_ray = new Ray(transform.position + (transform.up / 2.0f), -transform.up);
+        return Physics.Raycast(down_ray, 1, _parameter.GroundLayer);
 
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("ボス:トリガーヒット");
+        _stateProcessor.State = StateRise;
+
+        if (other.gameObject== _endColliderArea)
+       {
+       }
     }
 }
