@@ -2515,6 +2515,12 @@ PrefabInstance:
       propertyPath: _isActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4582134415702571508, guid: 6afa79f09c4a89045ad06ee01e8ec489,
+        type: 3}
+      propertyPath: Bullets.Array.data[0]._bullet
+      value: 
+      objectReference: {fileID: 7061468819291055948, guid: 57ba902d0bdb49447b7a3da59e6ebaa4,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6afa79f09c4a89045ad06ee01e8ec489, type: 3}
 --- !u!1001 &871716468
