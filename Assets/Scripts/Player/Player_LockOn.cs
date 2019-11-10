@@ -5,19 +5,18 @@ using UnityEngine;
 public class Player_LockOn : MonoBehaviour
 {
     [SerializeField]
-    private LockonCursor _lockonCursor = null;
+    private LockonCursor _lockonCursor = default;
 
     [SerializeField]
     private List<GameObject> _hitColliderList = new List<GameObject>();
-    private GameObject _lockOnGameObject = null;
 
-    private float _lockOnRange = 10.0f;
+    [SerializeField]
+    private GameObject _lockOnGameObject = null;
    
     // Start is called before the first frame update
     void Start()
     {
         _lockonCursor = GetComponent<LockonCursor>();
-        _lockOnRange = GetComponent<SphereCollider>().radius;
     }
 
     // Update is called once per frame
@@ -30,11 +29,6 @@ public class Player_LockOn : MonoBehaviour
             if (InputController.GetButtonDown(Button.L1))
             {
                 TagetChange();                
-            }
-
-            if (Vector3.Distance(this.transform.position, _lockOnGameObject.transform.position) > _lockOnRange)
-            {
-                LockOnExit();
             }
             return;
         }
@@ -53,19 +47,23 @@ public class Player_LockOn : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
+        if (_lockOnGameObject == other.gameObject)
+        {
+            LockOnExit();
+        }
         _hitColliderList.Remove(other.gameObject);
     }
 
     public void LockOnStart()
     {
+        //近くに対象がいない場合ロックオン開始をしない
         if (_hitColliderList.Count <= 0)
         {
             return;
         }
 
         _lockOnGameObject = _hitColliderList[0];
-        _lockonCursor.OnLockonRady(_hitColliderList[0].transform);
-        _lockonCursor.OnLockonStart();
+        _lockonCursor.OnLockonStart(_hitColliderList[0].transform);
     }
 
     public void LockOnExit()
@@ -76,6 +74,7 @@ public class Player_LockOn : MonoBehaviour
 
     public void TagetChange()
     {
+        //他の対象がいない場合ロックオン解除
         if (_hitColliderList.Count==1)
         {
             LockOnExit();
@@ -85,7 +84,8 @@ public class Player_LockOn : MonoBehaviour
         var changeObject = _hitColliderList[0];
         _hitColliderList.RemoveAt(0);
         _hitColliderList.Add(changeObject);
-        _lockonCursor.OnLockonRady(_hitColliderList[0].transform);
+        _lockOnGameObject = _hitColliderList[0];
+        _lockonCursor.OnLockonStart(_hitColliderList[0].transform);
     }
 
     public GameObject NowLockOnGameObject()
