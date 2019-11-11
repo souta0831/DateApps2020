@@ -124,7 +124,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0077c5afbce093840bfb86926d71981a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _active_distance: 50
+  _active_distance: 200
   DeadParticle: {fileID: 83773069660809620, guid: b62d53137927de849ad4f174cb19f23f,
     type: 3}
 --- !u!114 &4582134415702571508
@@ -141,9 +141,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Bullets:
   - _parameter: {fileID: 11400000, guid: 7e90cb803ec974c4baf579449b310c33, type: 2}
-    _bullet: {fileID: 3822299235731494083, guid: 9e4c8f55a1422c3498c27770849cb2da,
+    _bullet: {fileID: 7061468819291055948, guid: 57ba902d0bdb49447b7a3da59e6ebaa4,
       type: 3}
     _shotPos: {fileID: 2068811923422563526}
+  _isActive: 0
 --- !u!65 &5977408062963923602
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -5,10 +5,13 @@ using UnityEngine;
 public abstract class BalletBase : MonoBehaviour
 {
     
-    [SerializeField] protected float Speed;
-    [SerializeField] protected int DestroyTime;
+    [SerializeField] protected float _speed=10;
+    [SerializeField] protected int DestroyTime=300;
+
     protected GameObject _targetObject=null;
     protected float _accuracy;
+    protected Rigidbody _rigidBody;
+
 
     private bool _isJust=true;
     //パラメーター
@@ -21,7 +24,10 @@ public abstract class BalletBase : MonoBehaviour
         set { _accuracy = value; }
     }
 
-    // Update is called once per frame
+    private void Start()
+    {
+        _rigidBody = GetComponent<Rigidbody>();
+    }
     void Update()
     {
         if (_isJust)
@@ -32,11 +38,16 @@ public abstract class BalletBase : MonoBehaviour
         Move();
         Delete();
     }
+    private void FixedUpdate()
+    {
+        FixedMove();
+    }
     protected virtual void Initialize() { }
 
     protected virtual void Move()
     {
     }
+    protected virtual void FixedMove() { }
     void Delete()
     {
         DestroyTime--;

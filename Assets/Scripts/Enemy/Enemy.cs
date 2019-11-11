@@ -34,10 +34,10 @@ public class Enemy : MonoBehaviour
         //Rayを生成
         Ray ray = new Ray(transform.position, (_player_transform.position - transform.position).normalized);
         RaycastHit hit;
-        Debug.DrawLine(ray.origin, ray.direction, Color.red, 0, true);
 
         if (Physics.Raycast(ray, out hit, _active_distance))
         {
+            Debug.DrawLine(ray.origin, ray.direction, Color.red, 0, true);
             if (hit.collider.tag == "Player")
             {
                 _is_activate = true;
