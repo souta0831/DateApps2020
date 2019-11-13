@@ -3,13 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using UniRx;
+using System; // .NET 4.xモードで動かす場合は必須
 
 public class UI_LifeGauge : MonoBehaviour
 {
     [SerializeField]
-    private Image _gaugeImage = null;
+    LifePointBase _lifePoint = default;
+
     [SerializeField]
-    private Image _gaugeBGImage = null;
+    private Image _gaugeImage = default;
+    [SerializeField]
+    private Image _gaugeBGImage = default;
 
     [SerializeField, Range(0.0f, 1.0f)]
     private float _fillAmountMax = 0.85f;
@@ -28,18 +33,15 @@ public class UI_LifeGauge : MonoBehaviour
 
         _gaugeImage.color = _gaugeColor;
 
-        GaugeAnimation();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-     
+        _lifePoint.OnPointChanged.DistinctUntilChanged().Subscribe(_count =>
+        {
+            GaugeAnimation();
+        });
     }
 
     private void GaugeAnimation()
     {
-        _gaugeImage.fillAmount = 0.5f;
-        DOTween.To(() => _gaugeBGImage.fillAmount, num => _gaugeBGImage.fillAmount = num, 0.5f, _animationTime);
+        _gaugeImage.fillAmount = _fillAmountMax * ((float)_lifePoint.GetNowPoint() / (float)_lifePoint.GetMaxPoint());
+        DOTween.To(() => _gaugeBGImage.fillAmount, num => _gaugeBGImage.fillAmount = num, _gaugeImage.fillAmount, _animationTime);
     }
 }

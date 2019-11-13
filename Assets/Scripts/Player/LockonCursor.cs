@@ -8,81 +8,50 @@ using UnityEngine.UI;
 /// </summary>
 public class LockonCursor : MonoBehaviour
 {
-    // カーソルのRectTransform
-    private RectTransform[] rectTransform = new RectTransform[(int)LockOnState_.Num];
-
-    // カーソルのImage
     [SerializeField]
-    GameObject[] _lockon_image = new GameObject[(int)LockOnState_.Num];
+    GameObject _lockon_image = default;
 
     [SerializeField]
-    GameObject Canvas;
+    GameObject _canvas = default;
 
-    GameObject[] _image_obj = new GameObject[(int)LockOnState_.Num];
-    Image[] _image=new Image[(int)LockOnState_.Num];
+    private RectTransform _rectTransform = new RectTransform();
 
-    // ロックオン対象のTransform
-    GameObject LockonTarget;
+    private GameObject _image_obj = default;
+    private Image _image = default;
+
+    private Transform _lockonTarget = default;
 
     void Start()
-    {
-
-        for (int i = 0; i < 2; i++)
-        {
+    {    
             //生成
-            _image_obj[i] = Instantiate(_lockon_image[i]);
-            _image_obj[i].transform.SetParent(Canvas.transform, false);
+            _image_obj = Instantiate(_lockon_image);
+            _image_obj.transform.SetParent(_canvas.transform, false);
             //イメージ取得
-            _image[i] = _image_obj[i].GetComponent<Image>();
-            rectTransform[i] = _image[i].GetComponent<RectTransform>();
-
-            _image[i].enabled = false;
-        }
+            _image = _image_obj.GetComponent<Image>();
+            _rectTransform = _image.GetComponent<RectTransform>();
+            _image.enabled = false;
     }
 
     void Update()
     {
-
-        if (LockonTarget != null)
+        if (_lockonTarget == null)
         {
-            Vector3 targetPoint = Camera.main.WorldToScreenPoint(LockonTarget.transform.position);
-            for (int i = 0; i < 2; i++)
-            {
-                rectTransform[i].Rotate(0, 0, 1f);
-                rectTransform[i].position = targetPoint;
-            }
+            return;
         }
-
+            Vector3 targetPoint = Camera.main.WorldToScreenPoint(_lockonTarget.transform.position);
+            _rectTransform.Rotate(0, 0, 1f);
+            _rectTransform.position = targetPoint;
     }
 
-    public void OnLockonRady(GameObject target)
+    public void OnLockonStart(Transform target)
     {
-        _image[(int)LockOnState_.Ready].enabled = true;
-        LockonTarget = target;
-    }
-    public void OnLockonStart()
-    {
-        _image[(int)LockOnState_.Ready].enabled = false;
-        _image[(int)LockOnState_.LockOn].enabled = true;
+        _image.enabled = true;
+        _lockonTarget = target;
         Debug.Log("ロックオン");
     }
     public void OnLockonEnd()
     {
-        for (int i = 0; i < 2; i++)
-        {
-            _image[i].enabled = false;
-        }
-        LockonTarget = null;
+       _image.enabled = false;
+        _lockonTarget = null;
     }
-    public GameObject GetLockONTarget()
-    {
-        return LockonTarget;
-    }
-    public enum LockOnState_
-    {
-        Ready,
-        LockOn,
-        Num,
-    }
-
 }

@@ -5,61 +5,91 @@ using UnityEngine;
 public class Player_LockOn : MonoBehaviour
 {
     [SerializeField]
-    private LockonCursor _lockonCursor = null;
+    private LockonCursor _lockonCursor = default;
 
     [SerializeField]
-    private EnemyManager _enemyManager = null;
+    private List<GameObject> _hitColliderList = new List<GameObject>();
 
     [SerializeField]
-    private float _lockOnRange =10.0f;
-
     private GameObject _lockOnGameObject = null;
-
-    private bool _isLockOn = false;
-    private int _lockOnNum = 0;
-
+   
     // Start is called before the first frame update
     void Start()
     {
-        
+        _lockonCursor = GetComponent<LockonCursor>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (_isLockOn)
+        //ロックオン中
+        if (_lockOnGameObject!=null)
         {
-            if (InputController.GetButtonDown(Button.L1) ||
-                _lockOnRange <=  _enemyManager.GetEnemyList()[_lockOnNum].GetPlayerDistance())
+            //ロック切り替え
+            if (InputController.GetButtonDown(Button.L1))
             {
-                Debug.Log("ロックオン解除");
-              _lockonCursor.OnLockonEnd();
-                _isLockOn = false;
+                TagetChange();                
             }
-
             return;
         }
 
-        if (_lockOnRange >=  _enemyManager.GetEnemyList()[_lockOnNum].GetPlayerDistance())
-        {
-          _lockonCursor.OnLockonRady( _enemyManager.GetEnemyList()[_lockOnNum].gameObject);
-        }
         //ロックオン　
         if (InputController.GetButtonDown(Button.L1))
         {
-          _lockonCursor.OnLockonStart();
-            _isLockOn = true;
-        }
-        //ロック切り替え
-        if (InputController.GetButtonDown(Button.RightStick))
-        {
-            int _lockOnIndex = _lockOnNum+1 < _enemyManager.GetEnemyList().Count ? _lockOnNum + 1 : 0;
-            _lockOnNum = _lockOnRange >= _enemyManager.GetEnemyList()[_lockOnIndex].GetPlayerDistance() ? _lockOnIndex : _lockOnNum;
+            LockOnStart();
+        }   
+    }
 
-            //if (_lockOnRange >=  _enemyManager.GetEnemyList()[_lockOnIndex].GetPlayerDistance())
-            //{
-            //    _lockOnNum = _lockOnIndex;            
-            //}
+    private void OnTriggerEnter(Collider other)
+    {
+        _hitColliderList.Add(other.gameObject);
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (_lockOnGameObject == other.gameObject)
+        {
+            LockOnExit();
         }
+        _hitColliderList.Remove(other.gameObject);
+    }
+
+    public void LockOnStart()
+    {
+        //近くに対象がいない場合ロックオン開始をしない
+        if (_hitColliderList.Count <= 0)
+        {
+            return;
+        }
+
+        _lockOnGameObject = _hitColliderList[0];
+        _lockonCursor.OnLockonStart(_hitColliderList[0].transform);
+    }
+
+    public void LockOnExit()
+    {
+        _lockonCursor.OnLockonEnd();
+        _lockOnGameObject = null;
+    }
+
+    public void TagetChange()
+    {
+        //他の対象がいない場合ロックオン解除
+        if (_hitColliderList.Count==1)
+        {
+            LockOnExit();
+            return;
+        }
+
+        var changeObject = _hitColliderList[0];
+        _hitColliderList.RemoveAt(0);
+        _hitColliderList.Add(changeObject);
+        _lockOnGameObject = _hitColliderList[0];
+        _lockonCursor.OnLockonStart(_hitColliderList[0].transform);
+    }
+
+    public GameObject NowLockOnGameObject()
+    {
+        return _lockOnGameObject;
     }
 }

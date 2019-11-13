@@ -21,4 +21,13 @@ public class PlayerParameter : ScriptableObject
     public float WallRunStartRange = 1;
     [SerializeField]
     public float WallRunSpeed = 3.0f;
+    [SerializeField]
+    public LayerMask _groundLayer = 9;
+    [SerializeField]
+    public LayerMask _runWallLayer = 10;
+    [SerializeField]
+    public float _groundRange = 1;
+    [SerializeField]
+    public float _ceilingRange = 2;
+
 }
