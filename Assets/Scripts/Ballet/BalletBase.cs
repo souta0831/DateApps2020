@@ -6,7 +6,7 @@ public abstract class BalletBase : MonoBehaviour
 {
     
     [SerializeField] protected float _speed=10;
-    [SerializeField] protected int DestroyTime=300;
+    [SerializeField] protected float DestroyTime=300;
 
     protected GameObject _targetObject=null;
     protected float _accuracy;
@@ -50,7 +50,7 @@ public abstract class BalletBase : MonoBehaviour
     protected virtual void FixedMove() { }
     void Delete()
     {
-        DestroyTime--;
+        DestroyTime-=Time.deltaTime;
         if (DestroyTime <= 0)
         {
             Destroy(this.gameObject);
