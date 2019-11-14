@@ -15,7 +15,7 @@ MonoBehaviour:
   RunSpeed: 7.5
   JumpPower: 300
   SlidingSpeed: 12
-  SlidingLRSpeed: 3
+  SlidingLRSpeed: 2
   LockOnRange: 10
   MaxHp: 100
   WallRunStartRange: 1

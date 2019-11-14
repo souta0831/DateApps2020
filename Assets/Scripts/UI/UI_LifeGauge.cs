@@ -9,12 +9,12 @@ using System; // .NET 4.xモードで動かす場合は必須
 public class UI_LifeGauge : MonoBehaviour
 {
     [SerializeField]
-    LifePointBase _lifePoint = null;
+    LifePointBase _lifePoint = default;
 
     [SerializeField]
-    private Image _gaugeImage = null;
+    private Image _gaugeImage = default;
     [SerializeField]
-    private Image _gaugeBGImage = null;
+    private Image _gaugeBGImage = default;
 
     [SerializeField, Range(0.0f, 1.0f)]
     private float _fillAmountMax = 0.85f;

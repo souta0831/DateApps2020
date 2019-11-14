@@ -1,20 +1,24 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using State;
+using PlayerState;
+
 public class Player : MonoBehaviour
 {
     [SerializeField]
     private PlayerParameter _parameter;
 
     [SerializeField]
-    private LifePointBase _lifePoint = null;
+    private LifePointBase _lifePoint = default;
 
     [SerializeField]
-    private Player_EffectManager _effectManager = null;
+    private Player_LockOn _lockon = default;
 
     [SerializeField]
-    private GameObject AttackCollider = null;
+    private Player_EffectManager _effectManager = default;
+
+    [SerializeField]
+    private GameObject AttackCollider = default;
 
     //カメラ
     [SerializeField]
@@ -127,7 +131,7 @@ public class Player : MonoBehaviour
         _animator.SetBool("is_running", false);
         _animator.SetBool("is_sliding", false);
 
-        if (InputController.GetAxisDown(Axis.L_Horizontal) != 0.0f || InputController.GetAxisDown(Axis.L_Vertical) != 0.0f)
+        if (_stick_x != 0.0f || _stick_z != 0.0f)
         {
             StateProcessor.State = StateRun;
         }
@@ -169,7 +173,7 @@ public class Player : MonoBehaviour
         _animator.SetBool("is_sliding", true);
 
         var moveForward = Vector3.Scale(transform.forward, Vector3.right + Vector3.forward);
-        var moveLR = (transform.right * _stick_x);//.normalized;
+        var moveLR = (transform.right * _stick_x);
 
         //_move_power = (moveForward * _parameter.SlidingSpeed + moveLR * _parameter.SlidingLRSpeed) * Time.deltaTime;
         _move_power += (moveLR * _parameter.SlidingLRSpeed) /10.0f* Time.deltaTime;
@@ -241,7 +245,7 @@ public class Player : MonoBehaviour
     }
     private bool IsGround()
     {
-        Ray down_ray = new Ray(transform.position + (transform.up / 2.0f), -transform.up);
+        Ray down_ray = new Ray(transform.position + (transform.up / 2.0f), - transform.up);
         return Physics.Raycast(down_ray, _parameter._groundRange, _parameter._groundLayer);
     }
 
@@ -275,10 +279,9 @@ public class Player : MonoBehaviour
 
     //-------------------------------------------------
     // 各種取得関数
-    //-------------------------------------------------       
-    public PlayerState GetState()
+    //-------------------------------------------------    
+    public PlayerStateID GetState()
     {
-        return (PlayerState)StateProcessor.GetState();
+        return StateProcessor.State.GetState();
     }
-
 }
