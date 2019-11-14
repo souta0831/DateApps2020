@@ -121,7 +121,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1580c761fdd3f1c42800a74d8dc4cb1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 5
-  DestroyTime: 9999999
-  period: 3
-  Axis: z
+  _speed: 20
+  DestroyTime: 5
+  _homingTime: 2
+  _homingPower: 10
