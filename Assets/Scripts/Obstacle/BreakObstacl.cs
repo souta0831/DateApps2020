@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 public class BreakObstacl : MonoBehaviour
 {
     [SerializeField] List<GameObject> _break_efect;
@@ -17,7 +16,7 @@ public class BreakObstacl : MonoBehaviour
         if (collision.gameObject.tag == "Player")
         {
             ListInstance();
-            if (collision.gameObject.GetComponent<Player>().GetState() == PlayerStateID.SLIDING)
+            if (collision.gameObject.GetComponent<Player>().GetState().GetType() == typeof(PlayerStateSliding))
             {
                 Destroy(this.gameObject);
             }

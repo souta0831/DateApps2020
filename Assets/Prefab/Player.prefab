@@ -3324,11 +3324,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.y
       value: 0.030000003
       objectReference: {fileID: 0}
-    - target: {fileID: 451509570267526992, guid: df874768c603777408338bd38f5f64d1,
-        type: 3}
-      propertyPath: playOnAwake
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: df874768c603777408338bd38f5f64d1, type: 3}
 --- !u!4 &1826047884494235915 stripped
