@@ -13,10 +13,6 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject AttackCollider = default;
 
-    //カメラ
-    [SerializeField]
-    private Camera Camera;
-
     [SerializeField]
     private EnemyManager  _enemyManager;
 
@@ -27,6 +23,9 @@ public class Player : MonoBehaviour
     private Rigidbody _rigidbody;
     private Animator _animator;
     private BoxCollider _box_collider;
+
+    //カメラ
+    private Camera Camera;
 
     //保存用
     private Vector3 _collider_size = Vector3.zero;
@@ -77,14 +76,26 @@ public class Player : MonoBehaviour
 
         //Effect停止
         _effectManager.AllParticleStop();
+
+        
     }
 
     void Update()
     {
         State();
         StickUpdate();
-        Jump();      
+        Jump();
         Move();
+
+        if (InputController.GetButtonDown(Button.A))
+        {
+            Time.timeScale = 0.5f;
+        }
+        if (InputController.GetButtonUp(Button.A))
+        {
+            Time.timeScale = 1.0f;
+        }
+        
     }
     //-------------------------------------------------
     // 移動の関数のやつ？
@@ -92,7 +103,7 @@ public class Player : MonoBehaviour
     private void Move()
     {
         _rigidbody.AddForce(-transform.up*7.5f);
-       this.transform.position += _move_power;
+        _rigidbody.transform.position += _move_power;
         _buffer_pos = transform.position;
     }
 
