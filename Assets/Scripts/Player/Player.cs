@@ -8,13 +8,7 @@ public class Player : MonoBehaviour
     private PlayerParameter _parameter;
 
     [SerializeField]
-    private LifePointBase _lifePoint = default;
-
-    [SerializeField]
     private Player_LockOn _lockon = default;
-
-    [SerializeField]
-    private Player_EffectManager _effectManager = default;
 
     [SerializeField]
     private GameObject AttackCollider = default;
@@ -26,11 +20,13 @@ public class Player : MonoBehaviour
     [SerializeField]
     private EnemyManager  _enemyManager;
 
+    private LifePointBase _lifePoint = default;
+    private Player_EffectManager _effectManager = default;
+
     //Thisコンポーネント
     private Rigidbody _rigidbody;
     private Animator _animator;
     private BoxCollider _box_collider;
-    private LockonCursor _lockonCursor = null;
 
     //保存用
     private Vector3 _collider_size = Vector3.zero;
@@ -58,10 +54,11 @@ public class Player : MonoBehaviour
        _rigidbody = GetComponent<Rigidbody>();
        _animator = GetComponent<Animator>();
        _box_collider = GetComponent<BoxCollider>();
-       _lockonCursor = GetComponent<LockonCursor>();
+        _lifePoint = GetComponent<LifePointBase>();
+        _effectManager = GetComponent<Player_EffectManager>();
 
-        //コライダーの大きさを取得
-        _collider_size = _box_collider.size;
+       //コライダーの大きさを取得
+       _collider_size = _box_collider.size;
         _collider_center = _box_collider.center;
 
         //初期ステートセット
