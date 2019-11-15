@@ -1,8 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using PlayerState;
-
+using State;
 public class Player : MonoBehaviour
 {
     [SerializeField]
@@ -95,6 +94,7 @@ public class Player : MonoBehaviour
     //-------------------------------------------------
     private void Move()
     {
+        _rigidbody.AddForce(-transform.up*7.5f);
        this.transform.position += _move_power;
         _buffer_pos = transform.position;
     }
@@ -280,8 +280,8 @@ public class Player : MonoBehaviour
     //-------------------------------------------------
     // 各種取得関数
     //-------------------------------------------------    
-    public PlayerStateID GetState()
+    public StateBase GetState()
     {
-        return StateProcessor.State.GetState();
+        return StateProcessor.GetState();
     }
 }
