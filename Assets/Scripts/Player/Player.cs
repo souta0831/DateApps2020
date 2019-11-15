@@ -1,21 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using PlayerState;
-
+using State;
 public class Player : MonoBehaviour
 {
     [SerializeField]
     private PlayerParameter _parameter;
 
     [SerializeField]
-    private LifePointBase _lifePoint = default;
-
-    [SerializeField]
     private Player_LockOn _lockon = default;
-
-    [SerializeField]
-    private Player_EffectManager _effectManager = default;
 
     [SerializeField]
     private GameObject AttackCollider = default;
@@ -27,11 +20,13 @@ public class Player : MonoBehaviour
     [SerializeField]
     private EnemyManager  _enemyManager;
 
+    private LifePointBase _lifePoint = default;
+    private Player_EffectManager _effectManager = default;
+
     //Thisコンポーネント
     private Rigidbody _rigidbody;
     private Animator _animator;
     private BoxCollider _box_collider;
-    private LockonCursor _lockonCursor = null;
 
     //保存用
     private Vector3 _collider_size = Vector3.zero;
@@ -59,10 +54,11 @@ public class Player : MonoBehaviour
        _rigidbody = GetComponent<Rigidbody>();
        _animator = GetComponent<Animator>();
        _box_collider = GetComponent<BoxCollider>();
-       _lockonCursor = GetComponent<LockonCursor>();
+        _lifePoint = GetComponent<LifePointBase>();
+        _effectManager = GetComponent<Player_EffectManager>();
 
-        //コライダーの大きさを取得
-        _collider_size = _box_collider.size;
+       //コライダーの大きさを取得
+       _collider_size = _box_collider.size;
         _collider_center = _box_collider.center;
 
         //初期ステートセット
@@ -95,6 +91,7 @@ public class Player : MonoBehaviour
     //-------------------------------------------------
     private void Move()
     {
+        _rigidbody.AddForce(-transform.up*7.5f);
        this.transform.position += _move_power;
         _buffer_pos = transform.position;
     }
@@ -280,8 +277,8 @@ public class Player : MonoBehaviour
     //-------------------------------------------------
     // 各種取得関数
     //-------------------------------------------------    
-    public PlayerStateID GetState()
+    public StateBase GetState()
     {
-        return StateProcessor.State.GetState();
+        return StateProcessor.GetState();
     }
 }
