@@ -920,6 +920,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7376469134267716213}
+  - component: {fileID: 858613488246923209}
+  - component: {fileID: 848406399977825431}
   - component: {fileID: 8586455977208893004}
   - component: {fileID: 152385455414913982}
   - component: {fileID: 6544030524818361743}
@@ -944,6 +946,51 @@ Transform:
   m_Father: {fileID: 5071254205091298385}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &858613488246923209
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3727454199180353543}
+  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &848406399977825431
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3727454199180353543}
+  m_Enabled: 0
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
 --- !u!135 &8586455977208893004
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -1568,6 +1615,7 @@ GameObject:
   - component: {fileID: 8904348827464153794}
   - component: {fileID: 7190441197596850319}
   - component: {fileID: 6980060350891109078}
+  - component: {fileID: 1824189644828822314}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -1690,6 +1738,22 @@ MonoBehaviour:
   - {fileID: 1826047884494235914}
   - {fileID: 7712163778202297727}
   - {fileID: 0}
+--- !u!114 &1824189644828822314
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5071254205091258481}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75e08fd3d718fc64f8fd125d91b95a8a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_runWallLayer:
+    serializedVersion: 2
+    m_Bits: 1024
+  m_wallCheckRange: 1
 --- !u!1 &5086075751008443865
 GameObject:
   m_ObjectHideFlags: 0
@@ -3254,6 +3318,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: BurnerFire
       objectReference: {fileID: 0}
+    - target: {fileID: 451509570267526992, guid: df874768c603777408338bd38f5f64d1,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 451509570267526993, guid: df874768c603777408338bd38f5f64d1,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3412,15 +3481,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ec59025723f899942931bf95267fa512, type: 3}
---- !u!198 &7712163778202297727 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 8364421972446098961, guid: ec59025723f899942931bf95267fa512,
-    type: 3}
-  m_PrefabInstance: {fileID: 2239266960913126254}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7712163778202297712 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8364421972446098974, guid: ec59025723f899942931bf95267fa512,
+    type: 3}
+  m_PrefabInstance: {fileID: 2239266960913126254}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &7712163778202297727 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 8364421972446098961, guid: ec59025723f899942931bf95267fa512,
     type: 3}
   m_PrefabInstance: {fileID: 2239266960913126254}
   m_PrefabAsset: {fileID: 0}
