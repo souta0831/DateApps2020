@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2068811923422563526}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: ShotPos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45,7 +45,7 @@ GameObject:
   - component: {fileID: 4582134415702571508}
   - component: {fileID: 5977408062963923602}
   - component: {fileID: 3427212431964885414}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
