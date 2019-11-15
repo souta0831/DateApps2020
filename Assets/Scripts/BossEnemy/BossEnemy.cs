@@ -63,21 +63,23 @@ public class BossEnemy : MonoBehaviour
     private void RiseState()
     {
         Vector3 rise = transform.up * _parameter.RiseSpeed;
+
         transform.position += rise;
     }
     private bool IsGround()
     {
-        Ray down_ray = new Ray(transform.position + (transform.up / 2.0f), -transform.up);
+        Ray down_ray = new Ray(transform.position , -transform.up);
         return Physics.Raycast(down_ray, 1, _parameter.GroundLayer);
 
     }
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log("ボス:トリガーヒット");
-        _stateProcessor.State = StateRise;
 
         if (other.gameObject== _endColliderArea)
        {
-       }
+            _stateProcessor.State = StateRise;
+
+        }
     }
 }
