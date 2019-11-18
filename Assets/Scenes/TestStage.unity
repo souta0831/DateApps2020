@@ -281,14 +281,7 @@ PrefabInstance:
     - target: {fileID: 4704556150472290580, guid: e6ad8d0e9e7aca94fb76bebe4c11b5c6,
         type: 3}
       propertyPath: m_WarningMessage
-      value: "\nBinding warning: Some generic clip(s) animate transforms that are
-        already bound by a Humanoid avatar. These transforms can only be changed by
-        Humanoid clips.\n\tTransform 'QuickRigCharacter_RightToeBase'\n\tTransform
-        'QuickRigCharacter_LeftHand'\n\tTransform 'QuickRigCharacter_RightLeg'\n\tTransform
-        'QuickRigCharacter_Hips'\n\tTransform 'QuickRigCharacter_RightFoot'\n\tTransform
-        'QuickRigCharacter_LeftFoot'\n\tTransform 'QuickRigCharacter_RightHand'\n\tTransform
-        'QuickRigCharacter_LeftArm'\n\tTransform 'QuickRigCharacter_RightForeArm'\n\tTransform
-        'QuickRigCharacter_LeftLeg'\n\tand more ...\n\tFrom animation clip 'sliding2'"
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7491564085895121007, guid: e6ad8d0e9e7aca94fb76bebe4c11b5c6,
         type: 3}
@@ -494,6 +487,66 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 4753176259022529962, guid: a1460950ef56f0641a1a548f00264077,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4753176259022567818, guid: a1460950ef56f0641a1a548f00264077,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4753176259022567818, guid: a1460950ef56f0641a1a548f00264077,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4753176259022567818, guid: a1460950ef56f0641a1a548f00264077,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4753176259022567818, guid: a1460950ef56f0641a1a548f00264077,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4753176259022567818, guid: a1460950ef56f0641a1a548f00264077,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 2.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4753176259022567818, guid: a1460950ef56f0641a1a548f00264077,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 42.95
+      objectReference: {fileID: 0}
+    - target: {fileID: 4753176259022567818, guid: a1460950ef56f0641a1a548f00264077,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 106.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4753176259022567818, guid: a1460950ef56f0641a1a548f00264077,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6059737430830092855, guid: a1460950ef56f0641a1a548f00264077,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1268011354785811176, guid: a1460950ef56f0641a1a548f00264077,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8683020039290420724, guid: a1460950ef56f0641a1a548f00264077,
+        type: 3}
+      propertyPath: m_TargetDisplay
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a1460950ef56f0641a1a548f00264077, type: 3}

@@ -10,12 +10,16 @@ public class BossEnemy : MonoBehaviour
     private GameObject _endCollision;
     //
     [SerializeField]
+    private Camera _camera;
+    [SerializeField]
     private BossParameter _parameter;
     //ステート
     private StateProcessor _stateProcessor = new StateProcessor();
     private BossStateFall StateFall = new BossStateFall();
     private BossStateChase StateChase = new BossStateChase();
     private BossStateRise StateRise = new BossStateRise();
+    //
+    private bool _isActive = false;
     public GameObject _endColliderArea { private get; set; }
     void Start()
     {
@@ -25,10 +29,18 @@ public class BossEnemy : MonoBehaviour
         StateFall.execDelegate = FallState;
         StateChase.execDelegate = ChaseState;
         StateRise.execDelegate = RiseState;
+
     }
 
+    public void BossStart()
+    {
+        _isActive = true;
+        //カメラを変更
+        GameManager.ChangeCamera(_camera);
+    }
     void Update()
     {
+        if (!_isActive) return;
         State();
     }
     //ステート関数
@@ -48,7 +60,7 @@ public class BossEnemy : MonoBehaviour
         if (IsGround())
         {
             _stateProcessor.State = StateChase;
-
+            Destroy(_camera.gameObject);
         }
     }
     //追いかける
@@ -66,6 +78,7 @@ public class BossEnemy : MonoBehaviour
 
         transform.position += rise;
     }
+    
     private bool IsGround()
     {
         Ray down_ray = new Ray(transform.position , -transform.up);
