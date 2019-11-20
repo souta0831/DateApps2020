@@ -50,8 +50,8 @@ public class Player : MonoBehaviour
     {
         //GetComponent
         Camera = Camera.main;
-       _rigidbody = GetComponent<Rigidbody>();
-       _animator = GetComponent<Animator>();
+        _rigidbody = GetComponent<Rigidbody>();
+       _animator = GetComponentInChildren<Animator>();
        _box_collider = GetComponent<BoxCollider>();
         _lifePoint = GetComponent<LifePointBase>();
         _effectManager = GetComponent<Player_EffectManager>();
@@ -76,8 +76,6 @@ public class Player : MonoBehaviour
 
         //Effect停止
         _effectManager.AllParticleStop();
-
-        
     }
 
     void Update()
@@ -102,7 +100,7 @@ public class Player : MonoBehaviour
     //-------------------------------------------------
     private void Move()
     {
-        _rigidbody.AddForce(-transform.up*7.5f);
+        _rigidbody.AddForce(-transform.up*(7.5f*Time.timeScale));
         _rigidbody.transform.position += _move_power;
         _buffer_pos = transform.position;
     }
