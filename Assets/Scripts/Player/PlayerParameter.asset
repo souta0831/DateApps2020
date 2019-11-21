@@ -14,10 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   RunSpeed: 7.5
   JumpPower: 300
+  FallPower: 10
   SlidingSpeed: 12
   SlidingLRSpeed: 2
   LockOnRange: 10
   MaxHp: 100
+  MaxBoostPoint: 500
   WallRunStartRange: 1
   WallRunSpeed: 3
   _groundLayer:
