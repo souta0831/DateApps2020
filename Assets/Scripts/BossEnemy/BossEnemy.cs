@@ -4,13 +4,14 @@ using UnityEngine;
 using System;
 using State;
 using DG.Tweening;
+using UnityEngine.Playables;
 
 public class BossEnemy : MonoBehaviour
 {
     private GameObject _endCollision;
     //
     [SerializeField]
-    private Camera _camera;
+    private Camera _movieCamera;
     [SerializeField]
     private BossParameter _parameter;
     //ステート
@@ -18,8 +19,10 @@ public class BossEnemy : MonoBehaviour
     private BossStateFall StateFall = new BossStateFall();
     private BossStateChase StateChase = new BossStateChase();
     private BossStateRise StateRise = new BossStateRise();
-    //
+    //コンポーネント
+    private PlayableDirector _playableDirector;
     private bool _isActive = false;
+    
     public GameObject _endColliderArea { private get; set; }
     void Start()
     {
@@ -29,14 +32,16 @@ public class BossEnemy : MonoBehaviour
         StateFall.execDelegate = FallState;
         StateChase.execDelegate = ChaseState;
         StateRise.execDelegate = RiseState;
+        _playableDirector = GetComponent<PlayableDirector>();
+
 
     }
 
     public void BossStart()
     {
         _isActive = true;
-        //カメラを変更
-        GameManager.ChangeCamera(_camera);
+        GameManager.ChangeCamera(_movieCamera);
+        _playableDirector.Play();
     }
     void Update()
     {
@@ -55,13 +60,13 @@ public class BossEnemy : MonoBehaviour
     //下降
     private void FallState()
     {
-        Vector3 fall = -transform.up * _parameter.FallSpeed;
-        transform.position += fall;
-        if (IsGround())
-        {
-            _stateProcessor.State = StateChase;
-            Destroy(_camera.gameObject);
-        }
+        //Vector3 fall = -transform.up * _parameter.FallSpeed;
+        //transform.position += fall;
+        //if (IsGround())
+        //{
+        //    _stateProcessor.State = StateChase;
+
+        //}
     }
     //追いかける
     private void ChaseState()
