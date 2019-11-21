@@ -181,6 +181,7 @@ GameObject:
   - component: {fileID: 7296935915409624562}
   - component: {fileID: 8904348827464153794}
   - component: {fileID: 7190441197596850319}
+  - component: {fileID: 3137247867106396856}
   - component: {fileID: 6980060350891109078}
   m_Layer: 0
   m_Name: Player
@@ -270,7 +271,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _parameter: {fileID: 0}
   _lockon: {fileID: 0}
-  AttackCollider: {fileID: 5400341332914889586}
   _enemyManager: {fileID: 0}
   _boostPoint: {fileID: 0}
 --- !u!114 &7190441197596850319
@@ -287,6 +287,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _nowLifePoint:
     value: 100
+--- !u!114 &3137247867106396856
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5071254205091258481}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7cf18e4a0cafab40a37d93767313c77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _attackColliderObject: {fileID: 5400341332914889586}
 --- !u!114 &6980060350891109078
 MonoBehaviour:
   m_ObjectHideFlags: 0
