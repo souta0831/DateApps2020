@@ -157,6 +157,7 @@ GameObject:
   - component: {fileID: 2896710278846831891}
   - component: {fileID: 2896710278846831890}
   - component: {fileID: 2896710278846831894}
+  - component: {fileID: 4449755131444043564}
   m_Layer: 5
   m_Name: UI_BoostAndLifeGaugeCanvas
   m_TagString: Untagged
@@ -251,6 +252,24 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
 --- !u!114 &2896710278846831894
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2896710278846831889}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d4bc1de11759f0458aab165bb1e4d86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _lifePoint: {fileID: 0}
+  _gaugeImage: {fileID: 2896710279979241126}
+  _gaugeBGImage: {fileID: 2896710279955422476}
+  _fillAmountMax: 0.85
+  _gaugeColor: {r: 1, g: 0.37647063, b: 0, a: 1}
+  _animationTime: 1
+--- !u!114 &4449755131444043564
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
