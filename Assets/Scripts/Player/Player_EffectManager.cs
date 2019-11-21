@@ -9,6 +9,7 @@ public class Player_EffectManager : MonoBehaviour
         BurnerFire,
         SparkFire,
         SpeedLine,
+        SlashTrail,
         NUM
     }
 
