@@ -82,11 +82,10 @@ public class LockOnCamera : MonoBehaviour
 
     private void LockAtTargetObject(GameObject target)
     {
-        Vector3 relativePos = target.transform.position - m_playerTransform.position;
-        transform.rotation = new Quaternion(transform.rotation.x, 
-            Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(relativePos), 0.25f).y, 
-            transform.rotation.z, 
-            transform.rotation.w
-            );
+        Vector3 _targetPos = target.transform.position;
+        _targetPos.y = m_playerTransform.position.y;
+
+        Vector3 relativePos = _targetPos - m_playerTransform.position;
+        transform.rotation = Quaternion.Slerp(transform.rotation,Quaternion.LookRotation(relativePos, Vector3.up),0.25f);
     }
 }

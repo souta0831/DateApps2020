@@ -16,7 +16,11 @@ public class Player : MonoBehaviour
     [SerializeField]
     private EnemyManager  _enemyManager;
 
+    [SerializeField]
+    private LifePointBase _boostPoint = default;
+
     private LifePointBase _lifePoint = default;
+    
     private Player_EffectManager _effectManager = default;
 
     //Thisコンポーネント
@@ -73,6 +77,9 @@ public class Player : MonoBehaviour
         //LifePointセット
         _lifePoint.MaxPointSet(_parameter.MaxHp);
         _lifePoint.PointSet(_parameter.MaxHp);
+        //BoostPointSet
+        _boostPoint.MaxPointSet(_parameter.MaxBoostPoint);
+        _boostPoint.PointSet(_parameter.MaxBoostPoint);
 
         //Effect停止
         _effectManager.AllParticleStop();
@@ -100,7 +107,7 @@ public class Player : MonoBehaviour
     //-------------------------------------------------
     private void Move()
     {
-        _rigidbody.AddForce(-transform.up*(7.5f*Time.timeScale));
+        _rigidbody.AddForce(-transform.up*(_parameter.FallPower * Time.timeScale));
         _rigidbody.transform.position += _move_power;
         _buffer_pos = transform.position;
     }
@@ -110,7 +117,7 @@ public class Player : MonoBehaviour
         if (InputController.GetButtonDown(Button.B) && IsGround())
         {
             _animator.SetTrigger("Jump");
-            _rigidbody.AddRelativeForce(transform.up *  _parameter.JumpPower);
+            _rigidbody.AddRelativeForce(transform.up *  (_parameter.JumpPower * Time.timeScale));
             StateProcessor.State = StateJump;
         }
     }
@@ -134,6 +141,8 @@ public class Player : MonoBehaviour
     }
     private void IdleState()
     {
+        _boostPoint.AddPoint(1);
+
         _animator.SetBool("is_running", false);
         _animator.SetBool("is_sliding", false);
 
@@ -146,6 +155,9 @@ public class Player : MonoBehaviour
     }
     private void RunState()
     {
+        _boostPoint.AddPoint(1);
+
+
         if (_stick_x == 0.0f && _stick_z == 0.0f)
         {
             Debug.Log("ステート移行");
@@ -159,16 +171,25 @@ public class Player : MonoBehaviour
 
         Vector3 camForward = Vector3.Scale(Camera.transform.forward, Vector3.right + Vector3.forward);
         Vector3 moveForward = (camForward * _stick_z) + (Camera.transform.right * _stick_x);
-        //_move_power =  _parameter.RunSpeed * moveForward * Time.deltaTime;
-
-        _move_power = moveForward.normalized * (_parameter.RunSpeed / Mathf.Sqrt(2.0f) * Time.deltaTime);
 
         this.transform.rotation = Quaternion.LookRotation(moveForward);
+
+        if (_lockon.NowLockOnGameObject() != null)
+        {
+            Vector3 _targetPos = _lockon.NowLockOnGameObject().transform.position;
+            _targetPos.y = this.transform.position.y;
+
+        Vector3 relativePos = _targetPos - this.transform.position;
+        transform.rotation = Quaternion.LookRotation(relativePos, Vector3.up);        
+        }
+
+    _move_power = moveForward.normalized * (_parameter.RunSpeed / Mathf.Sqrt(2.0f) * Time.deltaTime);
 
         if (InputController.GetButtonDown(Button.R1))
         {
             //スライディングに移行
             StateProcessor.State = StateSliding;
+            _lockon.LockOnExit();
             SetSlidingCollider(true);
             _effectManager.AllParticlePlay();
         }
@@ -177,6 +198,8 @@ public class Player : MonoBehaviour
     private void SlidingState()
     {
         _animator.SetBool("is_sliding", true);
+
+        _boostPoint.AddPoint(-2);
 
         var moveForward = Vector3.Scale(transform.forward, Vector3.right + Vector3.forward);
         var moveLR = (transform.right * _stick_x);

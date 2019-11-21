@@ -10,6 +10,8 @@ public class PlayerParameter : ScriptableObject
     [SerializeField]
     public float JumpPower = 100.0f;
     [SerializeField]
+    public float FallPower = 10.0f;
+    [SerializeField]
     public float SlidingSpeed = 6.0f;
     [SerializeField]
     public float SlidingLRSpeed = 2.0f;
@@ -17,6 +19,8 @@ public class PlayerParameter : ScriptableObject
     public float LockOnRange = 10.0f;
     [SerializeField]
     public int MaxHp = 100;
+    [SerializeField]
+    public int MaxBoostPoint = 10000;
     [SerializeField]
     public float WallRunStartRange = 1;
     [SerializeField]
