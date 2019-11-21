@@ -128,6 +128,20 @@ public class Player : MonoBehaviour
         _stick_z = Input.GetAxis("Vertical");
     }
 
+    private void LookTaget()
+    {
+        if (_lockon.NowLockOnGameObject() == null)
+        {
+            return;
+        }
+
+        Vector3 _targetPos = _lockon.NowLockOnGameObject().transform.position;
+        _targetPos.y = this.transform.position.y;
+
+        Vector3 relativePos = _targetPos - this.transform.position;
+        transform.rotation = Quaternion.LookRotation(relativePos, Vector3.up);
+    }
+
     //-------------------------------------------------
     // ステートのやつ
     //-------------------------------------------------
@@ -142,6 +156,8 @@ public class Player : MonoBehaviour
     private void IdleState()
     {
         _boostPoint.AddPoint(1);
+
+        LookTaget();
 
         _animator.SetBool("is_running", false);
         _animator.SetBool("is_sliding", false);
@@ -174,14 +190,7 @@ public class Player : MonoBehaviour
 
         this.transform.rotation = Quaternion.LookRotation(moveForward);
 
-        if (_lockon.NowLockOnGameObject() != null)
-        {
-            Vector3 _targetPos = _lockon.NowLockOnGameObject().transform.position;
-            _targetPos.y = this.transform.position.y;
-
-        Vector3 relativePos = _targetPos - this.transform.position;
-        transform.rotation = Quaternion.LookRotation(relativePos, Vector3.up);        
-        }
+        LookTaget();
 
     _move_power = moveForward.normalized * (_parameter.RunSpeed / Mathf.Sqrt(2.0f) * Time.deltaTime);
 
@@ -204,7 +213,6 @@ public class Player : MonoBehaviour
         var moveForward = Vector3.Scale(transform.forward, Vector3.right + Vector3.forward);
         var moveLR = (transform.right * _stick_x);
 
-        //_move_power = (moveForward * _parameter.SlidingSpeed + moveLR * _parameter.SlidingLRSpeed) * Time.deltaTime;
         _move_power += (moveLR * _parameter.SlidingLRSpeed) /10.0f* Time.deltaTime;
         if (_move_power.magnitude>= _parameter.SlidingLRSpeed)
         {
