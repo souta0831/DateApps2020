@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8364421972446098974}
   - component: {fileID: 8364421972446098961}
   - component: {fileID: 8364421972446098960}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: fire_spark_red
   m_TagString: Untagged
   m_Icon: {fileID: 0}
