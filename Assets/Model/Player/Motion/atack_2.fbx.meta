@@ -255,10 +255,18 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.08264463
+      - time: 0
+        functionName: ParticlePlay
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 8252529ebdfce4b47b0e40a5f93f288f,
+          type: 3}
+        floatParameter: 0
+        intParameter: 3
+        messageOptions: 0
+      - time: 0
         functionName: AttackEvent
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: ecbcd34b8440c1f4ebdde1500646b2c0,
+        objectReferenceParameter: {fileID: 11500000, guid: e7cf18e4a0cafab40a37d93767313c77,
           type: 3}
         floatParameter: 0
         intParameter: 0
@@ -266,10 +274,10 @@ ModelImporter:
       - time: 1
         functionName: AttackExitEvent
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: ecbcd34b8440c1f4ebdde1500646b2c0,
+        objectReferenceParameter: {fileID: 11500000, guid: e7cf18e4a0cafab40a37d93767313c77,
           type: 3}
         floatParameter: 0
-        intParameter: 0
+        intParameter: 3
         messageOptions: 0
       transformMask: []
       maskType: 3
