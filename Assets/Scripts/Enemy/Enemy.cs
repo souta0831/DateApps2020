@@ -13,6 +13,10 @@ public class Enemy : MonoBehaviour
     //切られた時のエフェクト
     [SerializeField]
     private GameObject DeadParticle = null;
+    [SerializeField]
+    private List<GameObject> _deadObjectList;
+    [SerializeField]
+    private Transform _deadSpawnPos;
     private EnemyShooter _shooter;
     void Start()
     {
@@ -56,7 +60,11 @@ public class Enemy : MonoBehaviour
         if (collision.gameObject.tag == "Attack")
         {
             Debug.Log("攻撃");
-            Instantiate(DeadParticle, transform.position + new Vector3(0, 1, 0), transform.rotation);
+            foreach (var deadObject in _deadObjectList)
+            {
+                Instantiate(DeadParticle, _deadSpawnPos.position, transform.rotation);
+
+            }
             Destroy(this.gameObject);
         }
     }
