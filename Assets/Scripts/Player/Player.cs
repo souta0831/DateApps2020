@@ -224,12 +224,11 @@ public class Player : MonoBehaviour
         _move_power.x *= 0.99f;
 
         if (InputController.GetButtonDown(Button.Y))
-        {
-            _effectManager.ParticlePlay(Player_EffectManager.EffectType.SlashTrail);
+        {         
             _animator.SetTrigger("Attack");
         }
 
-        if (!InputController.GetButtonStay(Button.R1) && !IsUpWallHit() && IsGround())
+        if (!(InputController.GetButtonStay(Button.R1) && !IsUpWallHit() && IsGround())  || _boostPoint.GetNowPoint()<=0)
         {
             //アイドルに移行
             StateProcessor.State = StateIdle;
@@ -292,14 +291,16 @@ public class Player : MonoBehaviour
     //-------------------------------------------------
     // アニメーションイベントで呼び出す奴
     //-------------------------------------------------
-    private void AtackEvent()
+    private void AttackEvent()
     {
+        _effectManager.ParticlePlay(Player_EffectManager.EffectType.SlashTrail);
         AttackCollider.SetActive(true);
+        Debug.Log("Player::攻撃");
     }
-    private void AtackEndEvent()
+    private void AttackExitEvent()
     {
         AttackCollider.SetActive(false);
-
+        Debug.Log("Player::攻撃終了");
     }
 
     //-------------------------------------------------
