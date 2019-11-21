@@ -107,7 +107,7 @@ public class Player : MonoBehaviour
     //-------------------------------------------------
     private void Move()
     {
-        _rigidbody.AddForce(-transform.up*(_parameter.FallPower * Time.timeScale));
+        _rigidbody.velocity += (-transform.up * (_parameter.FallPower * Time.timeScale));
         _rigidbody.transform.position += _move_power;
         _buffer_pos = transform.position;
     }
@@ -117,7 +117,7 @@ public class Player : MonoBehaviour
         if (InputController.GetButtonDown(Button.B) && IsGround())
         {
             _animator.SetTrigger("Jump");
-            _rigidbody.AddRelativeForce(transform.up *  (_parameter.JumpPower * Time.timeScale));
+            _rigidbody.velocity = (transform.up *  _parameter.JumpPower );
             StateProcessor.State = StateJump;
         }
     }
@@ -200,7 +200,9 @@ public class Player : MonoBehaviour
             StateProcessor.State = StateSliding;
             _lockon.LockOnExit();
             SetSlidingCollider(true);
-            _effectManager.AllParticlePlay();
+            _effectManager.ParticlePlay(Player_EffectManager.EffectType.BurnerFire);
+            _effectManager.ParticlePlay(Player_EffectManager.EffectType.SparkFire);
+            _effectManager.ParticlePlay(Player_EffectManager.EffectType.SpeedLine);
         }
 
     }
@@ -223,6 +225,7 @@ public class Player : MonoBehaviour
 
         if (InputController.GetButtonDown(Button.Y))
         {
+            _effectManager.ParticlePlay(Player_EffectManager.EffectType.SlashTrail);
             _animator.SetTrigger("Attack");
         }
 

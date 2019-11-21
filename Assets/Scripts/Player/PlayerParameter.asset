@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: PlayerParameter
   m_EditorClassIdentifier: 
   RunSpeed: 7.5
-  JumpPower: 300
-  FallPower: 10
+  JumpPower: 8.5
+  FallPower: 0.4
   SlidingSpeed: 12
   SlidingLRSpeed: 2
   LockOnRange: 10
