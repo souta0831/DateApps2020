@@ -124,6 +124,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnemyBreak_Down
       objectReference: {fileID: 0}
+    - target: {fileID: 5723381185929619876, guid: 474b1d0f2f49369469aaf4654178f883,
+        type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
     - target: {fileID: 5723381185929459076, guid: 474b1d0f2f49369469aaf4654178f883,
         type: 3}
       propertyPath: m_LocalPosition.x
