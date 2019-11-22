@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8396568233111630156}
   - component: {fileID: 6876234204369157392}
   - component: {fileID: 4559542762994078241}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: EnemyBreak_Down
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -123,3 +123,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _powerVector: 1
   ForcePower: 5
+  _randomPower: 10
+  _deadTime: 3
