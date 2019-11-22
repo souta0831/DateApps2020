@@ -10,9 +10,6 @@ public class Enemy : MonoBehaviour
     //起動に必要な距離
     [SerializeField]
     private float _active_distance = 50;
-    //切られた時のエフェクト
-    [SerializeField]
-    private GameObject DeadParticle = null;
     [SerializeField]
     private List<GameObject> _deadObjectList;
     [SerializeField]
@@ -62,7 +59,7 @@ public class Enemy : MonoBehaviour
             Debug.Log("攻撃");
             foreach (var deadObject in _deadObjectList)
             {
-                Instantiate(DeadParticle, _deadSpawnPos.position, transform.rotation);
+                Instantiate(deadObject, _deadSpawnPos.position, transform.rotation);
 
             }
             Destroy(this.gameObject);
