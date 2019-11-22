@@ -16,6 +16,11 @@ public class Player_EffectManager : MonoBehaviour
     [SerializeField]
     private ParticleSystem[] _ParticleSystemList = new ParticleSystem[(int)EffectType.NUM];
 
+    private void Start()
+    {
+        AllParticleStop();
+    }
+
     public void ParticlePlay(EffectType effectType)
     {
         if (_ParticleSystemList[(int)effectType] == null)

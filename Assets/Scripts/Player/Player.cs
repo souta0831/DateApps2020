@@ -11,16 +11,13 @@ public class Player : MonoBehaviour
     private Player_LockOn _lockon = default;
 
     [SerializeField]
-    private GameObject AttackCollider = default;
-
-    [SerializeField]
     private EnemyManager  _enemyManager;
 
     [SerializeField]
     private LifePointBase _boostPoint = default;
 
     private LifePointBase _lifePoint = default;
-    
+
     private Player_EffectManager _effectManager = default;
 
     //Thisコンポーネント
@@ -54,14 +51,17 @@ public class Player : MonoBehaviour
     {
         //GetComponent
         Camera = Camera.main;
+
         _rigidbody = GetComponent<Rigidbody>();
        _animator = GetComponentInChildren<Animator>();
        _box_collider = GetComponent<BoxCollider>();
         _lifePoint = GetComponent<LifePointBase>();
-        _effectManager = GetComponent<Player_EffectManager>();
 
-       //コライダーの大きさを取得
-       _collider_size = _box_collider.size;
+        _effectManager = GetComponent<Player_EffectManager>();
+        _effectManager.AllParticleStop();
+
+        //コライダーの大きさを取得
+        _collider_size = _box_collider.size;
         _collider_center = _box_collider.center;
 
         //初期ステートセット
@@ -74,15 +74,10 @@ public class Player : MonoBehaviour
         StateWalRun.execDelegate = WallRunState;
         StateJump.execDelegate = JumpState;
 
-        //LifePointセット
         _lifePoint.MaxPointSet(_parameter.MaxHp);
         _lifePoint.PointSet(_parameter.MaxHp);
-        //BoostPointSet
         _boostPoint.MaxPointSet(_parameter.MaxBoostPoint);
         _boostPoint.PointSet(_parameter.MaxBoostPoint);
-
-        //Effect停止
-        _effectManager.AllParticleStop();
     }
 
     void Update()
@@ -173,21 +168,17 @@ public class Player : MonoBehaviour
     {
         _boostPoint.AddPoint(1);
 
-
         if (_stick_x == 0.0f && _stick_z == 0.0f)
         {
-            Debug.Log("ステート移行");
             StateProcessor.State = StateIdle;
             return;
         }
 
         Vector2 _stickRange = new Vector2(_stick_x,_stick_z);
-
         _animator.SetBool("is_running", true);
 
         Vector3 camForward = Vector3.Scale(Camera.transform.forward, Vector3.right + Vector3.forward);
         Vector3 moveForward = (camForward * _stick_z) + (Camera.transform.right * _stick_x);
-
         this.transform.rotation = Quaternion.LookRotation(moveForward);
 
         LookTaget();
@@ -199,7 +190,9 @@ public class Player : MonoBehaviour
             //スライディングに移行
             StateProcessor.State = StateSliding;
             _lockon.LockOnExit();
+
             SetSlidingCollider(true);
+
             _effectManager.ParticlePlay(Player_EffectManager.EffectType.BurnerFire);
             _effectManager.ParticlePlay(Player_EffectManager.EffectType.SparkFire);
             _effectManager.ParticlePlay(Player_EffectManager.EffectType.SpeedLine);
@@ -224,13 +217,15 @@ public class Player : MonoBehaviour
         _move_power.x *= 0.99f;
 
         if (InputController.GetButtonDown(Button.Y))
-        {
-            _effectManager.ParticlePlay(Player_EffectManager.EffectType.SlashTrail);
+        {         
             _animator.SetTrigger("Attack");
         }
 
-        if (!InputController.GetButtonStay(Button.R1) && !IsUpWallHit() && IsGround())
+        if (!(InputController.GetButtonStay(Button.R1)) || _boostPoint.GetNowPoint() <= 0)
         {
+            if (!ShouldSlidingExit()) {
+                return;
+            }
             //アイドルに移行
             StateProcessor.State = StateIdle;
             _effectManager.AllParticleStop();
@@ -241,11 +236,11 @@ public class Player : MonoBehaviour
     {
         _effectManager.AllParticleStop();
 
-        if (WallRunStartCheck())
-        {
-            Debug.Log("壁に当たった");
-            StateProcessor.State = StateWalRun;
-        }
+        //if (WallRunStartCheck())
+        //{
+        //    Debug.Log("壁に当たった");
+        //    StateProcessor.State = StateWalRun;
+        //}
         if (IsGround())
         {
             StateProcessor.State = StateIdle;
@@ -285,23 +280,18 @@ public class Player : MonoBehaviour
     }
     private bool IsGround()
     {
+        if (!IsFall()) return false;
         Ray down_ray = new Ray(transform.position + (transform.up / 2.0f), - transform.up);
         return Physics.Raycast(down_ray, _parameter._groundRange, _parameter._groundLayer);
     }
-
-    //-------------------------------------------------
-    // アニメーションイベントで呼び出す奴
-    //-------------------------------------------------
-    private void AtackEvent()
+    private bool IsFall()
     {
-        AttackCollider.SetActive(true);
+        return _rigidbody.velocity.y <= 0.0f;
     }
-    private void AtackEndEvent()
+    private bool ShouldSlidingExit()
     {
-        AttackCollider.SetActive(false);
-
+        return !(IsUpWallHit() || !IsGround());
     }
-
     //-------------------------------------------------
     // スライディング中に起動するやつ
     //-------------------------------------------------
