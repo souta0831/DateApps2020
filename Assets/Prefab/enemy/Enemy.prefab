@@ -156,10 +156,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _active_distance: 200
-  DeadParticle: {fileID: 83773069660809620, guid: b62d53137927de849ad4f174cb19f23f,
-    type: 3}
   _deadObjectList:
   - {fileID: 2692561324792526734, guid: 29051d40a143dbd4a8de25158632ac94, type: 3}
+  - {fileID: 8186942604235004327, guid: 7927f3f0db910cc44b8490593f1993c7, type: 3}
   _deadSpawnPos: {fileID: 6084703533266068015}
 --- !u!114 &4582134415702571508
 MonoBehaviour:
