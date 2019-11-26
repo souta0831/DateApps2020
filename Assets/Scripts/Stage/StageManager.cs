@@ -9,20 +9,20 @@ public class StageManager : MonoBehaviour
     public struct _Stage
     {
         public GameObject _gameObject;
+        [System.NonSerialized]
         public Stage _stageScript;
     };
-
-    //生成座標
+    //同時に生成するステージの数
     [SerializeField]
-    private Transform _spawnPos;
+    private float _existingStageNum=3;
     //スタート時に存在してるステージ
     [SerializeField]
     private _Stage _startStage;
     //生成するステージ
     [SerializeField]
-    private List<GameObject> _stageRandomList;
+    private List<_Stage> _stageRandomList=new List<_Stage>();
     //現在存在するステージ
-    private _Stage[] _StageArray = new _Stage[3];
+    private List<_Stage> _StageArray = new List<_Stage>();
     private float _scrollSpeed;
     private float _bufferSpeed;
     public float ScrollSpeed
@@ -30,17 +30,18 @@ public class StageManager : MonoBehaviour
         get { return _scrollSpeed; }
         set { _scrollSpeed = value; }
     }
-    public Transform SpawnPos
-    {
-        get { return _spawnPos; }
-    }
     void Start()
     {
         //ゲームオブジェクトからスクリプトを取得
         _startStage._stageScript = _startStage._gameObject.GetComponent<Stage>();
-        //パラメータをセット
-        _startStage._stageScript._startLeep = 0.5f;
-        _StageArray[0] = _startStage;
+        _StageArray.Add(_startStage);
+
+        for (int i = 0; i < _stageRandomList.Count; i++)
+        {
+            _Stage stage = _stageRandomList[i];
+            stage._stageScript = stage._gameObject.GetComponent<Stage>();
+            _stageRandomList[i] = stage;
+        }
     }
     void Update()
     {
@@ -48,31 +49,15 @@ public class StageManager : MonoBehaviour
     }
     void InstanceStage()
     {
-        for(int i=0;i<_StageArray.Length;i++)
+        if (_StageArray.Count<= _existingStageNum)
         {
-            if (_StageArray[i]._gameObject == null)
-            {
-                int random = Random.Range(0, _stageRandomList.Count);
-                _StageArray[i]._gameObject = Instantiate(_stageRandomList[random], _spawnPos);
-                Vector3 spawnPos = Vector3.Scale(_spawnPos.position, new Vector3(0, 0, i + 1));
-                _StageArray[i]._stageScript = _StageArray[i]._gameObject.GetComponent<Stage>();
-                _StageArray[i]._stageScript._scrollSpeed= _scrollSpeed;
-                _StageArray[i]._stageScript._spawnPos = spawnPos;
-                _StageArray[i]._stageScript._endPos = -_spawnPos.position;
-
-            }
+            _Stage stage=_stageRandomList[Random.Range(0,_stageRandomList.Count)];
+            stage._gameObject = Instantiate(stage._gameObject,_StageArray[_StageArray.Count-1]._stageScript.SpawnPos);
+            _StageArray.Add(stage);
         }
     }
     void SpeedUpdate()
     {
-        //スピードに変化があったらステージのスピードを更新する
-        if (_bufferSpeed != _scrollSpeed)
-        {
-            for (int i = 0; i < _StageArray.Length; i++)
-            {
-                _StageArray[i]._stageScript._scrollSpeed = _scrollSpeed;
-            }
-        }
-        _bufferSpeed = _scrollSpeed;
+        _StageArray[1]._gameObject.transform.position-=new Vector3(0,0,ScrollSpeed);
     }
 }
