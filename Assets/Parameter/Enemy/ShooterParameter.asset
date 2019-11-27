@@ -15,4 +15,4 @@ MonoBehaviour:
   FireRate: 5
   FireCoolTime: 60
   Burst: 1
-  Accuracy: 1
+  Accuracy: 0
