@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bac23fe0e69a2784c8a370b237d97c9f, type: 3}
   m_Name: PlayerParameter
   m_EditorClassIdentifier: 
-  RunSpeed: 7.5
-  JumpPower: 8.5
+  RunSpeed: 10
+  JumpPower: 9.5
   FallPower: 0.4
-  SlidingSpeed: 12
+  SlidingSpeed: 15
   SlidingLRSpeed: 2
   LockOnRange: 10
   MaxHp: 100
-  MaxBoostPoint: 500
+  MaxBoostPoint: 1000
   WallRunStartRange: 1
   WallRunSpeed: 3
   _groundLayer:

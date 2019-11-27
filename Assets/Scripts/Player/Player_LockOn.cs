@@ -22,7 +22,8 @@ public class Player_LockOn : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //ロックオン中
+        NullCheck();
+
         if (_lockOnGameObject!=null)
         {
             //ロック切り替え
@@ -33,11 +34,10 @@ public class Player_LockOn : MonoBehaviour
             return;
         }
 
-        //ロックオン　
         if (InputController.GetButtonDown(Button.L1))
         {
             LockOnStart();
-        }   
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -54,6 +54,21 @@ public class Player_LockOn : MonoBehaviour
         _hitColliderList.Remove(other.gameObject);
     }
 
+    private void NullCheck()
+    {
+        foreach (var num in _hitColliderList)
+        {
+            if (num == null)
+            {
+                if (_lockOnGameObject == num.gameObject)
+                {
+                    LockOnExit();
+                }
+                _hitColliderList.Remove(num.gameObject);
+            }
+        }
+    }
+
     public void LockOnStart()
     {
         //近くに対象がいない場合ロックオン開始をしない
@@ -63,7 +78,7 @@ public class Player_LockOn : MonoBehaviour
         }
 
         _lockOnGameObject = _hitColliderList[0];
-        _lockonCursor.OnLockonStart(_hitColliderList[0].transform);
+        _lockonCursor.OnLockonStart(_lockOnGameObject.transform);
     }
 
     public void LockOnExit()

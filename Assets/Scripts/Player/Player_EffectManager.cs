@@ -18,6 +18,7 @@ public class Player_EffectManager : MonoBehaviour
 
     private void Start()
     {
+
         AllParticleStop();
     }
 

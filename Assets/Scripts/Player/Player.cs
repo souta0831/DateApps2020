@@ -120,7 +120,7 @@ public class Player : MonoBehaviour
     private void StickUpdate()
     {
         _stick_x = Input.GetAxis("Horizontal");
-        _stick_z = Input.GetAxis("Vertical");
+        _stick_z = 1.0f;//Input.GetAxis("Vertical");
     }
 
     private void LookTaget()
@@ -185,6 +185,11 @@ public class Player : MonoBehaviour
 
     _move_power = moveForward.normalized * (_parameter.RunSpeed / Mathf.Sqrt(2.0f) * Time.deltaTime);
 
+        if (InputController.GetButtonDown(Button.Y))
+        {
+            _animator.SetTrigger("Attack");
+        }
+
         if (InputController.GetButtonDown(Button.R1))
         {
             //スライディングに移行
@@ -206,13 +211,13 @@ public class Player : MonoBehaviour
         _boostPoint.AddPoint(-2);
 
         var moveForward = Vector3.Scale(transform.forward, Vector3.right + Vector3.forward);
-        var moveLR = (transform.right * _stick_x);
+        //var moveLR = (transform.right * _stick_x);
 
-        _move_power += (moveLR * _parameter.SlidingLRSpeed) /10.0f* Time.deltaTime;
-        if (_move_power.magnitude>= _parameter.SlidingLRSpeed)
-        {
-            _move_power = _move_power.normalized * _parameter.SlidingLRSpeed;
-        }
+        //_move_power += (moveLR * _parameter.SlidingLRSpeed) /10.0f * Time.deltaTime;
+        //if (_move_power.magnitude>= _parameter.SlidingLRSpeed)
+        //{
+        //   // _move_power = _move_power.normalized * _parameter.SlidingLRSpeed;
+        //}
         this.transform.position += moveForward * _parameter.SlidingSpeed * Time.deltaTime;
         _move_power.x *= 0.99f;
 
