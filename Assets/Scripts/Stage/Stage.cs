@@ -10,15 +10,10 @@ public class Stage : MonoBehaviour
     {
         get { return _spawnPos; }
     }
-    void Start()
+    public void OnDead()
     {
+        _spawnPos.DetachChildren();
+        Destroy(this.gameObject);
     }
-
     // Update is called once per frame
-    void Update()
-    {
-
-
-
-    }
 }
