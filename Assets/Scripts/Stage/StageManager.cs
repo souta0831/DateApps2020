@@ -43,7 +43,7 @@ public class StageManager : MonoBehaviour
             stage._stageScript = stage._gameObject.GetComponent<Stage>();
             _stageRandomList[i] = stage;
         }
-        _scrollSpeed = 0.5f;
+
     }
     void Update()
     {
