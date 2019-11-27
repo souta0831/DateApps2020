@@ -7,6 +7,11 @@ public class Player_Events : MonoBehaviour
     [SerializeField]
     private GameObject _attackColliderObject = default;
 
+    private void Start()
+    {
+        _attackColliderObject.SetActive(false);
+    }
+
     private void AttackEvent()
     {
         _attackColliderObject.SetActive(true);
