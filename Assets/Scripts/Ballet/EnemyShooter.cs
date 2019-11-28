@@ -17,10 +17,10 @@ public class EnemyShooter : MonoBehaviour
     //シュータが起動中かどうか
     [SerializeField]
     bool _isActive;
-
-
-
+    [SerializeField]
     private GameObject _targetObject = null;
+
+
     private Enemy _enemy;
     private List<float> _fire_timer=new List<float>();
     private List<float> _cool_timer = new List<float>();

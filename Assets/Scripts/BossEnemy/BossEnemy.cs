@@ -32,7 +32,6 @@ public class BossEnemy : MonoBehaviour
         StateFall.execDelegate = FallState;
         StateChase.execDelegate = ChaseState;
         StateRise.execDelegate = RiseState;
-        _playableDirector = GetComponent<PlayableDirector>();
 
 
     }
@@ -41,7 +40,6 @@ public class BossEnemy : MonoBehaviour
     {
         _isActive = true;
         GameManager.ChangeCamera(_movieCamera);
-        _playableDirector.Play();
     }
     void Update()
     {
