@@ -48,6 +48,11 @@ public abstract class BalletBase : MonoBehaviour
     {
     }
     protected virtual void FixedMove() { }
+
+    public virtual void Reflection()
+    {
+
+    }
     void Delete()
     {
         DestroyTime-=Time.deltaTime;

@@ -11,11 +11,15 @@ public class Ballet : BalletBase
         Vector3 accuracy = new Vector3(Random.Range(-_accuracy, _accuracy), 0, Random.Range(-_accuracy, _accuracy));
         //ターゲットのほうに弾を向ける
         transform.LookAt(_targetObject.transform.position);
+        _rigidBody.AddForce(transform.forward * _speed); 
 
     }
     protected override void Move()
     {
-        _rigidBody.AddForce(transform.forward * _speed); 
 
+    }
+    protected override void FixedMove()
+    {
+        
     }
 }
