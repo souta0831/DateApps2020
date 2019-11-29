@@ -11,6 +11,9 @@ public class Player : MonoBehaviour
     private Player_LockOn _lockon = default;
 
     [SerializeField]
+    private StageManager m_stageManager = default;
+
+    [SerializeField]
     private EnemyManager  _enemyManager;
 
     [SerializeField]
@@ -103,7 +106,8 @@ public class Player : MonoBehaviour
     private void Move()
     {
         _rigidbody.velocity += (-transform.up * (_parameter.FallPower * Time.timeScale));
-        _rigidbody.transform.position += _move_power;
+        //_rigidbody.transform.position += _move_power;
+        m_stageManager.ScrollSpeed = _move_power.z;
         _buffer_pos = transform.position;
     }
 
@@ -178,8 +182,10 @@ public class Player : MonoBehaviour
         _animator.SetBool("is_running", true);
 
         Vector3 camForward = Vector3.Scale(Camera.transform.forward, Vector3.right + Vector3.forward);
-        Vector3 moveForward = (camForward * _stick_z) + (Camera.transform.right * _stick_x);
+        Vector3 moveForward = transform.forward;//(camForward * _stick_z) + (Camera.transform.right * _stick_x);
         this.transform.rotation = Quaternion.LookRotation(moveForward);
+
+        this.transform.position += (transform.right * _stick_x)*0.05f;
 
         LookTaget();
 
@@ -218,8 +224,8 @@ public class Player : MonoBehaviour
         //{
         //   // _move_power = _move_power.normalized * _parameter.SlidingLRSpeed;
         //}
-        this.transform.position += moveForward * _parameter.SlidingSpeed * Time.deltaTime;
-        _move_power.x *= 0.99f;
+        _move_power = moveForward * _parameter.SlidingSpeed * Time.deltaTime;
+        //_move_power.x *= 0.99f;
 
         if (InputController.GetButtonDown(Button.Y))
         {         
