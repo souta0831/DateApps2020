@@ -91,7 +91,6 @@ public class BossEnemy : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log("ボス:トリガーヒット");
-
         if (other.gameObject== _endColliderArea)
        {
             _stateProcessor.State = StateRise;

@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: ShooterParameter
   m_EditorClassIdentifier: 
   FireRate: 5
-  FireCoolTime: 60
+  FireCoolTime: 120
   Burst: 1
   Accuracy: 0

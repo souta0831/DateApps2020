@@ -48,9 +48,9 @@ MonoBehaviour:
   _startStage:
     _gameObject: {fileID: 2226890108577481690}
   _stageRandomList:
-  - _gameObject: {fileID: 6168353384489078540, guid: fbcedaf9faacfa34f922c3afa4e7a724,
+  - _gameObject: {fileID: 4772824035099961416, guid: fbcedaf9faacfa34f922c3afa4e7a724,
       type: 3}
-  _StageArray: []
+  _stageArray: []
 --- !u!1001 &6691217569082502034
 PrefabInstance:
   m_ObjectHideFlags: 0

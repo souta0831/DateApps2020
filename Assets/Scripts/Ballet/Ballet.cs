@@ -15,7 +15,6 @@ public class Ballet : BalletBase
     }
     protected override void Move()
     {
-
     }
     protected override void FixedMove()
     {
