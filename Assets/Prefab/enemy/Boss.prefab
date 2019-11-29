@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1189394230413869514}
   - component: {fileID: 2454560722562448086}
   - component: {fileID: 8560043330940292278}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Boss
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -61,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e0942dd8e0837924d937530aeedbd59f, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -93,6 +93,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a096b80b0344ff74b86fdc349301856b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _movieCamera: {fileID: 0}
   _parameter: {fileID: 11400000, guid: 3cf800241fd5aa340a97b3982dd28ee2, type: 2}
 --- !u!54 &2454560722562448086
 Rigidbody:
@@ -132,7 +133,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5533860575305938963}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Pivot
   m_TagString: Untagged
   m_Icon: {fileID: 0}

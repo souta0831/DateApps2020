@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Ballet : BalletBase
 {
-    
     protected override void Initialize()
     {
         //ぶれを求める
@@ -21,5 +20,9 @@ public class Ballet : BalletBase
     protected override void FixedMove()
     {
         
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+           // Destroy(this.gameObject);
     }
 }
