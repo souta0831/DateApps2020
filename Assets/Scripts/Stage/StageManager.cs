@@ -23,7 +23,7 @@ public class StageManager : MonoBehaviour
     private List<_Stage> _stageRandomList = new List<_Stage>();
     //現在存在するステージ
     [SerializeField]
-    private List<_Stage> _StageArray = new List<_Stage>();
+    private List<_Stage> _stageArray = new List<_Stage>();
     private float _scrollSpeed;
     private float _bufferSpeed;
     public float ScrollSpeed
@@ -35,7 +35,7 @@ public class StageManager : MonoBehaviour
     {
         //ゲームオブジェクトからスクリプトを取得
         _startStage._stageScript = _startStage._gameObject.GetComponent<Stage>();
-        _StageArray.Add(_startStage);
+        _stageArray.Add(_startStage);
 
         for (int i = 0; i < _stageRandomList.Count; i++)
         {
@@ -52,24 +52,24 @@ public class StageManager : MonoBehaviour
     }
     void InstanceStage()
     {
-        if (_StageArray.Count < _existingStageNum)
+        if (_stageArray.Count < _existingStageNum)
         {
             _Stage stage = _stageRandomList[Random.Range(0, _stageRandomList.Count)];
             _Stage stage2=new _Stage();
-            stage2._gameObject = Instantiate(stage._gameObject, _StageArray[_StageArray.Count - 1]._stageScript.SpawnPos);
+            stage2._gameObject = Instantiate(stage._gameObject, _stageArray[_stageArray.Count - 1]._stageScript.SpawnPos);
             stage2._stageScript = stage2._gameObject.GetComponent<Stage>();
-            _StageArray.Add(stage2);
+            _stageArray.Add(stage2);
         }
     }
     void SpeedUpdate()
     {
 
             
-            _StageArray[0]._gameObject.transform.position -= new Vector3(0, 0, ScrollSpeed);
-        if (_StageArray[0]._gameObject.transform.position.z <= -180)
+            _stageArray[0]._gameObject.transform.position -= new Vector3(0, 0, ScrollSpeed);
+        if (_stageArray[0]._gameObject.transform.position.z <= -180)
         {
-            _StageArray[0]._stageScript.OnDead();
-            _StageArray.RemoveAt(0);
+            _stageArray[0]._stageScript.OnDead();
+            _stageArray.RemoveAt(0);
         }
     }
 
