@@ -57,7 +57,7 @@ public class Player_EffectManager : MonoBehaviour
     {
         if (_ParticleSystemList[(int)effectType] == null)
         {
-            Debug.Log("◆Player_EffectManager : NULL");
+         //   Debug.Log("◆Player_EffectManager : NULL");
             return;
         }
 

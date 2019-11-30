@@ -24,19 +24,13 @@ public class StageManager : MonoBehaviour
     //現在存在するステージ
     [SerializeField]
     private List<_Stage> _stageArray = new List<_Stage>();
-    private float _scrollSpeed;
-    private float _bufferSpeed;
-    public float ScrollSpeed
-    {
-        get { return _scrollSpeed; }
-        set { _scrollSpeed = value; }
-    }
+    private SpeedManager _speedManager;
     void Start()
     {
         //ゲームオブジェクトからスクリプトを取得
         _startStage._stageScript = _startStage._gameObject.GetComponent<Stage>();
         _stageArray.Add(_startStage);
-
+        _speedManager = transform.root.gameObject.GetComponent<SpeedManager>();
         for (int i = 0; i < _stageRandomList.Count; i++)
         {
             _Stage stage = _stageRandomList[i];
@@ -65,7 +59,7 @@ public class StageManager : MonoBehaviour
     {
 
             
-            _stageArray[0]._gameObject.transform.position -= new Vector3(0, 0, ScrollSpeed);
+            _stageArray[0]._gameObject.transform.position -= new Vector3(0, 0, _speedManager.speedProperty.Value);
         if (_stageArray[0]._gameObject.transform.position.z <= -180)
         {
             _stageArray[0]._stageScript.OnDead();
