@@ -70,7 +70,7 @@ public class EnemyShooter : MonoBehaviour
             if (_fire_timer[i] >= 0) return;
 
             var bullet = Instantiate(Bullets[i]._bullet, Bullets[i]._shotPos.position, Bullets[i]._shotPos.rotation);
-
+            bullet.transform.parent = this.transform.root.gameObject.transform;
             var bullet_scprit = bullet.GetComponent<BalletBase>();
             bullet_scprit.TargetObject = _targetObject;
             bullet_scprit.Accuracy = Bullets[i]._parameter.Accuracy;

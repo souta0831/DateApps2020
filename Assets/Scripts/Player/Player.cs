@@ -10,8 +10,7 @@ public class Player : MonoBehaviour
     [SerializeField]
     private Player_LockOn _lockon = default;
 
-    [SerializeField]
-    private StageManager m_stageManager = default;
+    private SpeedManager m_speedManager = default;
 
     [SerializeField]
     private EnemyManager  _enemyManager;
@@ -81,6 +80,8 @@ public class Player : MonoBehaviour
         _lifePoint.PointSet(_parameter.MaxHp);
         _boostPoint.MaxPointSet(_parameter.MaxBoostPoint);
         _boostPoint.PointSet(_parameter.MaxBoostPoint);
+
+        m_speedManager= transform.root.gameObject.GetComponent<SpeedManager>();
     }
 
     void Update()
@@ -107,7 +108,7 @@ public class Player : MonoBehaviour
     {
         _rigidbody.velocity += (-transform.up * (_parameter.FallPower * Time.timeScale));
         //_rigidbody.transform.position += _move_power;
-        m_stageManager.ScrollSpeed = _move_power.z;
+        m_speedManager.SetSpeed(_move_power.z);
         _buffer_pos = transform.position;
     }
 
