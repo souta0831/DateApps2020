@@ -23,7 +23,7 @@ public class BossManager : MonoBehaviour
     public void SpawnBoss()
     {
         Debug.Log("Boss:Spawn");
-        _boosScript.BossStart();
+        //_boosScript.BossStart();
         Destroy(_bossSpawnCollider.gameObject); 
     }
 }
