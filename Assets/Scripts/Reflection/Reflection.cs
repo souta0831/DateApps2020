@@ -9,11 +9,11 @@ public class Reflection : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        var rigitbody = other.gameObject.GetComponent<Rigidbody>();
-        rigitbody.velocity = -rigitbody.velocity * m_reflectionPower;
+        //var rigitbody = other.gameObject.GetComponent<Rigidbody>();
+        //rigitbody.velocity = -rigitbody.velocity * m_reflectionPower;
 
-        var ColliiderGameObject = other.gameObject;
-        ColliiderGameObject.transform.eulerAngles = new Vector3(ColliiderGameObject.transform.eulerAngles.x, 180.0f+ColliiderGameObject.transform.eulerAngles.y, ColliiderGameObject.transform.eulerAngles.z);
+        //var ColliiderGameObject = other.gameObject;
+        //ColliiderGameObject.transform.eulerAngles = new Vector3(ColliiderGameObject.transform.eulerAngles.x, 180.0f+ColliiderGameObject.transform.eulerAngles.y, ColliiderGameObject.transform.eulerAngles.z);
 
 
     }
