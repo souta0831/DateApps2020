@@ -27,7 +27,7 @@ public class Ballet : BalletBase
     }
     private void ChangeSpeedVec()
     {
-        Debug.Log("値変わった？");
+       // Debug.Log("値変わった？");
         _rigidBody.velocity=transform.forward * (_speed * _speedManager.speedProperty.Value);
 
     }

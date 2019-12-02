@@ -9,11 +9,17 @@ using UnityEngine.Playables;
 public class BossEnemy : MonoBehaviour
 {
     private GameObject _endCollision;
+    //ダウンするまでに弾を充てる回数
+    [SerializeField]
+    int _downHp=1;
+    int _nowHP=0;
     //
     [SerializeField]
-    private Camera _movieCamera;
+
+    bool _isDown;
+    Vector3 _startPos=Vector3.zero;
     [SerializeField]
-    private BossParameter _parameter;
+    float _nowPosLeap =0;
     //ステート
     private StateProcessor _stateProcessor = new StateProcessor();
     private BossStateFall StateFall = new BossStateFall();
@@ -22,29 +28,29 @@ public class BossEnemy : MonoBehaviour
     //コンポーネント
     private PlayableDirector _playableDirector;
     private bool _isActive = false;
-    
+    private Animator _animator;
+    //弾の発射機構
+    private BossShoter _shoter;
     public GameObject _endColliderArea { private get; set; }
     void Start()
     {
+        _shoter = GetComponent<BossShoter>();
+        _animator =GetComponent<Animator>();
+        _nowHP = _downHp;
         //初期ステートセット
         _stateProcessor.State = StateFall;
-        //イデレーターにセット
-        StateFall.execDelegate = FallState;
-        StateChase.execDelegate = ChaseState;
-        StateRise.execDelegate = RiseState;
-
-
-    }
-
-    public void BossStart()
-    {
-        _isActive = true;
-        GameManager.ChangeCamera(_movieCamera);
+        _startPos = transform.position;
     }
     void Update()
     {
-        if (!_isActive) return;
-        State();
+
+        PosLeap();
+        OnDown();
+    }
+    void PosLeap()
+    {
+        var z = Mathf.Lerp(_startPos.z, 0, _nowPosLeap);
+        transform.position = new Vector3(transform.position.x, transform.position.y, z);
     }
     //ステート関数
     private void State()
@@ -55,46 +61,34 @@ public class BossEnemy : MonoBehaviour
         }
         _stateProcessor.Execute();
     }
-    //下降
-    private void FallState()
+    private void OnDown()
     {
-        //Vector3 fall = -transform.up * _parameter.FallSpeed;
-        //transform.position += fall;
-        //if (IsGround())
-        //{
-        //    _stateProcessor.State = StateChase;
+        _animator.SetBool("IsDown", _isDown);
+        _isDown = _nowHP <= 0;
 
-        //}
-    }
-    //追いかける
-    private void ChaseState()
-    {
-        Vector3 moveDis=(transform.position + _endColliderArea.transform.position).normalized;
-        moveDis.y = 0;
-        transform.position += moveDis * _parameter.ChaseSpeed;
-        
-    }
-    //上昇
-    private void RiseState()
-    {
-        Vector3 rise = transform.up * _parameter.RiseSpeed;
-
-        transform.position += rise;
-    }
-    
-    private bool IsGround()
-    {
-        Ray down_ray = new Ray(transform.position , -transform.up);
-        return Physics.Raycast(down_ray, 1, _parameter.GroundLayer);
-
+        if (_isDown)
+        {
+            _shoter.IsActive = false;
+            _nowPosLeap = Math.Min(0.8f, _nowPosLeap += 0.005f);
+            return;
+        }
+        _nowPosLeap = Math.Max(_nowPosLeap -= 0.01f, 0);
+        _shoter.IsActive = true;
     }
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("ボス:トリガーヒット");
-        if (other.gameObject== _endColliderArea)
-       {
-            _stateProcessor.State = StateRise;
+        if (other.gameObject.tag == "RifrectBallet")
+        {
+            Debug.Log("ボスヒット");
+            _nowHP--;
+            _animator.SetTrigger("Hit");
+        }
+        if (other.gameObject.tag == "Attack")
+        {
+            _nowHP = _downHp;
+            _animator.SetTrigger("DownEnd");
 
         }
+
     }
 }
