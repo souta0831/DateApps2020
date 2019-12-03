@@ -82,7 +82,7 @@ public class BossEnemy : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "RifrectBallet")
+        if (other.gameObject.tag == "RefrectBallet")
         {
             Debug.Log("ボスヒット");
             _nowHP--;
