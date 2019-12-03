@@ -20,7 +20,7 @@ public class Reflection : MonoBehaviour
 
         var ColliiderGameObject = other.gameObject;
         other.gameObject.tag = m_changeTagName;
-;        ColliiderGameObject.transform.eulerAngles = m_reflectionVectorObject.eulerAngles;
+        ColliiderGameObject.transform.eulerAngles = m_reflectionVectorObject.eulerAngles;
         //ColliiderGameObject.transform.eulerAngles = new Vector3(ColliiderGameObject.transform.eulerAngles.x, 180.0f + ColliiderGameObject.transform.eulerAngles.y, ColliiderGameObject.transform.eulerAngles.z);
     }
 }

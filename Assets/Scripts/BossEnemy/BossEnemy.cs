@@ -22,12 +22,11 @@ public class BossEnemy : MonoBehaviour
     float _nowPosLeap =0;
     //ステート
     private StateProcessor _stateProcessor = new StateProcessor();
-    private BossStateFall StateFall = new BossStateFall();
-    private BossStateChase StateChase = new BossStateChase();
-    private BossStateRise StateRise = new BossStateRise();
+    private BossStateIdle StateIdle = new BossStateIdle();
+    private BossStateDown StateDown = new BossStateDown();
+    private BossStateReturn StateReturn = new BossStateReturn();
     //コンポーネント
     private PlayableDirector _playableDirector;
-    private bool _isActive = false;
     private Animator _animator;
     //弾の発射機構
     private BossShoter _shoter;
@@ -38,15 +37,35 @@ public class BossEnemy : MonoBehaviour
         _animator =GetComponent<Animator>();
         _nowHP = _downHp;
         //初期ステートセット
-        _stateProcessor.State = StateFall;
+        _stateProcessor.State = StateIdle;
+        //イデレーター
+        StateIdle.execDelegate = IdleState;
+        StateDown.execDelegate = DownState;
         _startPos = transform.position;
     }
     void Update()
     {
-
         PosLeap();
-        OnDown();
+        State();
     }
+    void IdleState()
+    {
+        _nowPosLeap = Math.Max(_nowPosLeap -= 0.01f, 0);
+        _shoter.IsActive = true;
+        _animator.SetBool("IsDown", false);
+    }
+    void DownState()
+    {
+        _nowPosLeap = Math.Min(0.8f, _nowPosLeap += 0.005f);
+        _shoter.IsActive = false;
+        if (_nowPosLeap >= 1.3f)
+        {
+            _stateProcessor.State = StateIdle;
+        }
+        _animator.SetBool("IsDown", true);
+    }
+
+
     void PosLeap()
     {
         var z = Mathf.Lerp(_startPos.z, 0, _nowPosLeap);
@@ -61,20 +80,6 @@ public class BossEnemy : MonoBehaviour
         }
         _stateProcessor.Execute();
     }
-    private void OnDown()
-    {
-        _animator.SetBool("IsDown", _isDown);
-        _isDown = _nowHP <= 0;
-
-        if (_isDown)
-        {
-            _shoter.IsActive = false;
-            _nowPosLeap = Math.Min(0.8f, _nowPosLeap += 0.005f);
-            return;
-        }
-        _nowPosLeap = Math.Max(_nowPosLeap -= 0.01f, 0);
-        _shoter.IsActive = true;
-    }
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "RifrectBallet")
@@ -82,10 +87,16 @@ public class BossEnemy : MonoBehaviour
             Debug.Log("ボスヒット");
             _nowHP--;
             _animator.SetTrigger("Hit");
+            if (_nowHP <= 0)
+            {
+                _stateProcessor.State = StateDown;
+            }
         }
         if (other.gameObject.tag == "Attack")
         {
             _nowHP = _downHp;
+            _stateProcessor.State = StateIdle;
+
             _animator.SetTrigger("DownEnd");
 
         }
