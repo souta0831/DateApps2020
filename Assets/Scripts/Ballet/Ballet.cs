@@ -24,11 +24,12 @@ public class Ballet : BalletBase
     }
     protected override void Move()
     {
+        transform.eulerAngles += new Vector3(0, 0, 2);    
     }
     private void ChangeSpeedVec()
     {
        // Debug.Log("値変わった？");
-       // _rigidBody.velocity=transform.forward * (_speed * _speedManager.speedProperty.Value);
+        _rigidBody.velocity=transform.forward * (_speed * _speedManager.speedProperty.Value);
 
     }
     protected override void FixedMove()

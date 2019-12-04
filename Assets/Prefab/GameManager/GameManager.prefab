@@ -629,6 +629,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 002386bd0814df444b94cf34f6d7fea8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &9175112017259155305 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8682322107605659088, guid: 9c3fdae4fa915a742ae1df134aee5d22,
+    type: 3}
+  m_PrefabInstance: {fileID: 516020804995867321}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &6771257864857186102 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6544030524818361743, guid: 9c3fdae4fa915a742ae1df134aee5d22,
@@ -1065,7 +1071,13 @@ PrefabInstance:
         type: 3}
       propertyPath: _targetObject
       value: 
-      objectReference: {fileID: 4704556150464889544}
+      objectReference: {fileID: 9175112017259155305}
+    - target: {fileID: 5928185281854883180, guid: 177bd514762514e46a4efec7b911ec9d,
+        type: 3}
+      propertyPath: _beamParticle
+      value: 
+      objectReference: {fileID: 195558405093619240, guid: 24dd62588499a5d44bac50c857b1c9bc,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 177bd514762514e46a4efec7b911ec9d, type: 3}
 --- !u!4 &5154429154198925268 stripped
