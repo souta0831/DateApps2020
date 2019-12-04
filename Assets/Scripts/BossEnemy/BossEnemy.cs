@@ -12,7 +12,10 @@ public class BossEnemy : MonoBehaviour
     //ダウンするまでに弾を充てる回数
     [SerializeField]
     int _downHp=1;
-    int _nowHP=0;
+    int _nowDonwHp = 0;
+    [SerializeField]
+    int _hp;
+    int _nowHp;
     //
     [SerializeField]
     bool _isDown;
@@ -32,13 +35,16 @@ public class BossEnemy : MonoBehaviour
     private BossBeam _bossBeam;
     //弾の発射機構
     private BossShoter _shoter;
+    //保存用
+    private bool _useLaser = false;
     public GameObject _endColliderArea { private get; set; }
     void Start()
     {
         _shoter = GetComponent<BossShoter>();
         _animator =GetComponent<Animator>();
         _bossBeam = GetComponent<BossBeam>();
-        _nowHP = _downHp;
+        _nowDonwHp = _downHp;
+        _nowHp = _hp;
         //初期ステートセット
         _stateProcessor.State = StateIdle;
         //イデレーター
@@ -50,7 +56,12 @@ public class BossEnemy : MonoBehaviour
     {
         PosLeap();
         State();
-       _bossBeam.OnVerticalBeam();
+        if (_nowHp == 1&& !_useLaser)
+        {
+            _bossBeam.OnVerticalBeam();
+            _useLaser = true;
+
+        }
     }
     void IdleState()
     {
@@ -88,20 +99,20 @@ public class BossEnemy : MonoBehaviour
     {
         if (other.gameObject.tag == "ReflectBullet")
         {
-            Debug.Log("ボスヒット");
-            _nowHP--;
+            _nowDonwHp--;
             _animator.SetTrigger("Hit");
             HitEfect.Play();
-            if (_nowHP <= 0)
+            if (_nowDonwHp <= 0)
             {
                 _stateProcessor.State = StateDown;
             }
         }
         if (other.gameObject.tag == "Attack")
         {
-            _nowHP = _downHp;
+            Debug.Log("ボスヒット");
+            _nowDonwHp = _downHp;
+            _nowHp--;
             _stateProcessor.State = StateIdle;
-
             _animator.SetTrigger("DownEnd");
 
         }

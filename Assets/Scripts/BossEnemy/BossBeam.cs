@@ -8,7 +8,6 @@ public class BossBeam : MonoBehaviour
     private GameObject _beamPrefab;
     [SerializeField]
     private Transform _beamPos;
-    [SerializeField]
     private GameObject _beamObject;
     private Animator _animator;
     void Start()
@@ -34,7 +33,7 @@ public class BossBeam : MonoBehaviour
         if (_beamObject!=null)
         {
 
-            _beamObject.transform.eulerAngles -= new Vector3(1, 0, 0);
+            _beamObject.transform.eulerAngles -= new Vector3(0.7f, 0, 0);
         }   
     }
 

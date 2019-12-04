@@ -61,6 +61,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _speed: 15
   DestroyTime: 30
+  _muzzleFlashPrefab: {fileID: 6145016009843616947, guid: 1defd6faa59fc7d42b44fc7780dc13a1,
+    type: 3}
 --- !u!54 &2724568380238211932
 Rigidbody:
   m_ObjectHideFlags: 0
