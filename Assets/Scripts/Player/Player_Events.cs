@@ -10,6 +10,9 @@ public class Player_Events : MonoBehaviour
     [SerializeField]
     private GameObject m_trailRendererObject = default;
 
+    [SerializeField]
+    private Reflection m_reflection = default;
+
     private void Start()
     {
         m_attackColliderObject.SetActive(false);
@@ -33,5 +36,14 @@ public class Player_Events : MonoBehaviour
     private void TrailExitEvent()
     {
         m_trailRendererObject.SetActive(false);
+    }
+
+    private void ReflectionEvent()
+    {
+         m_reflection.ModeChange(Reflection.ReflectionMode.RandamMode);
+    }
+    private void ReflectionExitEvent()
+    {
+        m_reflection.ModeChange(Reflection.ReflectionMode.NomalMode);
     }
 }

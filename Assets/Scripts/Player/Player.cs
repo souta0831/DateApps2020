@@ -167,12 +167,12 @@ public class Player : MonoBehaviour
         _animator.SetBool("is_running", true);
 
         Vector3 camForward = Vector3.Scale(Camera.transform.forward, Vector3.right + Vector3.forward);
-        Vector3 moveForward = transform.forward;//(camForward * _stick_z) + (Camera.transform.right * _stick_x);
+        Vector3 moveForward = transform.forward;
         this.transform.rotation = Quaternion.LookRotation(moveForward);
 
         this.transform.position += (transform.right * _stick_x) * 0.05f;
 
-        _move_power = _parameter.RunSpeed * Time.deltaTime;//moveForward.normalized * (_parameter.RunSpeed / Mathf.Sqrt(2.0f) * Time.deltaTime);
+        _move_power = _parameter.RunSpeed * Time.deltaTime;
 
         if (InputController.GetButtonDown(Button.Y))
         {
