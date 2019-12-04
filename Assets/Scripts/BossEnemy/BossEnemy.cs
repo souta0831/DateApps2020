@@ -15,11 +15,12 @@ public class BossEnemy : MonoBehaviour
     int _nowHP=0;
     //
     [SerializeField]
-
     bool _isDown;
     Vector3 _startPos=Vector3.zero;
     [SerializeField]
     float _nowPosLeap =0;
+    [SerializeField]
+    private ParticleSystem HitEfect=default;
     //ステート
     private StateProcessor _stateProcessor = new StateProcessor();
     private BossStateIdle StateIdle = new BossStateIdle();
@@ -28,6 +29,7 @@ public class BossEnemy : MonoBehaviour
     //コンポーネント
     private PlayableDirector _playableDirector;
     private Animator _animator;
+    private BossBeam _bossBeam;
     //弾の発射機構
     private BossShoter _shoter;
     public GameObject _endColliderArea { private get; set; }
@@ -35,6 +37,7 @@ public class BossEnemy : MonoBehaviour
     {
         _shoter = GetComponent<BossShoter>();
         _animator =GetComponent<Animator>();
+        _bossBeam = GetComponent<BossBeam>();
         _nowHP = _downHp;
         //初期ステートセット
         _stateProcessor.State = StateIdle;
@@ -47,6 +50,7 @@ public class BossEnemy : MonoBehaviour
     {
         PosLeap();
         State();
+       _bossBeam.OnVerticalBeam();
     }
     void IdleState()
     {
@@ -82,11 +86,12 @@ public class BossEnemy : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "RefrectBallet")
+        if (other.gameObject.tag == "ReflectBullet")
         {
             Debug.Log("ボスヒット");
             _nowHP--;
             _animator.SetTrigger("Hit");
+            HitEfect.Play();
             if (_nowHP <= 0)
             {
                 _stateProcessor.State = StateDown;
