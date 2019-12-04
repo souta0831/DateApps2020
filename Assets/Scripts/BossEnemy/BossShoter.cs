@@ -18,7 +18,6 @@ public class BossShoter : MonoBehaviour
     [SerializeField]
     private GameObject _targetObject = null;
 
-
     private Animator _animator = default;
     private float[] _fire_timer = new float[2];
     private float[] _cool_timer = new float[2];
@@ -50,6 +49,7 @@ public class BossShoter : MonoBehaviour
         if (!_isActive) return;
         LeftShoter();
         RightShoter();
+        
     }
     void LeftShoter()
     {
