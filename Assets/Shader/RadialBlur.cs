@@ -3,7 +3,6 @@
 [ExecuteInEditMode]
 public class RadialBlur : MonoBehaviour
 {
-
     [SerializeField]
     private Shader m_shader = default;
     [SerializeField, Range(1, 16)]
@@ -11,7 +10,7 @@ public class RadialBlur : MonoBehaviour
     [SerializeField, Range(0.0f, 1.0f)]
     private float m_strength = 0.5f; //ブラーの強さ
 
-    private Material m_material;
+    private Material m_material = default;
 
     //すべてのレンダリングがRenderImageへと完了したときに呼び出される
     private void OnRenderImage(RenderTexture source, RenderTexture dest)

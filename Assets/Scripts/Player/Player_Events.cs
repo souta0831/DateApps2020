@@ -5,21 +5,33 @@ using UnityEngine;
 public class Player_Events : MonoBehaviour
 {
     [SerializeField]
-    private GameObject _attackColliderObject = default;
+    private GameObject m_attackColliderObject = default;
+
+    [SerializeField]
+    private GameObject m_trailRendererObject = default;
 
     private void Start()
     {
-        _attackColliderObject.SetActive(false);
+        m_attackColliderObject.SetActive(false);
     }
 
     private void AttackEvent()
     {
-        _attackColliderObject.SetActive(true);
+        m_attackColliderObject.SetActive(true);
         Debug.Log("Player::攻撃");
     }
     private void AttackExitEvent()
     {
-        _attackColliderObject.SetActive(false);
+        m_attackColliderObject.SetActive(false);
         Debug.Log("Player::攻撃終了");
+    }
+
+    private void TrailEvent()
+    {
+        m_trailRendererObject.SetActive(true);
+    }
+    private void TrailExitEvent()
+    {
+        m_trailRendererObject.SetActive(false);
     }
 }

@@ -32,7 +32,6 @@ public class LockOnCamera : MonoBehaviour
     void Start()
     {
         m_camera = GetComponentInChildren<Camera>();
-
         prevPlayerPos = m_playerTransform.position;
     }
 
@@ -76,7 +75,6 @@ public class LockOnCamera : MonoBehaviour
            Input.GetAxis("Horizontal2") * m_rotateSpeed,
            Input.GetAxis("Vertical2") * m_rotateSpeed
         );
-
         transform.eulerAngles += new Vector3(angle.y, angle.x);
     }
 

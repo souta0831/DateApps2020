@@ -33,8 +33,12 @@ public enum PlayerStateID
     {
 
     }
+public class PlayerStateRushAttack : PlayerState
+{
 
-    public class PlayerStateJump : PlayerState
+}
+
+public class PlayerStateJump : PlayerState
     {
 
     }
