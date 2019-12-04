@@ -7,9 +7,6 @@ public class Player : MonoBehaviour
     [SerializeField]
     private PlayerParameter _parameter;
 
-    [SerializeField]
-    private Player_LockOn _lockon = default;
-
     private SpeedManager m_speedManager = default;
 
     [SerializeField]
@@ -33,7 +30,7 @@ public class Player : MonoBehaviour
     //保存用
     private Vector3 _collider_size = Vector3.zero;
     private Vector3 _collider_center = Vector3.zero;
-    private Vector3 _move_power = Vector3.zero;
+    private float _move_power = 0.0f;
     private Vector3 _buffer_pos = Vector3.zero;
     private Vector3 _nomal_vector = Vector3.zero;
     private Vector3 _move_direction = Vector3.zero;
@@ -48,6 +45,7 @@ public class Player : MonoBehaviour
     private PlayerStateSliding StateSliding = new PlayerStateSliding();
     private PlayerStateJump StateJump = new PlayerStateJump();
     private PlayerStateWallRun StateWalRun = new PlayerStateWallRun();
+    private PlayerStateRushAttack StateRushAttack = new PlayerStateRushAttack();
 
     void Start()
     {
@@ -75,6 +73,7 @@ public class Player : MonoBehaviour
         StateSliding.execDelegate = SlidingState;
         StateWalRun.execDelegate = WallRunState;
         StateJump.execDelegate = JumpState;
+        StateRushAttack.execDelegate = RushAttackState;
 
         _lifePoint.MaxPointSet(_parameter.MaxHp);
         _lifePoint.PointSet(_parameter.MaxHp);
@@ -108,7 +107,7 @@ public class Player : MonoBehaviour
     {
         _rigidbody.velocity += (-transform.up * (_parameter.FallPower * Time.timeScale));
         //_rigidbody.transform.position += _move_power;
-        m_speedManager.SetSpeed(_move_power.z);
+        m_speedManager.SetSpeed(_move_power);
         _buffer_pos = transform.position;
     }
 
@@ -128,20 +127,6 @@ public class Player : MonoBehaviour
         _stick_z = 1.0f;//Input.GetAxis("Vertical");
     }
 
-    private void LookTaget()
-    {
-        if (_lockon.NowLockOnGameObject() == null)
-        {
-            return;
-        }
-
-        Vector3 _targetPos = _lockon.NowLockOnGameObject().transform.position;
-        _targetPos.y = this.transform.position.y;
-
-        Vector3 relativePos = _targetPos - this.transform.position;
-        transform.rotation = Quaternion.LookRotation(relativePos, Vector3.up);
-    }
-
     //-------------------------------------------------
     // ステートのやつ
     //-------------------------------------------------
@@ -157,7 +142,6 @@ public class Player : MonoBehaviour
     {
         _boostPoint.AddPoint(1);
 
-        LookTaget();
 
         _animator.SetBool("is_running", false);
         _animator.SetBool("is_sliding", false);
@@ -186,22 +170,25 @@ public class Player : MonoBehaviour
         Vector3 moveForward = transform.forward;//(camForward * _stick_z) + (Camera.transform.right * _stick_x);
         this.transform.rotation = Quaternion.LookRotation(moveForward);
 
-        this.transform.position += (transform.right * _stick_x)*0.05f;
+        this.transform.position += (transform.right * _stick_x) * 0.05f;
 
-        LookTaget();
-
-    _move_power = moveForward.normalized * (_parameter.RunSpeed / Mathf.Sqrt(2.0f) * Time.deltaTime);
+        _move_power = _parameter.RunSpeed * Time.deltaTime;//moveForward.normalized * (_parameter.RunSpeed / Mathf.Sqrt(2.0f) * Time.deltaTime);
 
         if (InputController.GetButtonDown(Button.Y))
         {
             _animator.SetTrigger("Attack");
         }
 
+        if (InputController.GetButtonDown(Button.X) )
+        {
+            _animator.SetBool("RushAttack",true);
+            StateProcessor.State = StateRushAttack;
+        }
+
         if (InputController.GetButtonDown(Button.R1))
         {
             //スライディングに移行
             StateProcessor.State = StateSliding;
-            _lockon.LockOnExit();
 
             SetSlidingCollider(true);
 
@@ -225,7 +212,7 @@ public class Player : MonoBehaviour
         //{
         //   // _move_power = _move_power.normalized * _parameter.SlidingLRSpeed;
         //}
-        _move_power = moveForward * _parameter.SlidingSpeed * Time.deltaTime;
+        _move_power =  _parameter.SlidingSpeed * Time.deltaTime;
         //_move_power.x *= 0.99f;
 
         if (InputController.GetButtonDown(Button.Y))
@@ -261,7 +248,27 @@ public class Player : MonoBehaviour
     private void WallRunState()
     {
         Vector3 WallRunVector = _move_direction + Vector3.Scale(((-_move_direction + _nomal_vector).normalized), _nomal_vector);
-        _move_power = WallRunVector * _parameter.WallRunSpeed;
+        _move_power = _parameter.WallRunSpeed*Time.deltaTime;
+    }
+
+    private void RushAttackState()
+    {
+        Vector2 _stickRange = new Vector2(_stick_x, _stick_z);
+        _animator.SetBool("is_running", true);
+
+        Vector3 camForward = Vector3.Scale(Camera.transform.forward, Vector3.right + Vector3.forward);
+        Vector3 moveForward = transform.forward;
+        this.transform.rotation = Quaternion.LookRotation(moveForward);
+
+        this.transform.position += (transform.right * _stick_x) * 0.05f;
+
+        _move_power = _parameter.RunSpeed * Time.deltaTime;
+
+        if (!InputController.GetButtonStay(Button.X) && IsGround())
+        {
+            _animator.SetBool("RushAttack", false);
+            StateProcessor.State = StateRun;
+        }
     }
     //-------------------------------------------------
     // 判定関数
