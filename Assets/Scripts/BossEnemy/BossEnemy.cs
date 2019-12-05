@@ -17,6 +17,8 @@ public class BossEnemy : MonoBehaviour
     [SerializeField]
     private GameObject _expEffect;
     [SerializeField]
+    private GameObject _slashEffect;
+    [SerializeField]
     float _dyingEfectFrame = 120;
     [SerializeField]
     int _maxHp;
@@ -28,6 +30,7 @@ public class BossEnemy : MonoBehaviour
     bool _isDown;
     Vector3 _startPos = Vector3.zero;
     float _nowPosLeap = 0;
+    bool _isDead=false;
 
     //ステート
     private StateProcessor _stateProcessor = new StateProcessor();
@@ -63,7 +66,7 @@ public class BossEnemy : MonoBehaviour
     {
         PosLeap();
         State();
-        if (IsDying())
+        if (IsDying()&&!_isDead)
         {
             _dyingEfectCount--;
             if (_dyingEfectCount<=0)
@@ -86,6 +89,12 @@ public class BossEnemy : MonoBehaviour
                 {
                     _shoter.IsActive = true;
                 }
+                if (_bossBeam.IsNowBeam())
+                {
+                    _shoter.IsActive = false;
+
+                }
+
             }
         }
     }
@@ -153,6 +162,7 @@ public class BossEnemy : MonoBehaviour
                 return;
             }
             _animator.SetTrigger("DownEnd");
+            Instantiate(_slashEffect, transform.position+new Vector3(0,1,0), transform.rotation);
             _nowHp--;
             _stateProcessor.State = StateIdle;
 
@@ -168,5 +178,6 @@ public class BossEnemy : MonoBehaviour
         Instantiate(_deadEfectPrefab, transform.position, transform.rotation);
         _animator.SetTrigger("Dead");
         _shoter.IsActive = false;
+        _isDead = true;
     }
 }
