@@ -7,7 +7,6 @@ public class Ballet : BalletBase
 {
     [SerializeField]
     private GameObject _muzzleFlashPrefab;
-
     private SpeedManager _speedManager;
 
     protected override void Initialize()
@@ -21,7 +20,7 @@ public class Ballet : BalletBase
         transform.LookAt(_targetObject.transform.position);
         _rigidBody.velocity= transform.forward * (_speed * _speedManager.speedProperty.Value); ;
         _speedManager.speedProperty.DistinctUntilChanged().Subscribe(_count => { ChangeSpeedVec(); });
-        Instantiate(_muzzleFlashPrefab, transform.position, transform.rotation);
+        Instantiate(_muzzleFlashPrefab, transform.position, transform.rotation,transform);
 
     }
     protected override void Move()
