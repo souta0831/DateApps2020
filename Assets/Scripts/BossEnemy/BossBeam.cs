@@ -8,6 +8,7 @@ public class BossBeam : MonoBehaviour
     private GameObject _beamPrefab;
     [SerializeField]
     private Transform _beamPos;
+    private ParticleSystem _particleSystem;
     private GameObject _beamObject;
     private Animator _animator;
     void Start()
@@ -35,6 +36,10 @@ public class BossBeam : MonoBehaviour
 
             _beamObject.transform.eulerAngles -= new Vector3(0.7f, 0, 0);
         }   
+    }
+    public bool IsNowBeam()
+    {
+        return _beamObject != null;
     }
 
 
