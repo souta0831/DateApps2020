@@ -5,9 +5,11 @@ using UnityEngine;
 public class BossEvent : MonoBehaviour
 {
     BossBeam _bossBeam;
+    BossShoter _bossShoter;
     private void Start()
     {
         _bossBeam = GetComponent<BossBeam>();
+        _bossShoter = GetComponent<BossShoter>();
     }
     private void BeginChargeEfect()
     {
@@ -18,5 +20,14 @@ public class BossEvent : MonoBehaviour
     {
         Debug.Log("ビーム開始");
         _bossBeam.OnVerticalBeam();
+    }
+    private void RightAttackEnd()
+    {
+        _bossShoter.OnRightShot();
+    }
+    private void LeftAttackEnd()
+    {
+        _bossShoter.OnLeftShot();
+
     }
 }

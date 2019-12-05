@@ -58,12 +58,6 @@ public class BossShoter : MonoBehaviour
         _fire_timer[(int)Arm.Left] --;
         if (_fire_timer[(int)Arm.Left] >= 0) return;
 
-        //発射
-        var bullet = Instantiate(LeftArm._bullet, LeftArm._shotPos.position, LeftArm._shotPos.rotation);
-        bullet.transform.parent = this.transform.root.gameObject.transform;
-        var bullet_scprit = bullet.GetComponent<BalletBase>();
-        bullet_scprit.TargetObject = _targetObject;
-        bullet_scprit.Accuracy = LeftArm._parameter.Accuracy;
         _animator.SetTrigger("LeftShot");
         Debug.Log("左");
         //発射感覚をリセット
@@ -79,6 +73,16 @@ public class BossShoter : MonoBehaviour
 
 
     }
+    public void OnLeftShot()
+    {
+        //発射
+        var bullet = Instantiate(LeftArm._bullet, LeftArm._shotPos.position, LeftArm._shotPos.rotation);
+        bullet.transform.parent = this.transform.root.gameObject.transform;
+        var bullet_scprit = bullet.GetComponent<BalletBase>();
+        bullet_scprit.TargetObject = _targetObject;
+        bullet_scprit.Accuracy = LeftArm._parameter.Accuracy;
+
+    }
     void RightShoter()
     {
         _cool_timer[(int)Arm.Right] --;
@@ -86,12 +90,6 @@ public class BossShoter : MonoBehaviour
         _fire_timer[(int)Arm.Right] --;
         if (_fire_timer[(int)Arm.Right] >= 0) return;
 
-        //発射
-        var bullet = Instantiate(RightArm._bullet, RightArm._shotPos.position, RightArm._shotPos.rotation);
-        bullet.transform.parent = this.transform.root.gameObject.transform;
-        var bullet_scprit = bullet.GetComponent<BalletBase>();
-        bullet_scprit.TargetObject = _targetObject;
-        bullet_scprit.Accuracy = RightArm._parameter.Accuracy;
         _animator.SetTrigger("RightShot");
         Debug.Log("右");
         //発射感覚をリセット
@@ -106,5 +104,14 @@ public class BossShoter : MonoBehaviour
         }
 
     }
+    public void OnRightShot()
+    {
+        //発射
+        var bullet = Instantiate(RightArm._bullet, RightArm._shotPos.position, RightArm._shotPos.rotation);
+        bullet.transform.parent = this.transform.root.gameObject.transform;
+        var bullet_scprit = bullet.GetComponent<BalletBase>();
+        bullet_scprit.TargetObject = _targetObject;
+        bullet_scprit.Accuracy = RightArm._parameter.Accuracy;
 
+    }
 }
