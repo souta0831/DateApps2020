@@ -7,13 +7,17 @@ public class BossBeam : MonoBehaviour
     [SerializeField]
     private GameObject _beamPrefab;
     [SerializeField]
+    private GameObject _chargeEfectPrefab;
+    [SerializeField]
     private Transform _beamPos;
     private ParticleSystem _particleSystem;
     private GameObject _beamObject;
     private Animator _animator;
+    public bool _beamEnd = false;
     void Start()
     {
         _animator = GetComponent<Animator>();
+
     }
 
     // Update is called once per frame
@@ -26,8 +30,12 @@ public class BossBeam : MonoBehaviour
         if (_beamObject == null)
         {
             _beamObject = Instantiate(_beamPrefab, _beamPos.position, _beamPos.rotation);
-            _animator.SetTrigger("Laser");
         }
+    }
+    public void OnCharge()
+    {
+        Instantiate(_chargeEfectPrefab, _beamPos.position, _beamPos.rotation);
+        _beamEnd = true;
     }
     private void VerticalBeam()
     {

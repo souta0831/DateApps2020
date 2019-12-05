@@ -1856,13 +1856,19 @@ PrefabInstance:
     - target: {fileID: 5154429155541269537, guid: e6ad8d0e9e7aca94fb76bebe4c11b5c6,
         type: 3}
       propertyPath: _maxHp
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5154429155541269537, guid: e6ad8d0e9e7aca94fb76bebe4c11b5c6,
         type: 3}
       propertyPath: _maxDownHp
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 5154429155541269537, guid: e6ad8d0e9e7aca94fb76bebe4c11b5c6,
+        type: 3}
+      propertyPath: _deadEfectPrefab
+      value: 
+      objectReference: {fileID: 1121192042590650, guid: e1b08032bec16ba4eb1ae23cbd572664,
+        type: 3}
     - target: {fileID: 3215843225567225857, guid: e6ad8d0e9e7aca94fb76bebe4c11b5c6,
         type: 3}
       propertyPath: m_reflection

@@ -11,19 +11,24 @@ public class BossEnemy : MonoBehaviour
     private GameObject _endCollision;
     //ダウンするまでに弾を充てる回数
     [SerializeField]
-    int _maxDownHp=3;
-    int _nowDonwHp = 0;
+    private ParticleSystem HitEfect=default;
     [SerializeField]
-    int _maxHp;
-    int _nowHp;
+    private GameObject _deadEfectPrefab;
+    [SerializeField]
+    private GameObject _expEffect;
     [SerializeField]
     float _dyingEfectFrame = 120;
+    [SerializeField]
+    int _maxHp;
+    [SerializeField]
+    int _maxDownHp = 3;
+    int _nowDownHp = 0;
+    int _nowHp;
     float _dyingEfectCount;
     bool _isDown;
-    Vector3 _startPos=Vector3.zero;
-    float _nowPosLeap =0;
-    [SerializeField]
-    private ParticleSystem HitEfect=default;
+    Vector3 _startPos = Vector3.zero;
+    float _nowPosLeap = 0;
+
     //ステート
     private StateProcessor _stateProcessor = new StateProcessor();
     private BossStateIdle StateIdle = new BossStateIdle();
@@ -37,13 +42,14 @@ public class BossEnemy : MonoBehaviour
     private BossShoter _shoter;
     //保存用
     private bool _useLaser = false;
+    private bool _isEnd = false;
     public GameObject _endColliderArea { private get; set; }
     void Start()
     {
         _shoter = GetComponent<BossShoter>();
         _animator =GetComponent<Animator>();
         _bossBeam = GetComponent<BossBeam>();
-        _nowDonwHp = _maxDownHp;
+        _nowDownHp = _maxDownHp;
         _nowHp = _maxHp;
         _dyingEfectCount = _dyingEfectFrame;
         //初期ステートセット
@@ -65,10 +71,21 @@ public class BossEnemy : MonoBehaviour
                 HitEfect.Play();
                 _dyingEfectCount = _dyingEfectFrame;
             }
-            if (_nowDonwHp == 1 && !_useLaser)
+            if (_nowDownHp == 1)
             {
-                _useLaser = true;
-                _bossBeam.OnVerticalBeam();
+                if (!_useLaser)
+                {
+                    _useLaser = true;
+                    _animator.SetTrigger("Leser");
+                }
+                if (!_bossBeam._beamEnd)
+                {
+                    _shoter.IsActive = false;
+                }
+                else
+                {
+                    _shoter.IsActive = true;
+                }
             }
         }
     }
@@ -117,10 +134,11 @@ public class BossEnemy : MonoBehaviour
     {
         if (other.gameObject.tag == "ReflectBullet")
         {
-            _nowDonwHp--;
+            _nowDownHp--;
             _animator.SetTrigger("Hit");
             HitEfect.Play();
-            if (_nowDonwHp <= 0)
+            Instantiate(_expEffect, other.gameObject.transform.position,other.gameObject.transform.rotation);
+            if (_nowDownHp <= 0)
             {
                 _stateProcessor.State = StateDown;
             }
@@ -128,10 +146,15 @@ public class BossEnemy : MonoBehaviour
         if (other.gameObject.tag == "Attack")
         {
             Debug.Log("ボスヒット");
-            _nowDonwHp = _maxDownHp;
+            _nowDownHp = _maxDownHp;
+            if (IsDying())
+            {
+                OnDead();
+                return;
+            }
+            _animator.SetTrigger("DownEnd");
             _nowHp--;
             _stateProcessor.State = StateIdle;
-            _animator.SetTrigger("DownEnd");
 
         }
 
@@ -139,5 +162,11 @@ public class BossEnemy : MonoBehaviour
     bool IsDying()
     {
         return _nowHp <= 1; 
+    }
+    void OnDead()
+    {
+        Instantiate(_deadEfectPrefab, transform.position, transform.rotation);
+        _animator.SetTrigger("Dead");
+        _shoter.IsActive = false;
     }
 }
