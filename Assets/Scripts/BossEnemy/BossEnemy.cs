@@ -11,7 +11,7 @@ public class BossEnemy : MonoBehaviour
     private GameObject _endCollision;
     //ダウンするまでに弾を充てる回数
     [SerializeField]
-    int _maxDownHp=1;
+    int _maxDownHp=3;
     int _nowDonwHp = 0;
     [SerializeField]
     int _maxHp;
@@ -65,6 +65,11 @@ public class BossEnemy : MonoBehaviour
                 HitEfect.Play();
                 _dyingEfectCount = _dyingEfectFrame;
             }
+            if (_nowDonwHp == 1 && !_useLaser)
+            {
+                _useLaser = true;
+                _bossBeam.OnVerticalBeam();
+            }
         }
     }
     void IdleState()
@@ -72,6 +77,15 @@ public class BossEnemy : MonoBehaviour
         _nowPosLeap = Math.Max(_nowPosLeap -= 0.01f, 0);
         _shoter.IsActive = true;
         _animator.SetBool("IsDown", false);
+        if (_bossBeam.IsNowBeam())
+        {
+            _shoter.IsActive = false;
+        }
+        else
+        {
+            _shoter.IsActive = true;
+        }
+
     }
     void DownState()
     {
@@ -124,6 +138,6 @@ public class BossEnemy : MonoBehaviour
     }
     bool IsDying()
     {
-        return _nowHp >= 1; 
+        return _nowHp <= 1; 
     }
 }

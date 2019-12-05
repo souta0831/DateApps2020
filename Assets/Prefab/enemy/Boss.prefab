@@ -1089,10 +1089,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a096b80b0344ff74b86fdc349301856b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _downHp: 3
-  _hp: 0
-  _isDown: 0
-  _nowPosLeap: 0
+  _maxDownHp: 3
+  _maxHp: 0
+  _dyingEfectFrame: 120
   HitEfect: {fileID: 6614869713164885979}
 --- !u!114 &8303103488695085385
 MonoBehaviour:
