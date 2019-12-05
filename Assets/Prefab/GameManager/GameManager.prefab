@@ -557,6 +557,16 @@ PrefabInstance:
       propertyPath: m_Radius
       value: 9
       objectReference: {fileID: 0}
+    - target: {fileID: 1602552400251207433, guid: 9c3fdae4fa915a742ae1df134aee5d22,
+        type: 3}
+      propertyPath: m_reflectionTagetObject
+      value: 
+      objectReference: {fileID: 2733731958693250356}
+    - target: {fileID: 1602552400251207433, guid: 9c3fdae4fa915a742ae1df134aee5d22,
+        type: 3}
+      propertyPath: m_reflectionPower
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 3832162172635798876, guid: 9c3fdae4fa915a742ae1df134aee5d22,
         type: 3}
       propertyPath: Canvas
@@ -1083,6 +1093,12 @@ PrefabInstance:
 --- !u!4 &5154429154198925268 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8303103489500756669, guid: 177bd514762514e46a4efec7b911ec9d,
+    type: 3}
+  m_PrefabInstance: {fileID: 3797302633980368233}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &2733731958693250356 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1243714896739520605, guid: 177bd514762514e46a4efec7b911ec9d,
     type: 3}
   m_PrefabInstance: {fileID: 3797302633980368233}
   m_PrefabAsset: {fileID: 0}
