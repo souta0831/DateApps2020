@@ -287,7 +287,7 @@ ModelImporter:
         intParameter: 0
         messageOptions: 0
       - time: 0.8599562
-        functionName: AttackEvent
+        functionName: AttackExitEvent
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: e7cf18e4a0cafab40a37d93767313c77,
           type: 3}
