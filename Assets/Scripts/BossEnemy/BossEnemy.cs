@@ -11,16 +11,16 @@ public class BossEnemy : MonoBehaviour
     private GameObject _endCollision;
     //ダウンするまでに弾を充てる回数
     [SerializeField]
-    int _downHp=1;
+    int _maxDownHp=1;
     int _nowDonwHp = 0;
     [SerializeField]
-    int _hp;
+    int _maxHp;
     int _nowHp;
-    //
     [SerializeField]
+    float _dyingEfectFrame = 120;
+    float _dyingEfectCount;
     bool _isDown;
     Vector3 _startPos=Vector3.zero;
-    [SerializeField]
     float _nowPosLeap =0;
     [SerializeField]
     private ParticleSystem HitEfect=default;
@@ -43,8 +43,9 @@ public class BossEnemy : MonoBehaviour
         _shoter = GetComponent<BossShoter>();
         _animator =GetComponent<Animator>();
         _bossBeam = GetComponent<BossBeam>();
-        _nowDonwHp = _downHp;
-        _nowHp = _hp;
+        _nowDonwHp = _maxDownHp;
+        _nowHp = _maxHp;
+        _dyingEfectCount = _dyingEfectFrame;
         //初期ステートセット
         _stateProcessor.State = StateIdle;
         //イデレーター
@@ -56,11 +57,14 @@ public class BossEnemy : MonoBehaviour
     {
         PosLeap();
         State();
-        if (_nowHp == 1&& !_useLaser)
+        if (IsDying())
         {
-            _bossBeam.OnVerticalBeam();
-            _useLaser = true;
-
+            _dyingEfectCount--;
+            if (_dyingEfectCount<=0)
+            {
+                HitEfect.Play();
+                _dyingEfectCount = _dyingEfectFrame;
+            }
         }
     }
     void IdleState()
@@ -110,12 +114,16 @@ public class BossEnemy : MonoBehaviour
         if (other.gameObject.tag == "Attack")
         {
             Debug.Log("ボスヒット");
-            _nowDonwHp = _downHp;
+            _nowDonwHp = _maxDownHp;
             _nowHp--;
             _stateProcessor.State = StateIdle;
             _animator.SetTrigger("DownEnd");
 
         }
 
+    }
+    bool IsDying()
+    {
+        return _nowHp >= 1; 
     }
 }
