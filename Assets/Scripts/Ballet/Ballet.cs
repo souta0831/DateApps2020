@@ -25,7 +25,7 @@ public class Ballet : BalletBase
     }
     protected override void Move()
     {
-        transform.eulerAngles += new Vector3(0, 0, 2);    
+        transform.eulerAngles += new Vector3(0, 0, 5);    
     }
     private void ChangeSpeedVec()
     {

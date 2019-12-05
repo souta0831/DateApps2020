@@ -222,7 +222,7 @@ MonoBehaviour:
     _shotPos: {fileID: 8303103490365056029}
   RightArm:
     _parameter: {fileID: 11400000, guid: d9bcac36b233ff642ba2d4f8f51dbfa9, type: 2}
-    _bullet: {fileID: 3822299235731494083, guid: 987a6072845aaf3499fdd14cecf59833,
+    _bullet: {fileID: 3822299235731494083, guid: 944e9bcf2c375ad4691ee22979958f65,
       type: 3}
     _shotPos: {fileID: 8303103488348227006}
   _isActive: 1

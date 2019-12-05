@@ -81,7 +81,6 @@ public class BossShoter : MonoBehaviour
         var bullet_scprit = bullet.GetComponent<BalletBase>();
         bullet_scprit.TargetObject = _targetObject;
         bullet_scprit.Accuracy = LeftArm._parameter.Accuracy;
-
     }
     void RightShoter()
     {
