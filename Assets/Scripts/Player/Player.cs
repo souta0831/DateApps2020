@@ -46,6 +46,7 @@ public class Player : MonoBehaviour
     private PlayerStateJump StateJump = new PlayerStateJump();
     private PlayerStateWallRun StateWalRun = new PlayerStateWallRun();
     private PlayerStateRushAttack StateRushAttack = new PlayerStateRushAttack();
+    private PlayerStateDamage StateDamage = new PlayerStateDamage();
 
     void Start()
     {
@@ -74,6 +75,7 @@ public class Player : MonoBehaviour
         StateWalRun.execDelegate = WallRunState;
         StateJump.execDelegate = JumpState;
         StateRushAttack.execDelegate = RushAttackState;
+        StateDamage.execDelegate = DamageState;
 
         _lifePoint.MaxPointSet(_parameter.MaxHp);
         _lifePoint.PointSet(_parameter.MaxHp);
@@ -269,6 +271,11 @@ public class Player : MonoBehaviour
             _animator.SetBool("RushAttack", false);
             StateProcessor.State = StateRun;
         }
+    }
+
+    private void DamageState()
+    {
+        
     }
     //-------------------------------------------------
     // 判定関数

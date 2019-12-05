@@ -37,6 +37,10 @@ public class PlayerStateRushAttack : PlayerState
 {
 
 }
+public class PlayerStateDamage : PlayerState
+{
+
+}
 
 public class PlayerStateJump : PlayerState
     {

@@ -49,6 +49,8 @@ public class Reflection : MonoBehaviour
         other.transform.rotation = Quaternion.LookRotation(m_reflectionTagetObject.transform.position, Vector3.up);
 
         rigitbody.velocity = rigitbody.velocity.magnitude * other.transform.forward * m_reflectionPower;
+        rigitbody.useGravity = false;
+
         var hitObject = Instantiate(m_HitInstanceObject);
         hitObject.transform.position = other.transform.position;
     }
@@ -59,7 +61,9 @@ public class Reflection : MonoBehaviour
 
         other.transform.eulerAngles = 90.0f * Vector3.left;
 
-        rigitbody.velocity = rigitbody.velocity.magnitude * other.transform.forward * m_reflectionPower;
+        rigitbody.velocity = other.transform.forward * m_reflectionPower;//rigitbody.velocity.magnitude * 
+        rigitbody.useGravity = true;
+
         var hitObject = Instantiate(m_HitInstanceObject);
         hitObject.transform.position = other.transform.position;
     }
