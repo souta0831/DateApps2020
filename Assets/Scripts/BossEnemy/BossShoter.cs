@@ -55,62 +55,45 @@ public class BossShoter : MonoBehaviour
     {
         _cool_timer[(int)Arm.Left]--;
         if (_cool_timer[(int)Arm.Left] >= 0) return;
-        _fire_timer[(int)Arm.Left] --;
-        if (_fire_timer[(int)Arm.Left] >= 0) return;
 
         _animator.SetTrigger("LeftShot");
-        Debug.Log("左");
-        //発射感覚をリセット
-        _fire_timer[(int)Arm.Left] = LeftArm._parameter.FireRate;
-        //球数を減らす
-        _burst_count[(int)Arm.Left]--;
-        //リロード
-        if (_burst_count[(int)Arm.Left] <= 0)
-        {
-            _cool_timer[(int)Arm.Left] = LeftArm._parameter.FireCoolTime;
-            _burst_count[(int)Arm.Left] = LeftArm._parameter.Burst;
-        }
+        _cool_timer[(int)Arm.Left] = LeftArm._parameter.FireCoolTime;
 
 
     }
     public void OnLeftShot()
     {
-        //発射
-        var bullet = Instantiate(LeftArm._bullet, LeftArm._shotPos.position, LeftArm._shotPos.rotation);
-        bullet.transform.parent = this.transform.root.gameObject.transform;
-        var bullet_scprit = bullet.GetComponent<BalletBase>();
-        bullet_scprit.TargetObject = _targetObject;
-        bullet_scprit.Accuracy = LeftArm._parameter.Accuracy;
+
+        StartCoroutine(Shot(LeftArm));
+        Debug.Log("左");
     }
     void RightShoter()
     {
         _cool_timer[(int)Arm.Right] --;
         if (_cool_timer[(int)Arm.Right] >= 0) return;
-        _fire_timer[(int)Arm.Right] --;
-        if (_fire_timer[(int)Arm.Right] >= 0) return;
 
         _animator.SetTrigger("RightShot");
-        Debug.Log("右");
-        //発射感覚をリセット
-        _fire_timer[(int)Arm.Right] = RightArm._parameter.FireRate;
-        //球数を減らす
-        _burst_count[(int)Arm.Right]--;
-        //リロード
-        if (_burst_count[(int)Arm.Right] <= 0)
-        {
-            _cool_timer[(int)Arm.Right] = RightArm._parameter.FireCoolTime;
-            _burst_count[(int)Arm.Right] = RightArm._parameter.Burst;
-        }
-
+        _cool_timer[(int)Arm.Right] = RightArm._parameter.FireCoolTime;
     }
     public void OnRightShot()
     {
-        //発射
-        var bullet = Instantiate(RightArm._bullet, RightArm._shotPos.position, RightArm._shotPos.rotation);
-        bullet.transform.parent = this.transform.root.gameObject.transform;
-        var bullet_scprit = bullet.GetComponent<BalletBase>();
-        bullet_scprit.TargetObject = _targetObject;
-        bullet_scprit.Accuracy = RightArm._parameter.Accuracy;
 
+        StartCoroutine(Shot(RightArm));
+        Debug.Log("右");
+    }
+
+    private IEnumerator Shot(BulletDate date)
+    {
+        for(int i = 0; i < date._parameter.Burst ; i++)
+        {
+            var bullet = Instantiate(date._bullet, date._shotPos.position, date._shotPos.rotation);
+            bullet.transform.parent = this.transform.root.gameObject.transform;
+            var bullet_scprit = bullet.GetComponent<BalletBase>();
+            bullet_scprit.TargetObject = _targetObject;
+            bullet_scprit.Accuracy = date._parameter.Accuracy;
+            Debug.Log("弾発射" + i);
+            yield return new WaitForSeconds(date._parameter.FireRate/60);
+
+        }
     }
 }
