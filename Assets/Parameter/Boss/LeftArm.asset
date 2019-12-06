@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c75bedd0188d334586a013bbb4c46ff, type: 3}
   m_Name: LeftArm
   m_EditorClassIdentifier: 
-  FireRate: 5
+  FireRate: 10
   FireCoolTime: 180
-  Burst: 1
+  Burst: 3
   Accuracy: 0
